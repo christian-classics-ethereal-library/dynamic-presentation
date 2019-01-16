@@ -10,14 +10,25 @@
 
     <script src="{{ asset('js/slides.js') }}" defer></script>
     <link href="{{ asset('css/reveal.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/dynamic.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="reveal">
         <div class="slides">
             @foreach ($slides as $slide)
-                <section id="{{ $slide['name'] }}">
-                    {!! $slide['content'] !!}
-                </section>
+                @if (isset($slide['name']))
+                    <section id="{{ $slide['name'] }}">
+                        {!! $slide['content'] !!}
+                    </section>
+                @else
+                    <section>
+                    @foreach ($slide as $subslide)
+                        <section id="{{$subslide['name']}}">
+                            {!! $subslide['content'] !!}
+                        </section>
+                    @endforeach
+                    </section>
+                @endif
             @endforeach
         </div>
     </div>

@@ -1,0 +1,8 @@
+/* reveal.js overrides for dynamic presentation */
+.reveal img.dynamic {
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
