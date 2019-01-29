@@ -15,13 +15,13 @@
 <body>
     <div class="reveal">
         <div class="slides">
-            @foreach ($slides as $slide)
+            @foreach ($slides as $key => $slide)
                 @if (isset($slide['name']))
                     <section id="{{ $slide['name'] }}">
                         {!! $slide['content'] !!}
                     </section>
                 @else
-                    <section>
+                    <section id="{{$key}}">
                     @foreach ($slide as $subslide)
                         <section id="{{$subslide['name']}}">
                             {!! $subslide['content'] !!}
