@@ -9,6 +9,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <script src="{{ asset('js/slides.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/dynamic.js') }}" defer></script>
     <link href="{{ asset('css/reveal.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dynamic.css') }}" rel="stylesheet">
 </head>
