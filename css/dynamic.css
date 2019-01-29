@@ -1,5 +1,5 @@
 /* reveal.js overrides for dynamic presentation */
-.reveal img.dynamic {
+.reveal .dynamic {
     max-width: none;
     max-height: none;
     margin: 0;
