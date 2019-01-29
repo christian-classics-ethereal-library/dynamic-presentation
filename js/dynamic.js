@@ -8,9 +8,9 @@ $(document).ready(function(){
 });
 
 /**
- * @brief changes the text within an svg to be that specified by a different attribute.
+ * @brief Change the lyrics in a dynamic.svg to a different verse.
  * @param string id the html id surrounding the svgs that you want to change.
- * @param string verseAttr The attribute containing the text that you want to switch to.
+ * @param string verseAttr 'data-v#' where # is a verse number (see tools/dynamic.py).
  */
 function switchVerse(id, verseAttr) {
     // TODO: Remove the text even when the verse we want isn't present.
@@ -20,6 +20,10 @@ function switchVerse(id, verseAttr) {
     }
 }
 
+/**
+ * @brief Change the Y position of the lyrics in a dynamic.svg.
+ * @param string yPositionAttr 'data-y-bottom' or 'data-y' (see tools/dynamic.py).
+ */
 function textYPosition(yPositionAttr) {
     var els = $('svg g text[' + yPositionAttr + ']');
     for (var i = 0; i < els.length; i++) {
