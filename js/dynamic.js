@@ -17,10 +17,32 @@ $(document).ready(function(){
  * @param string verseAttr 'data-v#' where # is a verse number (see tools/dynamic.py).
  */
 function switchVerse(id, verseAttr) {
-    // TODO: Remove the text even when the verse we want isn't present.
+    // TODO: Don't get rid of text that we need (show the chorus on verse two).
+    $('#' + id + ' svg g text').each(function(){this.innerHTML = "";});
+
     var els = $('#' + id + ' svg g text[' + verseAttr + ']');
     for (var i = 0; i < els.length; i++) {
-        els[i].innerHTML = $(els[i]).attr(verseAttr);
+        // Remove the hypens that start a syllable. We don't need two hypens per word.
+        text = $(els[i]).attr(verseAttr).replace(/^[ -]*/, "");
+
+        // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
+        // TODO: Consider using a monospace font for the lyrics.
+        var widthPerLetter = 13;
+        var boxWidth = $(els[i]).attr('data-textlength');
+
+        if (text.length * widthPerLetter >= boxWidth) {
+            // Apply the textLength attribute if we need to squish these letters.
+            $(els[i]).attr('textLength', boxWidth);
+
+            // If we need to squish this letter, it's okay to remove any trailing hyphens,
+            // as long as removing those won't stretch the letter out.
+            if ((text.length - 1) * widthPerLetter >= boxWidth) {
+                text = text.replace(/[ -]*$/,"");
+            }
+        } else {
+            $(els[i]).attr('textLength', null);
+        }
+        els[i].innerHTML = text;
     }
 }
 
