@@ -22,7 +22,7 @@ function setNoteHeight(h) {
         this.setAttribute('height', height);
     });
     // TODO: Move the lyrics.
-    // TODO: Resize the whole SVG.
+    resizeSVGHeight();
 }
 
 /**
@@ -41,7 +41,7 @@ function switchVerse(id, verseAttr) {
 
         // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
         // TODO: Consider using a monospace font for the lyrics.
-        var widthPerLetter = 13;
+        var widthPerLetter = getFontPixelSize() * .5;
         var boxWidth = $(els[i]).attr('data-textlength');
 
         if (text.length * widthPerLetter >= boxWidth) {
@@ -120,4 +120,41 @@ function fillDynamicOptions() {
         option += "</div><br/>";
         $('#dynamicOptions .viewport-inner').append(option);
     }
+}
+
+/**
+ * @brief Return the current font size of the lyrics, or 0 if there are no lyrics.
+ */
+function getFontPixelSize() {
+    var size = $('svg text[data-v1]').attr('font-size');
+    if (size == undefined) {
+        return 0;
+    } else if (size.indexOf("pt") != -1) {
+        return parseFloat(size.replace("pt", "")) * (4/3)
+    } else if (size.indexOf("px") != -1) {
+        return parseFloat(size.replace("px", ""))
+    }
+    return 0;
+}
+
+/**
+ * @brief Return the current pixel value for the note height.
+ */
+function getNoteHeight() {
+    var denominator = parseFloat($('svg g rect[data-height]').attr('data-height'));
+    var numerator = parseInt($('svg g rect[data-height]').attr('height'));
+    return numerator/denominator;
+}
+
+/**
+ * @brief Resize all SVGs based on the current note height and font size.
+ */
+function resizeSVGHeight() {
+    var nh = getNoteHeight();
+    var fs = getFontPixelSize();
+    $('svg').each(function(){
+        var noteRange = parseFloat(this.attributes['data-noterange']['value']);
+        var h = (noteRange * nh) + fs;
+        this.setAttribute('height', h);
+    });
 }
