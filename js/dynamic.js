@@ -2,12 +2,10 @@ var $ = window.jQuery;
 
 $(document).ready(function(){
     // TODO: Switch these automatically
-    switchVerse('v0', 'data-v1')
-    switchVerse('v1', 'data-v2')
-    switchVerse('v2', 'data-v3')
-    switchVerse('v3', 'data-v4')
-    textYPosition('v0', 'data-y-bottom');
-    textYPosition('v1', 'data-y-bottom');
+    switchVerse('v1', 'data-v1')
+    switchVerse('v2', 'data-v2')
+    switchVerse('v3', 'data-v3')
+    switchVerse('v4', 'data-v4')
     fillDynamicOptions();
 });
 
@@ -41,7 +39,7 @@ function switchVerse(id, verseAttr) {
 
         // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
         // TODO: Consider using a monospace font for the lyrics.
-        var widthPerLetter = getFontPixelSize() * .5;
+        var widthPerLetter = getFontPixelSize() * .6;
         var boxWidth = $(els[i]).attr('data-textlength');
 
         if (text.length * widthPerLetter >= boxWidth) {
@@ -66,6 +64,8 @@ function switchVerse(id, verseAttr) {
  * @param string yPositionAttr 'data-y-bottom' or 'data-y' (see tools/dynamic.py).
  */
 function textYPosition(id, yPositionAttr) {
+    // TODO: Change this to be affected by new note heights
+    // (no longer require attributes to be set here).
     var els = $('#' + id + ' svg g text[' + yPositionAttr + ']');
     for (var i = 0; i < els.length; i++) {
         $(els[i]).attr('y', $(els[i]).attr(yPositionAttr));
