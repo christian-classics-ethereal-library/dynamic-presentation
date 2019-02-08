@@ -12,6 +12,20 @@ $(document).ready(function(){
 });
 
 /**
+ * @brief Change the size of a notes.
+ */
+function setNoteHeight(h) {
+    $('svg g rect[data-y]').each(function(){
+        var y = parseFloat(this.attributes['data-y']['value']) * h;
+        this.setAttribute('y', y);
+        var height = parseFloat(this.attributes['data-height']['value']) * h;
+        this.setAttribute('height', height);
+    });
+    // TODO: Move the lyrics.
+    // TODO: Resize the whole SVG.
+}
+
+/**
  * @brief Change the lyrics in a dynamic.svg to a different verse.
  * @param string id the html id surrounding the svgs that you want to change.
  * @param string verseAttr 'data-v#' where # is a verse number (see tools/dynamic.py).
@@ -69,6 +83,7 @@ function toggleDynamicOptions() {
     }
 }
 
+window.setNoteHeight = setNoteHeight;
 window.switchVerse = switchVerse;
 window.textYPosition = textYPosition;
 window.toggleDynamicOptions = toggleDynamicOptions;
