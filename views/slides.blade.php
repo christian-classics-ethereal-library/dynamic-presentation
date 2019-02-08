@@ -24,6 +24,10 @@
             <div class='viewport'>
                 <div class='viewport-inner'>
                     <b>Dynamic Options</b><br/>
+                    <div style="background-color: gray;">
+                        <b>NoteHeight</b>
+                        <input type="range" value="20" min="1" max="20" step="1" onchange='window.setNoteHeight(this.value);'>
+                    </div>
                 </div>
             </div>
         </div>
