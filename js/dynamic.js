@@ -35,26 +35,9 @@ function switchVerse(id, verseAttr) {
     var els = $('#' + id + ' svg g text[' + verseAttr + ']');
     for (var i = 0; i < els.length; i++) {
         // Remove the hypens that start a syllable. We don't need two hypens per word.
-        text = $(els[i]).attr(verseAttr).replace(/^[ -]*/, "");
-
-        // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
-        // TODO: Consider using a monospace font for the lyrics.
-        var widthPerLetter = getFontPixelSize() * .6;
-        var boxWidth = $(els[i]).attr('data-textlength');
-
-        if (text.length * widthPerLetter >= boxWidth) {
-            // Apply the textLength attribute if we need to squish these letters.
-            $(els[i]).attr('textLength', boxWidth);
-
-            // If we need to squish this letter, it's okay to remove any trailing hyphens,
-            // as long as removing those won't stretch the letter out.
-            if ((text.length - 1) * widthPerLetter >= boxWidth) {
-                text = text.replace(/[ -]*$/,"");
-            }
-        } else {
-            $(els[i]).attr('textLength', null);
-        }
+        var text = $(els[i]).attr(verseAttr).replace(/^[ -]*/, "");
         els[i].innerHTML = text;
+        squishText(els[i]);
     }
 }
 
@@ -157,4 +140,36 @@ function resizeSVGHeight() {
         var h = (noteRange * nh) + fs;
         this.setAttribute('height', h);
     });
+}
+
+/**
+ * @brief Squish text so it doesn't go beyond the boundaries of its box.
+ *  Also possibly removes hypens or adds non-breaking spaces to squished text elements.
+ * @param el The element that you want to squish the text on.
+ */
+function squishText(el) {
+    var text = el.innerHTML;
+    // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
+    // TODO: Consider using a monospace font for the lyrics.
+    var widthPerLetter = getFontPixelSize() * .7;
+    var boxWidth = $(el).attr('data-textlength');
+
+    if (text.length * widthPerLetter >= boxWidth) {
+        // Apply the textLength attribute if we need to squish these letters.
+        $(el).attr('textLength', boxWidth);
+
+        // Add a non-breaking space if it doesn't end in a hyphen.
+        // (this syllable is the end of a word)
+        text = text.replace(/([^-])$/,"$1&nbsp;");
+
+        // If we need to squish this letter, it's okay to remove any trailing hyphens,
+        // as long as removing those won't stretch the letter out.
+        // (this syllable is the middle of a word, but is squished against its continuation)
+        if ((text.length - 1) * widthPerLetter >= boxWidth) {
+            text = text.replace(/[ -]*$/,"");
+        }
+    } else {
+        $(el).attr('textLength', null);
+    }
+    el.innerHTML = text;
 }
