@@ -9,6 +9,9 @@ $(document).ready(function(){
     fillDynamicOptions();
 });
 
+/**
+ * @brief Change the size of the font for the lyrics.
+ */
 function setFontSize(s) {
     fontPixelSize = undefined;
     $('svg g text').each(function(){
@@ -160,6 +163,9 @@ function getNoteHeight() {
     return numerator/denominator;
 }
 
+/**
+ * @brief Get the Number of notes tall a specific svg should be.
+ */
 function getNoteRange(svg) {
     var parts = $(svg).find('#parts rect');
     var max = 0;
@@ -173,7 +179,6 @@ function getNoteRange(svg) {
         }
     }
     return max + 1;
-    //return parseFloat(svg.attributes['data-noterange']['value']);
 }
 
 /**
