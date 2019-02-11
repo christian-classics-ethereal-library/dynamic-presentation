@@ -57,20 +57,6 @@ function switchVerse(id, verseAttr) {
 }
 
 /**
- * @brief Change the Y position of the lyrics in a dynamic.svg.
- * @param string id the html id surrounding the svgs that you want to change.
- * @param string yPositionAttr 'data-y-bottom' or 'data-y' (see tools/dynamic.py).
- */
-function textYPosition(id, yPositionAttr) {
-    // TODO: Change this to be affected by new note heights
-    // (no longer require attributes to be set here).
-    var els = $('#' + id + ' svg g text[' + yPositionAttr + ']');
-    for (var i = 0; i < els.length; i++) {
-        $(els[i]).attr('y', $(els[i]).attr(yPositionAttr));
-    }
-}
-
-/**
  * @brief Show or hide dynamic options.
  */
 function toggleDynamicOptions() {
@@ -97,7 +83,6 @@ function togglePart(id, partColor) {
 window.setFontSize = setFontSize;
 window.setNoteHeight = setNoteHeight;
 window.switchVerse = switchVerse;
-window.textYPosition = textYPosition;
 window.toggleDynamicOptions = toggleDynamicOptions;
 window.togglePart = togglePart;
 
@@ -124,12 +109,6 @@ function fillDynamicOptions() {
     for ( var i = 1; i <= countVerses(); i++) {
         var option = "<div>";
         option += "Verse " + i;
-        /*option += "<a href='#' onclick='window.textYPosition(\"v"+i+"\",\"data-y-bottom\");'>"
-        option += "Text on bottom";
-        option += "</a>";
-        option += "<a href='#' onclick='window.textYPosition(\"v"+i+"\",\"data-y\");'>"
-        option += "Text on notes";
-        option += "</a>";*/
         option += getPartsToggler('v' + i);
         option += "</div><br/>";
         $('#dynamicOptions .viewport-inner').append(option);
