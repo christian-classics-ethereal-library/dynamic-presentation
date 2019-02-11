@@ -165,6 +165,8 @@ function resizeSVGHeight() {
  * @precondition The text in the element ends with a non-breaking space if it is the end of a word.
  */
 function squishText(el) {
+    // If there is no text here, we don't have to do anything.
+    if (typeof el.childNodes[0] == "undefined") return;
     var text = el.childNodes[0].nodeValue;
     // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
     // TODO: Consider using a monospace font for the lyrics.
