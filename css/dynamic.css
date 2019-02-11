@@ -22,4 +22,5 @@
 
 .dynamic svg text {
     fill: white;
+    font-family: monospace;
 }

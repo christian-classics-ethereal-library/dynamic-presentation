@@ -78,11 +78,25 @@ function toggleDynamicOptions() {
     }
 }
 
+/**
+ * @brief Show or hide a part from a specific verse.
+ * @param id The html id surrounding the svgs that you want to change.
+ * @param partColor The fill color of the part that you want to hide.
+ */
+function togglePart(id, partColor) {
+    $('#' + id + ' svg g rect[fill="' + partColor + '"]').each( function() {
+        // TODO: Create CSS rule to toggle with less latency.
+        $(this).toggle();
+    });
+    resizeSVGHeight();
+}
+
 window.setFontSize = setFontSize;
 window.setNoteHeight = setNoteHeight;
 window.switchVerse = switchVerse;
 window.textYPosition = textYPosition;
 window.toggleDynamicOptions = toggleDynamicOptions;
+window.togglePart = togglePart;
 
 /**
  * @brief Count the number of verses in this dynamic presentation.
@@ -107,12 +121,13 @@ function fillDynamicOptions() {
     for ( var i = 1; i <= countVerses(); i++) {
         var option = "<div>";
         option += "Verse " + i;
-        option += "<a href='#' onclick='window.textYPosition(\"v"+i+"\",\"data-y-bottom\");'>"
+        /*option += "<a href='#' onclick='window.textYPosition(\"v"+i+"\",\"data-y-bottom\");'>"
         option += "Text on bottom";
         option += "</a>";
         option += "<a href='#' onclick='window.textYPosition(\"v"+i+"\",\"data-y\");'>"
         option += "Text on notes";
-        option += "</a>";
+        option += "</a>";*/
+        option += getPartsToggler('v' + i);
         option += "</div><br/>";
         $('#dynamicOptions .viewport-inner').append(option);
     }
@@ -145,6 +160,37 @@ function getNoteHeight() {
     return numerator/denominator;
 }
 
+function getNoteRange(svg) {
+    var parts = $(svg).find('#parts rect');
+    var max = 0;
+    for (var i = 0; i < parts.length; i++) {
+        if ($(parts[i]).is(":visible")) {
+            var test = parseFloat($(parts[i]).attr('data-y'))
+                + parseFloat($(parts[i]).attr('data-height'));
+            if (test > max) {
+                max = test;
+            }
+        }
+    }
+    return max + 1;
+    //return parseFloat(svg.attributes['data-noterange']['value']);
+}
+
+/**
+ * @brief get HTML for a toggle option to remove parts.
+ */
+function getPartsToggler(id) {
+    // Take the parts from the first SVG.
+    var parts = $('.slides > section:first-of-type > section:first-of-type svg #parts rect');
+    var html = "";
+    for (var i = 0; i < parts.length; i++) {
+        var fill = $(parts[i]).attr('fill');
+        var js = 'window.togglePart("' + id + '", "' + fill + '")';
+        html += "<button onclick='" + js + "'>" + fill + "</button>";
+    }
+    return html;
+}
+
 /**
  * @brief Resize all SVGs based on the current note height and font size.
  */
@@ -152,7 +198,7 @@ function resizeSVGHeight() {
     var nh = getNoteHeight();
     var fs = getFontPixelSize();
     $('svg').each(function(){
-        var noteRange = parseFloat(this.attributes['data-noterange']['value']);
+        var noteRange = getNoteRange(this);
         var h = (noteRange * nh) + fs;
         this.setAttribute('height', h);
     });
