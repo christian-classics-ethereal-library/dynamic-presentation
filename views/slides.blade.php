@@ -26,10 +26,16 @@
                     <b>Dynamic Options</b><br/>
                     <div style="background-color: gray;">
                         <b>Note Height: </b>
-                        <input type="range" value="20" min="1" max="20" step="1" onchange='window.setNoteHeight(this.value);'>
+                        <input type="range" value="20" min="1" max="20" step="1"
+                            onchange='window.setNoteHeight(this.value);
+                                window.jQuery(".noteHeight").html(this.value);'>
+                        <i class='noteHeight'></i>
                         <br/>
                         <b>Font Size: </b>
-                        <input type="range" value="20" min="10" max="50" step="1" onchange='window.setFontSize(this.value);'>
+                        <input type="range" value="20" min="10" max="50" step="1"
+                            onchange='window.setFontSize(this.value);
+                                window.jQuery(".fontSize").html(this.value);'>
+                        <i class='fontSize'></i>
                     </div>
                 </div>
             </div>
