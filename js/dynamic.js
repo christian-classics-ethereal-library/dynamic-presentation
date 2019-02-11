@@ -13,8 +13,10 @@ function setFontSize(s) {
     fontPixelSize = undefined;
     $('svg g text').each(function(){
         this.setAttribute('font-size', s + 'pt');
+        this.setAttribute('dy', (-1 / 3) * s);
         squishText(this);
     });
+    resizeSVGHeight();
 }
 
 /**
