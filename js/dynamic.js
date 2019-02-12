@@ -149,7 +149,8 @@ function getNoteRange(svg) {
     var parts = $(svg).find('#parts rect');
     var max = 0;
     for (var i = 0; i < parts.length; i++) {
-        if ($(parts[i]).is(":visible")) {
+        // togglePart sets display to none.
+        if ($(parts[i]).css('display') != 'none') {
             var test = parseFloat($(parts[i]).attr('data-y'))
                 + parseFloat($(parts[i]).attr('data-height'));
             if (test > max) {
