@@ -14,6 +14,11 @@
     <link href="{{ asset('css/dynamic.css') }}" rel="stylesheet">
 </head>
 <body>
+    @if (isset($audio))
+        <audio id='audio'>
+            <source src="{{$audio}}" type="audio/mpeg">
+        </audio>
+    @endif
     <div class="reveal">
         <div id='dynamicOptions' class='overlay'>
             <header>
