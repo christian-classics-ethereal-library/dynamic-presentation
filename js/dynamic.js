@@ -14,7 +14,7 @@ $(document).ready(function(){
  */
 function setFontSize(s) {
     fontPixelSize = undefined;
-    $('svg g text').each(function(){
+    $('.dynamic svg g text').each(function(){
         this.setAttribute('font-size', s + 'pt');
         this.setAttribute('dy', (-1 / 3) * s);
         squishText(this);
@@ -26,7 +26,7 @@ function setFontSize(s) {
  * @brief Change the size of a notes.
  */
 function setNoteHeight(h) {
-    $('svg g rect[data-y]').each(function(){
+    $('.dynamic svg rect[data-y]').each(function(){
         var y = parseFloat(this.attributes['data-y']['value']) * h;
         this.setAttribute('y', y);
         var height = parseFloat(this.attributes['data-height']['value']) * h;
@@ -43,7 +43,7 @@ function setNoteHeight(h) {
  */
 function switchVerse(id, verseAttr) {
     // TODO: Don't get rid of text that we need (show the chorus on verse two).
-    $('#' + id + ' svg g text').each(function(){this.innerHTML = "";});
+    $('#' + id + ' .dynamic svg g text').each(function(){this.innerHTML = "";});
 
     var els = $('#' + id + ' svg g text[' + verseAttr + ']');
     for (var i = 0; i < els.length; i++) {
@@ -73,7 +73,7 @@ function toggleDynamicOptions() {
  * @param partColor The fill color of the part that you want to hide.
  */
 function togglePart(id, partColor) {
-    $('#' + id + ' svg g rect[fill="' + partColor + '"]').each( function() {
+    $('#' + id + ' .dynamic svg rect[fill="' + partColor + '"]').each( function() {
         // TODO: Create CSS rule to toggle with less latency.
         $(this).toggle();
     });
@@ -91,7 +91,7 @@ window.togglePart = togglePart;
  */
 function countVerses() {
     // Grab the first SVG
-    var svgSelector = '.slides > section:first-of-type > section:first-of-type svg'
+    var svgSelector = '.slides > section:first-of-type > section:first-of-type .dynamic svg'
     var i;
     for (i = 1; i < 10; i++) {
         var selector = svgSelector + " [data-v" + i + "]";
@@ -121,7 +121,7 @@ function fillDynamicOptions() {
 function getFontPixelSize() {
     // Use a global variable to improve speed.
     if (typeof fontPixelSize == "undefined") {
-        var size = $('svg text[data-v1]').attr('font-size');
+        var size = $('.dynamic svg text[data-v1]').attr('font-size');
         if (size == undefined) {
             fontPixelSize = 0;
         } else if (size.indexOf("pt") != -1) {
@@ -137,8 +137,8 @@ function getFontPixelSize() {
  * @brief Return the current pixel value for the note height.
  */
 function getNoteHeight() {
-    var denominator = parseFloat($('svg g rect[data-height]').attr('data-height'));
-    var numerator = parseInt($('svg g rect[data-height]').attr('height'));
+    var denominator = parseFloat($('.dynamic svg rect[data-height]').attr('data-height'));
+    var numerator = parseInt($('.dynamic svg rect[data-height]').attr('height'));
     return numerator/denominator;
 }
 
@@ -166,7 +166,7 @@ function getNoteRange(svg) {
  */
 function getPartsToggler(id) {
     // Take the parts from the first SVG.
-    var parts = $('.slides > section:first-of-type > section:first-of-type svg #parts rect');
+    var parts = $('.slides > section:first-of-type > section:first-of-type .dynamic svg #parts rect');
     var html = "";
     for (var i = 0; i < parts.length; i++) {
         var fill = $(parts[i]).attr('fill');
