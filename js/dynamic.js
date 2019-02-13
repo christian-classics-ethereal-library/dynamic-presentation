@@ -32,8 +32,23 @@ function setNoteHeight(h) {
         var height = parseFloat(this.attributes['data-height']['value']) * h;
         this.setAttribute('height', height);
     });
-    // TODO: Move the lyrics.
     resizeSVGHeight();
+}
+
+function setNoteWidth(w) {
+    $('.dynamic svg [data-x]').each(function(){
+        var x = parseFloat(this.attributes['data-x']['value']) * w;
+        this.setAttribute('x', x);
+        if (typeof this.attributes['data-width'] != 'undefined') {
+            var width = parseFloat(this.attributes['data-width']['value']) * w;
+            this.setAttribute('width', width);
+        } else if (typeof this.attributes['data-tl'] != 'undefined') {
+            var width = parseFloat(this.attributes['data-tl']['value']) * w;
+            this.setAttribute('data-textlength', width);
+            squishText(this);
+        }
+    });
+    resizeSVGWidth();
 }
 
 /**
@@ -82,6 +97,7 @@ function togglePart(id, partColor) {
 
 window.setFontSize = setFontSize;
 window.setNoteHeight = setNoteHeight;
+window.setNoteWidth = setNoteWidth;
 window.switchVerse = switchVerse;
 window.toggleDynamicOptions = toggleDynamicOptions;
 window.togglePart = togglePart;
@@ -141,11 +157,16 @@ function getNoteHeight() {
     var numerator = parseInt($('.dynamic svg rect[data-height]').attr('height'));
     return numerator/denominator;
 }
+function getNoteWidth() {
+    var denominator = parseFloat($('.dynamic svg rect[data-width]').attr('data-width'));
+    var numerator = parseInt($('.dynamic svg rect[data-width]').attr('width'));
+    return numerator/denominator;
+}
 
 /**
  * @brief Get the Number of notes tall a specific svg should be.
  */
-function getNoteRange(svg) {
+function getSVGNoteRange(svg) {
     var parts = $(svg).find('#parts rect');
     var max = 0;
     for (var i = 0; i < parts.length; i++) {
@@ -159,6 +180,9 @@ function getNoteRange(svg) {
         }
     }
     return max;
+}
+function getSVGSongLength(svg) {
+    return $(svg).attr('data-songlength');
 }
 
 /**
@@ -183,9 +207,19 @@ function resizeSVGHeight() {
     var nh = getNoteHeight();
     var fs = getFontPixelSize();
     $('svg').each(function(){
-        var noteRange = getNoteRange(this);
+        var noteRange = getSVGNoteRange(this);
         var h = (noteRange * nh) + fs;
         this.setAttribute('height', h);
+    });
+}
+/**
+ * @brief Resize all SVGs based on the current note width.
+ */
+function resizeSVGWidth() {
+    var nw = getNoteWidth();
+    $('svg').each(function(){
+        var songLength = getSVGSongLength(this);
+        this.setAttribute('width', songLength * nw);
     });
 }
 
