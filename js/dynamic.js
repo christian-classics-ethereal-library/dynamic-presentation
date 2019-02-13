@@ -1,5 +1,9 @@
 var $ = window.jQuery;
 
+// These seem to be hard-coded into reveal.js.
+var revealHeight = 700;
+var revealWidth = 960;
+
 $(document).ready(function(){
     // TODO: Switch these automatically
     switchVerse('v1', 'data-v1')
@@ -7,6 +11,8 @@ $(document).ready(function(){
     switchVerse('v3', 'data-v3')
     switchVerse('v4', 'data-v4')
     fillDynamicOptions();
+    setupPages();
+    setViewBoxes();
 });
 
 /**
@@ -220,6 +226,45 @@ function resizeSVGWidth() {
     $('svg').each(function(){
         var songLength = getSVGSongLength(this);
         this.setAttribute('width', songLength * nw);
+    });
+    setViewBoxes();
+}
+
+function setupPages() {
+    $('.dynamic.original svg').each(function(){
+        var slideGroup = $(this).closest('section.stack');
+        var slide = $(this).closest('section');
+        // TODO: Count the number of pages that we'll need.
+        for (var i = 1; i < 10; i++) {
+            if (setupPageSlideIsFull(slide)) {
+                slide = setupPageNewSlide(slide);
+            }
+            var child = $('<div class="dynamic" data-page="' + i + '">');
+            slide.append(child);
+            $(slide).find('[data-page="' + i + '"]')[0].innerHTML = this.outerHTML;
+            //child.innerHTML = this.outerHTML;
+        }
+    });
+}
+
+function setupPageNewSlide(slide) {
+    var slideGroup = $(slide).closest('section.stack');
+    slideGroup.append($("<section>"));
+    return slideGroup.find('section:last-of-type');
+    window.Reveal.sync();
+}
+
+function setupPageSlideIsFull(slide) {
+    // TODO: Change this to allow multiple lines per slide.
+    return true;
+}
+
+function setViewBoxes() {
+    $('.dynamic svg').each(function(){
+        var x = $(this).closest('[data-page]').attr('data-page') * revealWidth;
+        var height = $(this).attr('height');
+        var width = $(this).attr('width');
+        this.setAttribute('viewBox', x + ' 0 ' + width + ' ' + height);
     });
 }
 

@@ -25,3 +25,4 @@ function playPauseAudio() {
 }
 
 window.playPauseAudio = playPauseAudio;
+window.Reveal = Reveal;
