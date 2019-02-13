@@ -242,7 +242,6 @@ function setupPages() {
             var child = $('<div class="dynamic" data-page="' + i + '">');
             slide.append(child);
             $(slide).find('[data-page="' + i + '"]')[0].innerHTML = this.outerHTML;
-            //child.innerHTML = this.outerHTML;
         }
     });
 }
@@ -261,7 +260,8 @@ function setupPageSlideIsFull(slide) {
 
 function setViewBoxes() {
     $('.dynamic svg').each(function(){
-        var x = $(this).closest('[data-page]').attr('data-page') * revealWidth;
+        var peakahead = 84;
+        var x = $(this).closest('[data-page]').attr('data-page') * (revealWidth - peakahead);
         var height = $(this).attr('height');
         var width = $(this).attr('width');
         this.setAttribute('viewBox', x + ' 0 ' + width + ' ' + height);

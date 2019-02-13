@@ -4,7 +4,8 @@
     max-height: none;
     margin: 0;
     border: none;
-    box-shadow: none;
+    box-shadow: 0 0 50px 50px black;
+    overflow: hidden;
 }
 
 .reveal.reveal .slides > section, .reveal.reveal .slides > section > section {
