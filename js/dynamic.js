@@ -12,7 +12,6 @@ $(document).ready(function(){
     switchVerse('v4', 'data-v4')
     fillDynamicOptions();
     setupPages();
-    setViewBoxes();
 });
 
 /**
@@ -227,15 +226,28 @@ function resizeSVGWidth() {
         var songLength = getSVGSongLength(this);
         this.setAttribute('width', songLength * nw);
     });
-    setViewBoxes();
+    setupPages();
 }
 
 function setupPages() {
+    var unoriginal = $('.dynamic:not(.original)');
+    // Do this syncronously so that we don't delete things that are created later in the function.
+    for (var i = 0; i < unoriginal.length; i++) {
+        var item = unoriginal[i];
+        if (item.parentElement.children.length == 1) {
+            item.parentElement.remove();
+        } else {
+            item.remove();
+    }
+
+    }
     $('.dynamic.original svg').each(function(){
         var slideGroup = $(this).closest('section.stack');
         var slide = $(this).closest('section');
-        // TODO: Count the number of pages that we'll need.
-        for (var i = 1; i < 10; i++) {
+
+        var numPages = Math.ceil($(this).attr('width') / revealWidth);
+        // Start at 1 because page 0 already exists.
+        for (var i = 1; i < numPages; i++) {
             if (setupPageSlideIsFull(slide)) {
                 slide = setupPageNewSlide(slide);
             }
@@ -244,6 +256,7 @@ function setupPages() {
             $(slide).find('[data-page="' + i + '"]')[0].innerHTML = this.outerHTML;
         }
     });
+    setViewBoxes();
 }
 
 function setupPageNewSlide(slide) {
@@ -260,8 +273,7 @@ function setupPageSlideIsFull(slide) {
 
 function setViewBoxes() {
     $('.dynamic svg').each(function(){
-        var peakahead = 84;
-        var x = $(this).closest('[data-page]').attr('data-page') * (revealWidth - peakahead);
+        var x = $(this).closest('[data-page]').attr('data-page') * (revealWidth);
         var height = $(this).attr('height');
         var width = $(this).attr('width');
         this.setAttribute('viewBox', x + ' 0 ' + width + ' ' + height);
