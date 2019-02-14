@@ -28,6 +28,13 @@ function setFontSize(s) {
 }
 
 /**
+ * @brief Set the number of quarter notes to display per line.
+ */
+function setNotesPerLine(n) {
+    setNoteWidth(revealWidth/n);
+}
+
+/**
  * @brief Change the size of a notes.
  */
 function setNoteHeight(h) {
@@ -101,6 +108,7 @@ function togglePart(id, partColor) {
 }
 
 window.setFontSize = setFontSize;
+window.setNotesPerLine = setNotesPerLine;
 window.setNoteHeight = setNoteHeight;
 window.setNoteWidth = setNoteWidth;
 window.switchVerse = switchVerse;
@@ -290,8 +298,6 @@ function setupPageSlideIsFull(slide) {
     var svgHeight = parseInt($(slide).find('.dynamic svg').attr('height'));
     var canHold = Math.floor(revealHeight / svgHeight);
     var numberOfChildren = $(slide).find('.dynamic svg').length;
-    console.log(canHold);
-    console.log(numberOfChildren);
     return (numberOfChildren >= canHold);
 }
 

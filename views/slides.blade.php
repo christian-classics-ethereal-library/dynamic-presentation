@@ -36,6 +36,12 @@
                                 window.jQuery(".noteHeight").html(this.value);'>
                         <i class='noteHeight'></i>
                         <br/>
+                        <b>Notes Per Line: </b>
+                        <input type="range" value="12" min="6" max="24" step="1"
+                            onchange='window.setNotesPerLine(this.value);
+                                window.jQuery(".notesPerLine").html(this.value);'>
+                        <i class='notesPerLine'></i>
+                        <br/>
                         <b>Font Size: </b>
                         <input type="range" value="20" min="10" max="50" step="1"
                             onchange='window.setFontSize(this.value);
