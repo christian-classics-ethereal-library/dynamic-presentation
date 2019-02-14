@@ -217,6 +217,7 @@ function resizeSVGHeight() {
         var h = (noteRange * nh) + fs;
         this.setAttribute('height', h);
     });
+    setViewBoxes();
 }
 /**
  * @brief Resize all SVGs based on the current note width.
