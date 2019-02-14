@@ -216,6 +216,7 @@ function resizeSVGHeight() {
         var h = (noteRange * nh) + fs;
         this.setAttribute('height', h);
     });
+    setViewBoxes();
 }
 /**
  * @brief Resize all SVGs based on the current note width.
@@ -231,7 +232,7 @@ function resizeSVGWidth() {
 
 function setupPages() {
     var unoriginal = $('.dynamic:not(.original)');
-    // Do this syncronously so that we don't delete things that are created later in the function.
+    // Do this syncronously so we don't have a race condition for item.parentElement.children.length.
     for (var i = 0; i < unoriginal.length; i++) {
         var item = unoriginal[i];
         if (item.parentElement.children.length == 1) {
@@ -268,7 +269,12 @@ function setupPageNewSlide(slide) {
 
 function setupPageSlideIsFull(slide) {
     // TODO: Change this to allow multiple lines per slide.
-    return true;
+    var svgHeight = parseInt($(slide).find('.dynamic svg').attr('height'));
+    var canHold = Math.floor(revealHeight / svgHeight);
+    var numberOfChildren = $(slide).find('.dynamic svg').length;
+    console.log(canHold);
+    console.log(numberOfChildren);
+    return (numberOfChildren >= canHold);
 }
 
 function setViewBoxes() {
