@@ -11,8 +11,26 @@ $(document).ready(function(){
     switchVerse('v3', 'data-v3')
     switchVerse('v4', 'data-v4')
     fillDynamicOptions();
-    setupPages();
+    autosetNotesPerLine();
 });
+
+/**
+ * @brief Set the notes per line automatically based on the breathSections.
+ */
+function autosetNotesPerLine() {
+    var breathSections = $('.dynamic.original svg:first #breathSections rect');
+    var maxNPL = 0;
+    if (breathSections.length) {
+        for (var i = 0; i < breathSections.length; i++) {
+            var npl = parseInt(breathSections[i].attributes['data-width'].value);
+            if (npl > maxNPL) {
+                maxNPL = npl;
+            }
+        }
+        return setNotesPerLine(maxNPL);
+    }
+    return setNotesPerLine(12);
+}
 
 /**
  * @brief Change the size of the font for the lyrics.
@@ -107,6 +125,7 @@ function togglePart(id, partColor) {
     resizeSVGHeight();
 }
 
+window.autosetNotesPerLine = autosetNotesPerLine;
 window.setFontSize = setFontSize;
 window.setNotesPerLine = setNotesPerLine;
 window.setNoteHeight = setNoteHeight;
