@@ -268,7 +268,12 @@ function setupPages() {
         var slideGroup = $(this).closest('section.stack');
         var slide = $(this).closest('section');
 
-        var numPages = Math.ceil($(this).attr('width') / revealWidth);
+        var numPages = 0;
+        if ($(this).find('#breathSections rect').length) {
+            numPages = $(this).find('#breathSections rect').length;
+        } else {
+            numPages = Math.ceil($(this).attr('width') / revealWidth);
+        }
         // Start at 1 because page 0 already exists.
         for (var i = 1; i < numPages; i++) {
             if (setupPageSlideIsFull(slide)) {
@@ -311,8 +316,18 @@ function setupPageSlideIsFull(slide) {
  * @brief Set the view boxes for each svg "line" so they start at the correct x value.
  */
 function setViewBoxes() {
+    var sections = $('.dynamic.original svg:first #breathSections rect');
+
     $('.dynamic svg').each(function(){
-        var x = $(this).closest('[data-page]').attr('data-page') * (revealWidth);
+        var x = 0;
+        var pageNum = $(this).closest('[data-page]').attr('data-page');
+        if (sections.length > pageNum) {
+            x = sections[pageNum].attributes['x']['value'];
+            $(this).attr('width', sections[pageNum].attributes['width']['value']);
+        } else {
+            x = pageNum * (revealWidth);
+        }
+
         var height = $(this).attr('height');
         var width = $(this).attr('width');
         this.setAttribute('viewBox', x + ' 0 ' + width + ' ' + height);

@@ -8,6 +8,12 @@
     overflow: hidden;
     /* Prevent this div from adding any height. */
     font-size: 0;
+    text-align: left;
+}
+
+.reveal .dynamic svg {
+    /* Black out the end of each svg.*/
+    box-shadow: 0 0 0 960px black;
 }
 
 .reveal .dynamic.odd {
