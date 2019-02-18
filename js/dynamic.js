@@ -27,7 +27,9 @@ function autosetNotesPerLine() {
                 maxNPL = npl;
             }
         }
-        return setNotesPerLine(maxNPL);
+        if (maxNPL >= 1) {
+            return setNotesPerLine(maxNPL);
+        }
     }
     return setNotesPerLine(12);
 }
@@ -49,7 +51,9 @@ function setFontSize(s) {
  * @brief Set the number of quarter notes to display per line.
  */
 function setNotesPerLine(n) {
-    setNoteWidth(revealWidth/n);
+    if (n >= 1){
+        setNoteWidth(revealWidth/n);
+    }
 }
 
 /**
@@ -288,7 +292,7 @@ function setupPages() {
         var slide = $(this).closest('section');
 
         var numPages = 0;
-        if ($(this).find('#breathSections rect').length) {
+        if ($(this).find('#breathSections rect').length > 1) {
             numPages = $(this).find('#breathSections rect').length;
         } else {
             numPages = Math.ceil($(this).attr('width') / revealWidth);
@@ -340,7 +344,8 @@ function setViewBoxes() {
     $('.dynamic svg').each(function(){
         var x = 0;
         var pageNum = $(this).closest('[data-page]').attr('data-page');
-        if (sections.length > pageNum) {
+        if (sections.length > pageNum && $(sections[pageNum]).attr('width') > 0) {
+            console.log(sections.length)
             x = sections[pageNum].attributes['x']['value'];
             $(this).attr('width', sections[pageNum].attributes['width']['value']);
         } else {
