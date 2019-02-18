@@ -10,6 +10,10 @@
     font-size: 0;
 }
 
+.reveal .dynamic.odd {
+    background-color: rgba(127, 127, 127, 0.2);
+}
+
 .reveal.reveal .slides > section, .reveal.reveal .slides > section > section {
     padding: 0px;
 }

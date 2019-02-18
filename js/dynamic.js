@@ -136,11 +136,11 @@ function countVerses() {
  */
 function fillDynamicOptions() {
     for ( var i = 1; i <= countVerses(); i++) {
-        var option = "<div>";
-        option += "Verse " + i;
-        option += getPartsToggler('v' + i);
-        option += "</div><br/>";
+        var option = $("<div>");
+        $(option).addClass("v" + i);
+        option.html("Verse " + i);
         $('#dynamicOptions .viewport-inner').append(option);
+        getPartsToggler('v' + i, option);
     }
 }
 
@@ -201,16 +201,17 @@ function getSVGSongLength(svg) {
 /**
  * @brief get HTML for a toggle option to remove parts.
  */
-function getPartsToggler(id) {
+function getPartsToggler(id, section) {
     // Take the parts from the first SVG.
-    var parts = $('.slides > section:first-of-type > section:first-of-type .dynamic svg #parts rect');
-    var html = "";
+    var parts = $('.slides > section:first-of-type > section .dynamic.original svg #parts rect');
     for (var i = 0; i < parts.length; i++) {
         var fill = $(parts[i]).attr('fill');
-        var js = 'window.togglePart("' + id + '", "' + fill + '")';
-        html += "<button onclick='" + js + "'>" + fill + "</button>";
+        var button = $("<button>");
+        button.html(fill);
+        $(button).attr('onclick', 'window.togglePart("' + id + '","' + fill + '")');
+        $(button).css('background-color', fill);
+        $(section).append(button);
     }
-    return html;
 }
 
 /**
@@ -273,7 +274,12 @@ function setupPages() {
             if (setupPageSlideIsFull(slide)) {
                 slide = setupPageNewSlide(slide);
             }
-            var child = $('<div class="dynamic" data-page="' + i + '">');
+            var child = $('<div>');
+            $(child).addClass('dynamic');
+            $(child).attr('data-page', i);
+            if (i % 2 == 1) {
+                $(child).addClass('odd');
+            }
             slide.append(child);
             $(slide).find('[data-page="' + i + '"]')[0].innerHTML = this.outerHTML;
         }
