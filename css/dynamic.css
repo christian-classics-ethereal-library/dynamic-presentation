@@ -4,7 +4,6 @@
     max-height: none;
     margin: 0;
     border: none;
-    box-shadow: inset 0px -3px rgba(255, 255, 255, 0.8);
     overflow: hidden;
     /* Prevent this div from adding any height. */
     font-size: 0;
@@ -17,7 +16,7 @@
 }
 
 .reveal .dynamic.odd {
-    background-color: rgba(127, 127, 127, 0.2);
+    background-color: rgba(127, 127, 127, 0.4);
 }
 
 .reveal.reveal .slides > section, .reveal.reveal .slides > section > section {
