@@ -304,6 +304,7 @@ function setupPages() {
             }
             var child = $('<div>');
             $(child).addClass('dynamic');
+            $(child).css('opacity', 0);
             $(child).attr('data-page', i);
             if (i % 2 == 1) {
                 $(child).addClass('odd');
@@ -356,6 +357,7 @@ function setViewBoxes() {
         var width = $(this).attr('width');
         this.setAttribute('viewBox', x + ' 0 ' + width + ' ' + height);
     });
+    $('.dynamic').css('opacity', 1);
 }
 
 /**

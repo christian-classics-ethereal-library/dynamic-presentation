@@ -8,6 +8,7 @@
     /* Prevent this div from adding any height. */
     font-size: 0;
     text-align: left;
+    transition: opacity .2s ease;
 }
 
 .reveal .dynamic svg {
