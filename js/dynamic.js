@@ -241,8 +241,8 @@ function getPartsToggler(id, section) {
  * @brief Reset RevealJS so it detects the changes we've made to the DOM.
  */
 function resetReveal() {
-    // TODO: Stay on the roughly same slide (or the same verse).
-    window.Reveal.slide(0,0);
+    var indices = window.Reveal.getIndices();
+    window.Reveal.slide(indices.h, indices.v);
 }
 
 /**
