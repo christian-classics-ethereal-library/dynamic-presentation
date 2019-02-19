@@ -11,6 +11,8 @@ Reveal.addKeyBinding(
 
 Reveal.initialize({
     "controlsTutorial": false,
+    // TODO: use linear navigationMode when that feature is added to reveal.js.
+    //'navigationMode': 'linear',
     "transition": "none"
 });
 
