@@ -41,7 +41,7 @@ function setFontSize(s) {
     fontPixelSize = undefined;
     $('.dynamic svg g text').each(function(){
         this.setAttribute('font-size', s + 'pt');
-        this.setAttribute('dy', (-1 / 3) * s);
+        this.setAttribute('dy', (-1 / 2) * s);
         squishText(this);
     });
     resizeSVGHeight();
@@ -253,7 +253,7 @@ function resizeSVGHeight() {
     var fs = getFontPixelSize();
     $('svg').each(function(){
         var noteRange = getSVGNoteRange(this);
-        var h = (noteRange * nh) + fs;
+        var h = (noteRange * nh) + (fs * (4 / 3));
         this.setAttribute('height', h);
     });
     setViewBoxes();
