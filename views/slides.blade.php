@@ -14,11 +14,6 @@
     <link href="{{ asset('css/dynamic.css') }}" rel="stylesheet">
 </head>
 <body>
-    @if (isset($audio))
-        <audio id='audio'>
-            <source src="{{$audio}}" type="audio/mpeg">
-        </audio>
-    @endif
     <div class="reveal">
         <div id='dynamicOptions' class='overlay'>
             <header>
@@ -28,6 +23,12 @@
             </header>
             <div class='viewport'>
                 <div class='viewport-inner'>
+                    @if (isset($audio))
+                        <audio id='audio' controls>
+                            <source src="{{$audio}}" type="audio/mpeg">
+                        </audio>
+                        <br/>
+                    @endif
                     <b>Dynamic Options</b><br/>
                     <div style="background-color: gray;">
                         <b>Note Height: </b>
