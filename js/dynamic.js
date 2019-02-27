@@ -11,6 +11,7 @@ $(document).ready(function(){
     switchVerse('v3', 'data-v3')
     switchVerse('v4', 'data-v4')
     fillDynamicOptions();
+    setDisplay('melody', 'all', false);
     autosetNotesPerLine();
 });
 
@@ -34,7 +35,7 @@ function autosetNotesPerLine() {
     return setNotesPerLine(12);
 }
 
-function setDisplay(type, verse='all') {
+function setDisplay(type, verse='all', doSetupPages = true) {
     if (type == 'lyrics') {
         hideParts(verse);
     } else if (type == 'melody') {
@@ -45,7 +46,9 @@ function setDisplay(type, verse='all') {
         hideParts(verse, 'show');
     }
     resizeSVGHeight();
-    setupPages();
+    if (doSetupPages) {
+        setupPages();
+    }
 }
 
 /**
@@ -176,12 +179,16 @@ function countVerses() {
  * @brief Fill the dynamic options with the controls for this song.
  */
 function fillDynamicOptions() {
+    var option = $("<div>");
+    option.html("All Verses");
+    $('#dynamicOptions .viewport-inner').append(option);
+    getDisplaySetter('all', option);
     for ( var i = 1; i <= countVerses(); i++) {
         var option = $("<div>");
         $(option).addClass("v" + i);
         option.html("Verse " + i);
         $('#dynamicOptions .viewport-inner').append(option);
-        getPartsToggler(i, option);
+        getDisplaySetter(i, option);
     }
 }
 
@@ -237,6 +244,20 @@ function getSVGNoteRange(svg) {
 }
 function getSVGSongLength(svg) {
     return $(svg).attr('data-songlength');
+}
+
+/**
+ * @brief Append HTML for a setting to change the view of different verses.
+ */
+function getDisplaySetter(verse, section) {
+    var choices = ['lyrics', 'melody', 'harmony'];
+    for (var i = 0; i < choices.length; i++) {
+        var button = $("<button>");
+        $(button).attr('value', choices[i]);
+        $(button).attr('onclick', 'window.setDisplay(this.value, "' + verse + '");');
+        $(button).html(choices[i]);
+        $(section).append(button);
+    }
 }
 
 /**
