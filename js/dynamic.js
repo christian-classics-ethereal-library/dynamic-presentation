@@ -34,6 +34,20 @@ function autosetNotesPerLine() {
     return setNotesPerLine(12);
 }
 
+function setDisplay(type, verse='all') {
+    if (type == 'lyrics') {
+        hideParts(verse);
+    } else if (type == 'melody') {
+        hideParts(verse);
+        var melodyColor = $('#parts rect[fill]:first-of-type').attr('fill');
+        togglePart(verse, melodyColor);
+    } else if (type == 'harmony') {
+        hideParts(verse, 'show');
+    }
+    resizeSVGHeight();
+    setupPages();
+}
+
 /**
  * @brief Change the size of the font for the lyrics.
  */
@@ -121,15 +135,19 @@ function toggleDynamicOptions() {
  * @param id The html id surrounding the svgs that you want to change.
  * @param partColor The fill color of the part that you want to hide.
  */
-function togglePart(id, partColor) {
-    $('#' + id + ' .dynamic svg rect[fill="' + partColor + '"]').each( function() {
+function togglePart(verse, partColor) {
+    var selector = '.dynamic svg rect[fill="' + partColor + '"]';
+    if (verse != 'all') {
+        selector = '#v' + verse + ' ' + selector;
+    }
+    $(selector).each( function() {
         // TODO: Create CSS rule to toggle with less latency.
         $(this).toggle();
     });
-    resizeSVGHeight();
 }
 
 window.autosetNotesPerLine = autosetNotesPerLine;
+window.setDisplay = setDisplay;
 window.setFontSize = setFontSize;
 window.setNotesPerLine = setNotesPerLine;
 window.setNoteHeight = setNoteHeight;
@@ -163,7 +181,7 @@ function fillDynamicOptions() {
         $(option).addClass("v" + i);
         option.html("Verse " + i);
         $('#dynamicOptions .viewport-inner').append(option);
-        getPartsToggler('v' + i, option);
+        getPartsToggler(i, option);
     }
 }
 
@@ -224,17 +242,33 @@ function getSVGSongLength(svg) {
 /**
  * @brief get HTML for a toggle option to remove parts.
  */
-function getPartsToggler(id, section) {
+function getPartsToggler(verse, section) {
     // Take the parts from the first SVG.
     var parts = $('.slides > section:first-of-type > section .dynamic.original svg #parts rect');
     for (var i = 0; i < parts.length; i++) {
         var fill = $(parts[i]).attr('fill');
         var button = $("<button>");
         button.html(fill);
-        $(button).attr('onclick', 'window.togglePart("' + id + '","' + fill + '")');
+        $(button).attr('onclick', 'window.togglePart("' + verse + '","' + fill + '")');
         $(button).css('background-color', fill);
         $(section).append(button);
     }
+}
+
+/**
+ * @brief Hide all parts of music.
+ * @param verse either 'all', or the verse number for which you want to hide parts.
+ * @param method optionally "show" to show parts instead of hide them.
+ */
+function hideParts(verse, method='hide') {
+    var selector = ' .dynamic svg rect[fill]'
+    if (verse != 'all') {
+        selector = '#v' + verse + selector;
+    }
+    $(selector).each( function() {
+        // TODO: Create CSS rule to show/hide with less latency.
+        $(this)[method]();
+    });
 }
 
 /**
