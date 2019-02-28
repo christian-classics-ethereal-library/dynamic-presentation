@@ -290,9 +290,9 @@ function getDisplaySetter (verse, section) {
  * @param method optionally "show" to show parts instead of hide them.
  */
 function hideParts (verse, method = 'hide') {
-  var selector = ' .dynamic svg rect[fill]';
+  var selector = '.dynamic svg rect[fill]';
   if (verse !== 'all') {
-    selector = '#v' + verse + selector;
+    selector = '#v' + verse + ' ' + selector;
   }
   $(selector).each(function () {
     // TODO: Create CSS rule to show/hide with less latency.
