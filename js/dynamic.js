@@ -12,6 +12,14 @@ $(document).ready(function(){
     switchVerse('v4', 'data-v4')
     fillDynamicOptions();
     autosetNotesPerLine();
+
+    var audio = document.getElementById('audio')
+    audio.onended = function() {
+        if (window.Reveal.availableRoutes()['right']) {
+            window.Reveal.right();
+            this.play()
+        }
+    };
 });
 
 /**
