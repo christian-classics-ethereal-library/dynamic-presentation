@@ -2,13 +2,13 @@ var Reveal = require('reveal.js');
 
 Reveal.addKeyBinding(
   { keyCode: 68, key: 'D', description: 'Toggle Dynamic Presentation Options' },
-  function() {
+  function () {
     window.toggleDynamicOptions();
   }
 );
 Reveal.addKeyBinding(
   { keyCode: 77, key: 'M', description: 'Play/Stop audio' },
-  function() {
+  function () {
     window.playPauseAudio();
   }
 );
@@ -16,11 +16,11 @@ Reveal.addKeyBinding(
 Reveal.initialize({
   controlsTutorial: false,
   // TODO: use linear navigationMode when that feature is added to reveal.js.
-  //'navigationMode': 'linear',
+  // 'navigationMode': 'linear',
   transition: 'none'
 });
 
-function playPauseAudio() {
+function playPauseAudio () {
   var audio = document.getElementById('audio');
   if (audio.paused) {
     audio.currentTime = 0;
