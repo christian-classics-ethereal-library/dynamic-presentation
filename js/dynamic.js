@@ -4,6 +4,8 @@ var $ = window.jQuery;
 var revealHeight = 700;
 var revealWidth = 960;
 
+var fontPixelSize;
+
 $(document).ready(function () {
   // TODO: Switch these automatically
   switchVerse('v1', 'data-v1');
@@ -44,13 +46,13 @@ function autosetNotesPerLine () {
 }
 
 function setDisplay (type, verse = 'all', doSetupPages = true) {
-  if (type == 'lyrics') {
+  if (type === 'lyrics') {
     hideParts(verse);
-  } else if (type == 'melody') {
+  } else if (type === 'melody') {
     hideParts(verse);
     var melodyColor = $('#parts rect[fill]:first-of-type').attr('fill');
     togglePart(verse, melodyColor);
-  } else if (type == 'harmony') {
+  } else if (type === 'harmony') {
     hideParts(verse, 'show');
   }
   resizeSVGHeight();
@@ -95,14 +97,15 @@ function setNoteHeight (h) {
 }
 
 function setNoteWidth (w) {
+  var width;
   $('.dynamic svg [data-x]').each(function () {
     var x = parseFloat(this.attributes['data-x']['value']) * w;
     this.setAttribute('x', x);
     if (typeof this.attributes['data-width'] !== 'undefined') {
-      var width = parseFloat(this.attributes['data-width']['value']) * w;
+      width = parseFloat(this.attributes['data-width']['value']) * w;
       this.setAttribute('width', width);
     } else if (typeof this.attributes['data-tl'] !== 'undefined') {
-      var width = parseFloat(this.attributes['data-tl']['value']) * w;
+      width = parseFloat(this.attributes['data-tl']['value']) * w;
       this.setAttribute('data-textlength', width);
       squishText(this);
     }
@@ -152,7 +155,7 @@ function toggleDynamicOptions () {
  */
 function togglePart (verse, partColor) {
   var selector = '.dynamic svg rect[fill="' + partColor + '"]';
-  if (verse != 'all') {
+  if (verse !== 'all') {
     selector = '#v' + verse + ' ' + selector;
   }
   $(selector).each(function () {
@@ -181,7 +184,7 @@ function countVerses () {
   var i;
   for (i = 1; i < 10; i++) {
     var selector = svgSelector + ' [data-v' + i + ']';
-    if ($(selector).length == 0) {
+    if ($(selector).length === 0) {
       return i - 1;
     }
   }
@@ -197,7 +200,7 @@ function fillDynamicOptions () {
   $('#dynamicOptions .viewport-inner').append(option);
   getDisplaySetter('all', option);
   for (var i = 1; i <= countVerses(); i++) {
-    var option = $('<div>');
+    option = $('<div>');
     $(option).addClass('v' + i);
     option.html('Verse ' + i);
     $('#dynamicOptions .viewport-inner').append(option);
@@ -212,11 +215,11 @@ function getFontPixelSize () {
   // Use a global variable to improve speed.
   if (typeof fontPixelSize === 'undefined') {
     var size = $('.dynamic svg text[data-v1]').attr('font-size');
-    if (size == undefined) {
+    if (size === undefined) {
       fontPixelSize = 0;
-    } else if (size.indexOf('pt') != -1) {
+    } else if (size.indexOf('pt') !== -1) {
       fontPixelSize = parseFloat(size.replace('pt', '')) * (4 / 3);
-    } else if (size.indexOf('px') != -1) {
+    } else if (size.indexOf('px') !== -1) {
       fontPixelSize = parseFloat(size.replace('px', ''));
     }
   }
@@ -249,7 +252,7 @@ function getSVGNoteRange (svg) {
   var max = 0;
   for (var i = 0; i < parts.length; i++) {
     // togglePart sets display to none.
-    if ($(parts[i]).css('display') != 'none') {
+    if ($(parts[i]).css('display') !== 'none') {
       var test =
         parseFloat($(parts[i]).attr('data-y')) +
         parseFloat($(parts[i]).attr('data-height'));
@@ -282,34 +285,13 @@ function getDisplaySetter (verse, section) {
 }
 
 /**
- * @brief get HTML for a toggle option to remove parts.
- */
-function getPartsToggler (verse, section) {
-  // Take the parts from the first SVG.
-  var parts = $(
-    '.slides > section:first-of-type > section .dynamic.original svg #parts rect'
-  );
-  for (var i = 0; i < parts.length; i++) {
-    var fill = $(parts[i]).attr('fill');
-    var button = $('<button>');
-    button.html(fill);
-    $(button).attr(
-      'onclick',
-      'window.togglePart("' + verse + '","' + fill + '")'
-    );
-    $(button).css('background-color', fill);
-    $(section).append(button);
-  }
-}
-
-/**
  * @brief Hide all parts of music.
  * @param verse either 'all', or the verse number for which you want to hide parts.
  * @param method optionally "show" to show parts instead of hide them.
  */
 function hideParts (verse, method = 'hide') {
   var selector = ' .dynamic svg rect[fill]';
-  if (verse != 'all') {
+  if (verse !== 'all') {
     selector = '#v' + verse + selector;
   }
   $(selector).each(function () {
@@ -361,14 +343,13 @@ function setupPages () {
   // Do this syncronously so we don't have a race condition for item.parentElement.children.length.
   for (var i = 0; i < unoriginal.length; i++) {
     var item = unoriginal[i];
-    if (item.parentElement.children.length == 1) {
+    if (item.parentElement.children.length === 1) {
       item.parentElement.remove();
     } else {
       item.remove();
     }
   }
   $('.dynamic.original svg').each(function () {
-    var slideGroup = $(this).closest('section.stack');
     var slide = $(this).closest('section');
 
     var numPages = 0;
@@ -386,7 +367,7 @@ function setupPages () {
       $(child).addClass('dynamic');
       $(child).css('opacity', 0);
       $(child).attr('data-page', i);
-      if (i % 2 == 1) {
+      if (i % 2 === 1) {
         $(child).addClass('odd');
       }
       slide.append(child);
