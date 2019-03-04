@@ -13,6 +13,14 @@ $(document).ready(function(){
     fillDynamicOptions();
     setDisplay('melody', 'all', false);
     autosetNotesPerLine();
+
+    var audio = document.getElementById('audio')
+    audio.onended = function() {
+        if (window.Reveal.availableRoutes()['right']) {
+            window.Reveal.right();
+            this.play()
+        }
+    };
 });
 
 /**
