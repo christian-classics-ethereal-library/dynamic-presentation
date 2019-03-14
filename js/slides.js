@@ -1,29 +1,33 @@
-var Reveal = require("reveal.js");
+var Reveal = require('reveal.js');
 
 Reveal.addKeyBinding(
-    { keyCode: 68, key: 'D',description: 'Toggle Dynamic Presentation Options' },
-    function(){ window.toggleDynamicOptions(); }
+  { keyCode: 68, key: 'D', description: 'Toggle Dynamic Presentation Options' },
+  function () {
+    window.toggleDynamicOptions();
+  }
 );
 Reveal.addKeyBinding(
-    { keyCode: 77, key: 'M', description: 'Play/Stop audio' },
-    function(){ window.playPauseAudio(); }
+  { keyCode: 77, key: 'M', description: 'Play/Stop audio' },
+  function () {
+    window.playPauseAudio();
+  }
 );
 
 Reveal.initialize({
-    "controlsTutorial": false,
-    // TODO: use linear navigationMode when that feature is added to reveal.js.
-    //'navigationMode': 'linear',
-    "transition": "none"
+  controlsTutorial: false,
+  // TODO: use linear navigationMode when that feature is added to reveal.js.
+  // 'navigationMode': 'linear',
+  transition: 'none'
 });
 
-function playPauseAudio() {
-    var audio = document.getElementById('audio');
-    if (audio.paused) {
-        audio.currentTime = 0;
-        audio.play();
-    } else {
-        audio.pause();
-    }
+function playPauseAudio () {
+  var audio = document.getElementById('audio');
+  if (audio.paused) {
+    audio.currentTime = 0;
+    audio.play();
+  } else {
+    audio.pause();
+  }
 }
 
 window.playPauseAudio = playPauseAudio;
