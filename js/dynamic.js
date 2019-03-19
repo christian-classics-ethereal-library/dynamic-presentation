@@ -8,10 +8,12 @@ var fontPixelSize;
 
 $(document).ready(function () {
   // TODO: Switch these automatically
-  switchVerse('v1', 'data-v1');
-  switchVerse('v2', 'data-v2');
-  switchVerse('v3', 'data-v3');
-  switchVerse('v4', 'data-v4');
+  switchVerse(1, 'data-v1');
+  switchVerse(2, 'data-v2');
+  switchVerse(3, 'data-v3');
+  switchVerse(4, 'data-v4');
+  alwaysShow('data-vrefrain');
+
   fillDynamicOptions();
   setDisplay('melody', 'all', false);
   autosetNotesPerLine();
@@ -115,16 +117,20 @@ function setNoteWidth (w) {
 
 /**
  * @brief Change the lyrics in a dynamic.svg to a different verse.
- * @param string id the html id surrounding the svgs that you want to change.
- * @param string verseAttr 'data-v#' where # is a verse number (see tools/dynamic.py).
  */
-function switchVerse (id, verseAttr) {
-  // TODO: Don't get rid of text that we need (show the chorus on verse two).
-  $('#' + id + ' .dynamic svg g text').each(function () {
-    this.innerHTML = '';
-  });
+function switchVerse (verse, verseAttr, hidePrevious = true) {
+  var selector = '.dynamic svg g text';
+  if (verse !== 'all') {
+    selector = '#v' + verse + ' ' + selector;
+  }
 
-  var els = $('#' + id + ' svg g text[' + verseAttr + ']');
+  if (hidePrevious) {
+    $(selector).each(function () {
+      this.innerHTML = '';
+    });
+  }
+
+  var els = $(selector + '[' + verseAttr + ']');
   for (var i = 0; i < els.length; i++) {
     // Remove the hypens that start a syllable. We don't need two hypens per word.
     var text = $(els[i])
@@ -150,8 +156,6 @@ function toggleDynamicOptions () {
 
 /**
  * @brief Show or hide a part from a specific verse.
- * @param id The html id surrounding the svgs that you want to change.
- * @param partColor The fill color of the part that you want to hide.
  */
 function togglePart (verse, partColor) {
   var selector = '.dynamic svg rect[fill="' + partColor + '"]';
@@ -173,6 +177,10 @@ window.setNoteWidth = setNoteWidth;
 window.switchVerse = switchVerse;
 window.toggleDynamicOptions = toggleDynamicOptions;
 window.togglePart = togglePart;
+
+function alwaysShow (name) {
+  switchVerse('all', name, false);
+}
 
 /**
  * @brief Count the number of verses in this dynamic presentation.
