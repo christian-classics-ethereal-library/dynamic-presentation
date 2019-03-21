@@ -30,6 +30,7 @@
                         <br/>
                     @endif
                     <b>Dynamic Options</b><br/>
+                    <span class='url'>{{Request::url()}}?dp-noteHeight=<i class='noteHeight'></i>&dp-fontSize=<i class='fontSize'></i><i class='displayOpts'></i></span>
                     <div style="background-color: gray;">
                         <b>Note Height: </b>
                         <input type="range" value="20" min="1" max="20" step="1"

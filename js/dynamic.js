@@ -9,22 +9,27 @@ var fontPixelSize;
 $(document).ready(function () {
   $('#openDynamicOptions').click(window.toggleDynamicOptions);
 
-  // TODO: Switch these automatically
-  switchVerse(1, 'data-v1');
-  switchVerse(2, 'data-v2');
-  switchVerse(3, 'data-v3');
-  switchVerse(4, 'data-v4');
+  fillDynamicOptions();
+  var p;
+
+  if ((p = urlParam('dp-vall')) !== false) {
+    setDisplay(p, 'all', false);
+  }
+  for (let i = 1; i <= countVerses(); i++) {
+    switchVerse(i, 'data-v' + i);
+    if (urlParam('dp-v' + i) !== false) {
+      setDisplay(urlParam('dp-v' + i), i, false);
+    }
+  }
   alwaysShow('data-vrefrain');
 
-  if (urlParam('dp-noteHeight') !== false) {
-    setNoteHeight(parseInt(urlParam('dp-noteHeight')));
+  if ((p = urlParam('dp-noteHeight')) !== false) {
+    setNoteHeight(parseInt(p));
   }
-  if (urlParam('dp-fontSize') !== false) {
-    setFontSize(parseInt(urlParam('dp-fontSize')));
+  if ((p = urlParam('dp-fontSize')) !== false) {
+    setFontSize(parseInt(p));
   }
 
-  fillDynamicOptions();
-  setDisplay('melody', 'all', false);
   autosetNotesPerLine();
 
   var audio = document.getElementById('audio');
@@ -57,6 +62,18 @@ function autosetNotesPerLine () {
 }
 
 function setDisplay (type, verse = 'all', doSetupPages = true) {
+  var options = $('.displayOpts')
+    .html()
+    .replace(/&amp;/g, '&');
+  console.log(options);
+  if (verse === 'all') {
+    options = '';
+  }
+  var regex = new RegExp('&dp-v' + verse + '=[^&]*', 'g');
+  options = options.replace(regex, '');
+  options += '&dp-v' + verse + '=' + type;
+  $('.displayOpts').html(options);
+
   if (type === 'lyrics') {
     hideParts(verse);
   } else if (type === 'melody') {
@@ -76,6 +93,7 @@ function setDisplay (type, verse = 'all', doSetupPages = true) {
  * @brief Change the size of the font for the lyrics.
  */
 function setFontSize (s) {
+  $('.fontSize').html(s);
   fontPixelSize = undefined;
   $('.dynamic svg g text').each(function () {
     this.setAttribute('font-size', s + 'pt');
@@ -98,6 +116,7 @@ function setNotesPerLine (n) {
  * @brief Change the size of a notes.
  */
 function setNoteHeight (h) {
+  $('.noteHeight').html(h);
   $('.dynamic svg rect[data-y]').each(function () {
     var y = parseFloat(this.attributes['data-y']['value']) * h;
     this.setAttribute('y', y);
@@ -479,10 +498,10 @@ function squishText (el) {
   el.innerHTML = text;
 }
 
-
 function urlParam (name) {
-  var results = new RegExp('[\?&]' + name + '=([^&#]*)')
-    .exec(window.location.search);
+  var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(
+    window.location.search
+  );
 
-  return (results !== null) ? results[1] || 0 : false;
+  return results !== null ? results[1] || 0 : false;
 }
