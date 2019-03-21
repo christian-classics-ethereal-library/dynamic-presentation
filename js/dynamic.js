@@ -16,6 +16,13 @@ $(document).ready(function () {
   switchVerse(4, 'data-v4');
   alwaysShow('data-vrefrain');
 
+  if (urlParam('dp-noteHeight') !== false) {
+    setNoteHeight(parseInt(urlParam('dp-noteHeight')));
+  }
+  if (urlParam('dp-fontSize') !== false) {
+    setFontSize(parseInt(urlParam('dp-fontSize')));
+  }
+
   fillDynamicOptions();
   setDisplay('melody', 'all', false);
   autosetNotesPerLine();
@@ -470,4 +477,12 @@ function squishText (el) {
     $(el).attr('textLength', null);
   }
   el.innerHTML = text;
+}
+
+
+function urlParam (name) {
+  var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+    .exec(window.location.search);
+
+  return (results !== null) ? results[1] || 0 : false;
 }
