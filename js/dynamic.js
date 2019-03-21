@@ -7,6 +7,8 @@ var revealWidth = 960;
 var fontPixelSize;
 
 $(document).ready(function () {
+  $('#openDynamicOptions').click(window.toggleDynamicOptions);
+
   // TODO: Switch these automatically
   switchVerse(1, 'data-v1');
   switchVerse(2, 'data-v2');

@@ -52,6 +52,7 @@
                 </div>
             </div>
         </div>
+        <a href='#' id='openDynamicOptions'>&#x2699;</a>
         <div class="slides">
             @foreach ($slides as $key => $slide)
                 @if (isset($slide['name']))
