@@ -65,7 +65,6 @@ function setDisplay (type, verse = 'all', doSetupPages = true) {
   var options = $('.displayOpts')
     .html()
     .replace(/&amp;/g, '&');
-  console.log(options);
   if (verse === 'all') {
     options = '';
   }
@@ -449,7 +448,6 @@ function setViewBoxes () {
       .closest('[data-page]')
       .attr('data-page');
     if (sections.length > pageNum && $(sections[pageNum]).attr('width') > 0) {
-      console.log(sections.length);
       x = sections[pageNum].attributes['x']['value'];
       $(this).attr('width', sections[pageNum].attributes['width']['value']);
     } else {
