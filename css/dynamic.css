@@ -19,6 +19,9 @@
 .reveal .dynamic.odd {
     background-color: rgba(127, 127, 127, 0.4);
 }
+.reveal .dynamic:not(.odd) {
+    background-color: rgba(127, 127, 127, 0.2);
+}
 
 .reveal.reveal .slides > section, .reveal.reveal .slides > section > section {
     padding: 0px;
@@ -37,6 +40,7 @@
     font-family: monospace;
 }
 
+<<<<<<< HEAD
 a#openDynamicOptions {
     float: right;
     z-index: 1;
@@ -53,4 +57,10 @@ a#openDynamicOptions {
 
 #dynamicOptions input.url {
     width: 10px;
+}
+section > section {
+    flex-direction: column !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    height: 700px;
 }

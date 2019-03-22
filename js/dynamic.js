@@ -439,7 +439,9 @@ function setupPageSlideIsFull (slide) {
       .find('.dynamic svg')
       .attr('height')
   );
-  var canHold = Math.floor(revealHeight / svgHeight);
+  // Subtract a few pixels from revealHeight
+  // so that there's always at least a little space between each line.
+  var canHold = Math.floor((revealHeight - 50) / svgHeight);
   var numberOfChildren = $(slide).find('.dynamic svg').length;
   return numberOfChildren >= canHold;
 }
