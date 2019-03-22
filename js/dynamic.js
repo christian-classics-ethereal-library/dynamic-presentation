@@ -39,6 +39,14 @@ $(document).ready(function () {
       this.play();
     }
   };
+
+  $('#dynamicOptions .copyUrl').click(function(){
+    var text = $('#dynamicOptions span.url').text();
+    var input = $('#dynamicOptions input.url')[0];
+    input.value = text;
+    input.select();
+    document.execCommand("copy");
+  });
 });
 
 /**

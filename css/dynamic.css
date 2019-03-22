@@ -50,3 +50,7 @@ a#openDynamicOptions {
 #dynamicOptions .url {
     word-wrap: anywhere;
 }
+
+#dynamicOptions input.url {
+    width: 10px;
+}
