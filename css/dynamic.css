@@ -1,65 +1,66 @@
 /* reveal.js overrides for dynamic presentation */
 .reveal .dynamic {
-    max-width: none;
-    max-height: none;
-    margin: 0;
-    border: none;
-    overflow: hidden;
-    /* Prevent this div from adding any height. */
-    font-size: 0;
-    text-align: left;
-    transition: opacity .2s ease;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: none;
+  overflow: hidden;
+  /* Prevent this div from adding any height. */
+  font-size: 0;
+  text-align: left;
+  transition: opacity 0.2s ease;
 }
 
 .reveal .dynamic svg {
-    /* Black out the end of each svg.*/
-    box-shadow: 0 0 0 960px black;
+  /* Black out the end of each svg.*/
+  box-shadow: 0 0 0 960px black;
 }
 
 .reveal .dynamic.odd {
-    background-color: rgba(127, 127, 127, 0.4);
+  background-color: rgba(127, 127, 127, 0.4);
 }
 .reveal .dynamic:not(.odd) {
-    background-color: rgba(127, 127, 127, 0.2);
+  background-color: rgba(127, 127, 127, 0.2);
 }
 
-.reveal.reveal .slides > section, .reveal.reveal .slides > section > section {
-    padding: 0px;
+.reveal.reveal .slides > section,
+.reveal.reveal .slides > section > section {
+  padding: 0px;
 }
 
 #dynamicOptions.overlay .viewport {
-    color: #fff;
-    text-align: center;
-    margin: auto;
-    padding: 20px 20px 80px 20px;
-    font-size: 20px;
+  color: #fff;
+  text-align: center;
+  margin: auto;
+  padding: 20px 20px 80px 20px;
+  font-size: 20px;
 }
 
 .dynamic svg text {
-    fill: white;
-    font-family: monospace;
+  fill: white;
+  font-family: monospace;
 }
 
 a#openDynamicOptions {
-    float: right;
-    z-index: 1;
-    padding: 0 10px;
+  float: right;
+  z-index: 1;
+  padding: 0 10px;
 }
 
 #dynamicOptions {
-    font-family: monospace;
+  font-family: monospace;
 }
 
 #dynamicOptions .url {
-    word-wrap: anywhere;
+  word-wrap: anywhere;
 }
 
 #dynamicOptions input.url {
-    width: 10px;
+  width: 10px;
 }
 section > section {
-    flex-direction: column !important;
-    display: flex !important;
-    justify-content: space-around !important;
-    height: 700px;
+  flex-direction: column !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  height: 700px;
 }
