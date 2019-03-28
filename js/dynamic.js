@@ -100,6 +100,10 @@ function setDisplay (type, verse = 'all', doSetupPages = true) {
  * @brief Change the size of the font for the lyrics.
  */
 function setFontSize (s) {
+  s = parseInt(s);
+  if (!Number.isInteger(s) || s < 10 || s > 60) {
+    return;
+  }
   $('.fontSize').html(s);
   fontPixelSize = undefined;
   $('.dynamic svg g text').each(function () {
@@ -123,6 +127,10 @@ function setNotesPerLine (n) {
  * @brief Change the size of a notes.
  */
 function setNoteHeight (h) {
+  h = parseInt(h);
+  if (!Number.isInteger(h) || h < 3 || h > 40) {
+    return;
+  }
   $('.noteHeight').html(h);
   $('.dynamic svg rect[data-y]').each(function () {
     var y = parseFloat(this.attributes['data-y']['value']) * h;
