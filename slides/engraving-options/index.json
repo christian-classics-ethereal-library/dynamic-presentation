@@ -1,9 +1,11 @@
 {
-    "slides": [
-        "intro",
-        "abc2svg",
-        "opensheetmusicdisplay",
-        "verovio",
-        "features"
-    ]
+  "slides": [
+    "intro",
+    "abc2svg",
+    "opensheetmusicdisplay",
+    "verovio",
+    "features",
+    "essential",
+    "essential2"
+  ]
 }
