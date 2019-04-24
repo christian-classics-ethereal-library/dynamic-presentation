@@ -1,0 +1,11 @@
+- **Open Sheet Music Display**
+  - Created 2016
+  - Uses MusicXML
+  - Uses VexFlow
+  - 13 contributors
+- VexFlow
+  - Created 2010
+  - 54 contributors
+- MusicXML
+  - Created 2004
+  - Last release 3.1 in 2017

@@ -1,0 +1,13 @@
+- **ABC2SVG**
+  - Based off 2014 C project abcm2ps
+  - Written in Javascript
+  - 7 contributors
+- XML2ABC
+  - Created 2014
+  - Written in Python, manually converted to Javascript
+  - 2 contributors
+- ABC Notation
+  - Created 1993
+  - Human-writable
+  - Last release 2.1 in 2011
+  - Draft 2.2 developed 2013-2015

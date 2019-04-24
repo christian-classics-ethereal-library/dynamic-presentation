@@ -1,0 +1,10 @@
+- **Verovio**
+  - Created in 2014
+  - Named after Simone Verovio
+  - Written in C++, compiled with Emscripten
+  - Uses MEI as backend format
+  - 22 contributors
+- Music Encoding Initiative
+  - XML-based
+  - Created in 2010
+  - Actively developed
