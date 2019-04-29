@@ -1,7 +1,6 @@
 - **Open Sheet Music Display**
   - Created 2016
-  - Uses MusicXML
-  - Uses VexFlow
+  - Written in TypeScript
   - 13 contributors
 - VexFlow
   - Created 2010

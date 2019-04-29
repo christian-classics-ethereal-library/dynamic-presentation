@@ -1,6 +1,5 @@
 <style>
 .reveal section#essential img[alt=MuseScore]{
-    background: white;
     height: 350px;
     margin: 0;
     border: 0;

@@ -1,5 +1,5 @@
 <style>
-.reveal section#desired img[alt=MuseScore]{
+.reveal section img{
     background: white;
 }
 </style>

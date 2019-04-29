@@ -1,6 +1,5 @@
 <style>
 .reveal section#desired2 img{
-    background: white;
     height: 350px;
     margin: 0;
     border: 0;

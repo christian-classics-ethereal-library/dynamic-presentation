@@ -1,6 +1,5 @@
 <style>
 .reveal section#essential2 img{
-    background: white;
     margin: 0;
     border: 0;
 }
