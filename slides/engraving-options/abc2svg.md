@@ -8,6 +8,6 @@
   - 2 contributors
 - ABC Notation
   - Created 1993
-  - Human-writable
+  - Human-writable, readable
   - Last release 2.1 in 2011
   - Draft 2.2 developed 2013-2015

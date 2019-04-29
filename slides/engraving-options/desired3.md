@@ -9,4 +9,3 @@
 ![ABC](e-o/desiredabcweb.svg)
 ![OSMD](e-o/desiredosmd.svg)
 ![verovio](e-o/desiredverovio.svg)
-
