@@ -1,10 +1,10 @@
-- **Open Sheet Music Display**
+- [**Open Sheet Music Display**](https://opensheetmusicdisplay.org/)
   - Created 2016
   - Written in TypeScript
   - 13 contributors
-- VexFlow
+- [VexFlow](http://vexflow.com/)
   - Created 2010
   - 54 contributors
-- MusicXML
+- [MusicXML](https://www.musicxml.com/)
   - Created 2004
   - Last release 3.1 in 2017

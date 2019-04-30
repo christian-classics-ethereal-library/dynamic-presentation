@@ -1,12 +1,12 @@
-- **ABC2SVG**
+- [**ABC2SVG**](http://moinejf.free.fr/js/index.html)
   - Based off 2014 C project abcm2ps
   - Written in Javascript
   - 7 contributors
-- XML2ABC
+- [XML2ABC](https://wim.vree.org/svgParse/xml2abc.html)
   - Created 2014
   - Written in Python, manually converted to Javascript
   - 2 contributors
-- ABC Notation
+- [ABC Notation](https://abcnotation.com/)
   - Created 1993
   - Human-writable, readable
   - Last release 2.1 in 2011
