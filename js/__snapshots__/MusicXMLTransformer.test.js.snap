@@ -1,0 +1,1192 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`files loaded properly 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE score-partwise PUBLIC \\"-//Recordare//DTD MusicXML 1.0 Partwise//EN\\"
+                                \\"http://www.musicxml.org/dtds/partwise.dtd\\">
+<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">Multiple (simple) lyrics. The 
+          order of the exported stanzas is relevant (identified by the number 
+          attribute in this test case)</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time symbol=\\"common\\">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>1.Tra</text>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>begin</syllabic>
+          <text>2.tra</text>
+        </lyric>
+        <lyric number=\\"3\\">
+          <syllabic>begin</syllabic>
+          <text>3.TRA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>middle</syllabic>
+          <text>la</text>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>middle</syllabic>
+          <text>la</text>
+        </lyric>
+        <lyric number=\\"3\\">
+          <syllabic>middle</syllabic>
+          <text>LA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>la,</text>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>end</syllabic>
+          <text>la,</text>
+        </lyric>
+        <lyric number=\\"3\\">
+          <syllabic>end</syllabic>
+          <text>LA,</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>ja!</text>
+          <extend/>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>single</syllabic>
+          <text>ja!</text>
+          <extend/>
+        </lyric>
+        <lyric number=\\"3\\">
+          <syllabic>single</syllabic>
+          <text>JA!</text>
+          <extend/>
+        </lyric>
+      </note>
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"2\\">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>Tra</text>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>begin</syllabic>
+          <text>Tra</text>
+        </lyric>
+        <lyric number=\\"3\\">
+          <syllabic>begin</syllabic>
+          <text>TRA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>ra...</text>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>end</syllabic>
+          <text>ra.</text>
+        </lyric>
+        <lyric number=\\"3\\">
+          <syllabic>end</syllabic>
+          <text>RA...</text>
+        </lyric>
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>
+"
+`;
+
+exports[`files loaded properly 2`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE score-partwise PUBLIC \\"-//Recordare//DTD MusicXML 1.0 Partwise//EN\\"
+                                \\"http://www.musicxml.org/dtds/partwise.dtd\\">
+<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">A lyrics syllable can have both 
+          a number and a name attribute. The question is: What should be used 
+          to put syllables of the same voice together. This example uses 
+          different number/name combinations to check how different 
+          applications handle this unspecified case (The advice on the 
+          MusicXML mailing list was \\"there is no correct way, each 
+          application can do what it thinks is best\\").
+	
+	  The complete text should be (by note number):
+          1: Verse1A, Chorus1A, AnotherChorus1A
+          2: 1B, 2B
+          3: Verse1C, Chorus2C
+          4: Chorus1D
+          5: VerseE
+          6: NoneF (indicating no number or name was given) 
+      </miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>0</fifths><mode>major</mode></key>
+        <time><beats>6</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\" name=\\"Verse\\">
+          <syllabic>begin</syllabic>
+          <text>Verse1A</text>
+        </lyric>
+        <lyric number=\\"1\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus1A</text>
+        </lyric>
+        <lyric number=\\"1\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>AnotherChorus1A</text>
+        </lyric>
+        <lyric number=\\"2\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus1A</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>1B</text>
+        </lyric>
+        <lyric number=\\"2\\">
+          <syllabic>begin</syllabic>
+          <text>2B</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\" name=\\"Verse\\">
+          <syllabic>begin</syllabic>
+          <text>Verse1C</text>
+        </lyric>
+        <lyric number=\\"2\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus2C</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus1D</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric name=\\"Verse\\">
+          <syllabic>begin</syllabic>
+          <text>VerseE</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric>
+          <syllabic>begin</syllabic>
+          <text>NoneF</text>
+        </lyric>
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>
+"
+`;
+
+exports[`hideOtherLyrics works fine 1`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">A lyrics syllable can have both 
+          a number and a name attribute. The question is: What should be used 
+          to put syllables of the same voice together. This example uses 
+          different number/name combinations to check how different 
+          applications handle this unspecified case (The advice on the 
+          MusicXML mailing list was \\"there is no correct way, each 
+          application can do what it thinks is best\\").
+	
+	  The complete text should be (by note number):
+          1: Verse1A, Chorus1A, AnotherChorus1A
+          2: 1B, 2B
+          3: Verse1C, Chorus2C
+          4: Chorus1D
+          5: VerseE
+          6: NoneF (indicating no number or name was given) 
+      </miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>0</fifths><mode>major</mode></key>
+        <time><beats>6</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\" name=\\"Verse\\">
+          <syllabic>begin</syllabic>
+          <text>Verse1A</text>
+        </lyric>
+        
+        
+        
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\" name=\\"Verse\\">
+          <syllabic>begin</syllabic>
+          <text>Verse1C</text>
+        </lyric>
+        
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric name=\\"Verse\\">
+          <syllabic>begin</syllabic>
+          <text>VerseE</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
+
+exports[`hideOtherLyrics works fine 2`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">A lyrics syllable can have both 
+          a number and a name attribute. The question is: What should be used 
+          to put syllables of the same voice together. This example uses 
+          different number/name combinations to check how different 
+          applications handle this unspecified case (The advice on the 
+          MusicXML mailing list was \\"there is no correct way, each 
+          application can do what it thinks is best\\").
+	
+	  The complete text should be (by note number):
+          1: Verse1A, Chorus1A, AnotherChorus1A
+          2: 1B, 2B
+          3: Verse1C, Chorus2C
+          4: Chorus1D
+          5: VerseE
+          6: NoneF (indicating no number or name was given) 
+      </miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>0</fifths><mode>major</mode></key>
+        <time><beats>6</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"1\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus1A</text>
+        </lyric>
+        <lyric number=\\"1\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>AnotherChorus1A</text>
+        </lyric>
+        <lyric number=\\"2\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus1A</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus2C</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\" name=\\"Chorus\\">
+          <syllabic>begin</syllabic>
+          <text>Chorus1D</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
+
+exports[`hideOtherVerses works fine 1`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">Multiple (simple) lyrics. The 
+          order of the exported stanzas is relevant (identified by the number 
+          attribute in this test case)</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time symbol=\\"common\\">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>1.Tra</text>
+        </lyric>
+        
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>middle</syllabic>
+          <text>la</text>
+        </lyric>
+        
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>la,</text>
+        </lyric>
+        
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>ja!</text>
+          <extend/>
+        </lyric>
+        
+        
+      </note>
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"2\\">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>Tra</text>
+        </lyric>
+        
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>ra...</text>
+        </lyric>
+        
+        
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
+
+exports[`hideOtherVerses works fine 2`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">Multiple (simple) lyrics. The 
+          order of the exported stanzas is relevant (identified by the number 
+          attribute in this test case)</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time symbol=\\"common\\">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\">
+          <syllabic>begin</syllabic>
+          <text>2.tra</text>
+        </lyric>
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\">
+          <syllabic>middle</syllabic>
+          <text>la</text>
+        </lyric>
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\">
+          <syllabic>end</syllabic>
+          <text>la,</text>
+        </lyric>
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\">
+          <syllabic>single</syllabic>
+          <text>ja!</text>
+          <extend/>
+        </lyric>
+        
+      </note>
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"2\\">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\">
+          <syllabic>begin</syllabic>
+          <text>Tra</text>
+        </lyric>
+        
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        <lyric number=\\"2\\">
+          <syllabic>end</syllabic>
+          <text>ra.</text>
+        </lyric>
+        
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
+
+exports[`hideOtherVerses works fine 3`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">Multiple (simple) lyrics. The 
+          order of the exported stanzas is relevant (identified by the number 
+          attribute in this test case)</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time symbol=\\"common\\">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+        <lyric number=\\"3\\">
+          <syllabic>begin</syllabic>
+          <text>3.TRA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+        <lyric number=\\"3\\">
+          <syllabic>middle</syllabic>
+          <text>LA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+        <lyric number=\\"3\\">
+          <syllabic>end</syllabic>
+          <text>LA,</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+        <lyric number=\\"3\\">
+          <syllabic>single</syllabic>
+          <text>JA!</text>
+          <extend/>
+        </lyric>
+      </note>
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"2\\">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+        <lyric number=\\"3\\">
+          <syllabic>begin</syllabic>
+          <text>TRA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        
+        
+        <lyric number=\\"3\\">
+          <syllabic>end</syllabic>
+          <text>RA...</text>
+        </lyric>
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
+
+exports[`makeAllWordsVerse1 works fine 1`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">Multiple (simple) lyrics. The 
+          order of the exported stanzas is relevant (identified by the number 
+          attribute in this test case)</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time symbol=\\"common\\">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>1.Tra</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>2.tra</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>3.TRA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>middle</syllabic>
+          <text>la</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>middle</syllabic>
+          <text>la</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>middle</syllabic>
+          <text>LA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>la,</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>la,</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>LA,</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>ja!</text>
+          <extend/>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>ja!</text>
+          <extend/>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>JA!</text>
+          <extend/>
+        </lyric>
+      </note>
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"2\\">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>Tra</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>Tra</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>begin</syllabic>
+          <text>TRA</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>ra...</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>ra.</text>
+        </lyric>
+        <lyric number=\\"1\\">
+          <syllabic>end</syllabic>
+          <text>RA...</text>
+        </lyric>
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
