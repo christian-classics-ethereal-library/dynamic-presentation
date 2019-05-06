@@ -1,11 +1,11 @@
 /* globals Document, DOMParser, XMLSerializer */
 export class PianoRollToolkit {
   constructor () {
-    this.zoom = 50;
+    this.scale = 50;
     this.width = 300;
     this.height = 150;
-    this.xScale = this.zoom;
-    this.yScale = this.zoom / 5;
+    this.xScale = this.scale;
+    this.yScale = this.scale / 5;
     this.fontSize = 20;
   }
   getPageCount () {}
@@ -59,7 +59,7 @@ export class PianoRollToolkit {
         });
         offset[voice] = (offset[voice] || 0) + duration;
       }
-      // chord symbols
+      // TODO: Show chord symbols in dynamic presentation?
       // measure.querySelectorAll('harmony')
     });
 
@@ -70,7 +70,8 @@ export class PianoRollToolkit {
     let svg = new Document().createElement('svg');
     svg.setAttribute('width', this.width);
     svg.setAttribute('height', this.height);
-    let notes = this.data.measures[3].notes;
+    // TODO: Show multiple measures per page
+    let notes = this.data.measures[page].notes;
     for (let i = 0; i < notes.length; i++) {
       let note = notes[i];
       let x = note.offset;
@@ -83,16 +84,18 @@ export class PianoRollToolkit {
     return new XMLSerializer().serializeToString(svg);
   }
   setOptions (options) {
-    if (options.zoom) {
-      this.zoom = options.zoom;
+    if (options.scale) {
+      this.scale = options.scale;
     }
     // For some reason, pageWidth and pageHeight options are not the actual pixel values...
     if (options.pageWidth) {
-      this.width = (options.pageWidth / 100) * this.zoom;
+      this.width = (options.pageWidth / 100) * this.scale;
     }
     if (options.pageHeight) {
-      this.height = (options.pageHeight / 100) * this.zoom;
+      this.height = (options.pageHeight / 100) * this.scale;
     }
+    this.xScale = this.scale;
+    this.yScale = this.scale / 5;
   }
 
   // Private functions
