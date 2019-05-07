@@ -8,7 +8,10 @@ export class PianoRollToolkit {
     this.yScale = this.scale / 5;
     this.fontSize = 20;
   }
-  getPageCount () {}
+  getPageCount () {
+    // TODO: Count the number of pages that this will be divided into.
+    return 10;
+  }
   getTimeForElement (id) {}
   loadData (data) {
     let parser = new DOMParser();
