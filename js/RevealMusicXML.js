@@ -19,10 +19,6 @@ export class RevealMusicXML {
 
   // Private methods
 
-  _convertSlides () {
-    return Promise.resolve();
-  }
-
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicxml');
     return fetch(url)
@@ -42,10 +38,12 @@ export class RevealMusicXML {
         );
       }
     });
+    // TODO: Fix this to return a promise.
   }
 
   _slidify (data) {
     let zoom = 50;
+    // TODO: Fix this to take Reveal's width and height;
     this.toolkit.setOptions({
       pageHeight: (700 * 100) / zoom,
       pageWidth: (960 * 100) / zoom,
