@@ -19,7 +19,7 @@ export class RevealMusicXML {
       // Create a dummy transformer that does no transformation.
       this.transformer = { transform: (data, transformation) => data };
     }
-    return this._processSlides();
+    return this._processSlides().then(() => Promise.resolve())
   }
 
   // Private methods
@@ -36,9 +36,10 @@ export class RevealMusicXML {
   }
 
   _processSlides () {
+    let promises = [];
     document.querySelectorAll('[data-musicxml]').forEach((section, i) => {
       if (section.getAttribute('data-musicxml').length) {
-        this._loadExternalMusicXML(section);
+        promises.push( this._loadExternalMusicXML(section) );
       } else {
         section.innerHTML = this._slidify(
           this.transformer.transform(
@@ -48,7 +49,7 @@ export class RevealMusicXML {
         );
       }
     });
-    // TODO: Fix this to return a promise.
+    return Promise.all(promises)
   }
 
   _slidify (data) {
