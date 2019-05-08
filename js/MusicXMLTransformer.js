@@ -13,6 +13,17 @@ export class MusicXMLTransformer {
     this.doc = doc;
   }
 
+  /* transform is called by the Reveal Plugin */
+  transform (data, transformationName) {
+    if (transformationName) {
+      this.loadData(data);
+      this.showSection(transformationName);
+      return this.getData();
+    } else {
+      return data;
+    }
+  }
+
   showSection (sectionName) {
     if (this.doc.querySelector(`lyric[name='${sectionName}']`)) {
       this.hideOtherLyrics(sectionName);
@@ -25,8 +36,6 @@ export class MusicXMLTransformer {
     this.hideOtherMeasures();
     this.renumberMeasures();
   }
-
-  // Private methods
 
   hideOtherLyrics (sectionName) {
     this.doc

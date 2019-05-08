@@ -15,6 +15,10 @@ export class RevealMusicXML {
         'RevealMusicXML needs to be constructed with a rendering toolkit.'
       );
     }
+    if (typeof this.transformer === 'undefined') {
+      // Create a dummy transformer that does no transformation.
+      this.transformer = { transform: (data, transformation) => data };
+    }
     return this._processSlides();
   }
 
@@ -22,8 +26,10 @@ export class RevealMusicXML {
 
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicxml');
+    const transformation = section.getAttribute('data-musicxml-transform');
     return fetch(url)
       .then(res => res.text())
+      .then(text => this.transformer.transform(text, transformation))
       .then(text => {
         section.innerHTML = this._slidify(text);
       });
@@ -35,7 +41,10 @@ export class RevealMusicXML {
         this._loadExternalMusicXML(section);
       } else {
         section.innerHTML = this._slidify(
-          section.querySelector('script[type="text/template"]').innerHTML
+          this.transformer.transform(
+            section.querySelector('script[type="text/template"]').innerHTML,
+            section.getAttribute('data-musicxml-transform')
+          )
         );
       }
     });
