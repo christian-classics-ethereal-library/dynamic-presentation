@@ -9,8 +9,8 @@ export class PianoRollToolkit {
     this.fontSize = 20;
   }
   getPageCount () {
-    // TODO: Count the number of pages that this will be divided into.
-    return 10;
+    // this.pages has an empty item in it.
+    return this.pages.length - 1;
   }
   getTimeForElement (id) {}
   loadData (data) {
@@ -23,7 +23,7 @@ export class PianoRollToolkit {
     this.lowNote = Infinity;
     this.highNote = -Infinity;
     this.data = {};
-    this.data.measures = {};
+    this.data.measures = [];
     this.doc.querySelectorAll('measure').forEach(measure => {
       const measureNumber = measure.getAttribute('number');
       this.data.measures[measureNumber] = {
@@ -68,22 +68,26 @@ export class PianoRollToolkit {
 
     // Compute some things about the song.
     this.noteRange = this.highNote - this.lowNote + 1;
+
+    this._assignMeasuresToPages();
   }
   renderToSVG (page, options) {
     let svg = new Document().createElement('svg');
     svg.setAttribute('width', this.width);
     svg.setAttribute('height', this.height);
-    // TODO: Show multiple measures per page
-    let notes = this.data.measures[page].notes;
-    for (let i = 0; i < notes.length; i++) {
-      let note = notes[i];
-      let x = note.offset;
-      let w = note.duration;
-      let y = this.highNote - note.pitch;
-      let h = 1;
-      let lyric = note.lyric;
-      svg.appendChild(this._rectangle(x, y, w, h, lyric, 'red'));
-    }
+    this.pages[page].forEach(measurePlacement => {
+      let measure = this.data.measures[measurePlacement.i];
+      if (measure) {
+        let measureElement = this._measure(
+          this.data.measures[measurePlacement.i]
+        );
+        measureElement.setAttribute(
+          'transform',
+          `translate(${measurePlacement.x} ${measurePlacement.y})`
+        );
+        svg.appendChild(measureElement);
+      }
+    });
     return new XMLSerializer().serializeToString(svg);
   }
   setOptions (options) {
@@ -103,6 +107,33 @@ export class PianoRollToolkit {
 
   // Private functions
 
+  _assignMeasuresToPages () {
+    // let rowHeight = this._getMeasureHeight(this.data.measures[0]);
+    // let rowsPerSlide = Math.floor(this.height / rowHeight);
+    this.pages = [[], []];
+    let j = 1;
+    for (let i = 1; i <= this.data.measures.length; i++) {
+      if (i % 3 === 0) {
+        this.pages[j] = [];
+      }
+      let xTransform = 0;
+      let yTransform = 1;
+      this.pages[j].push({ x: xTransform, y: yTransform, i: i });
+      if (i % 3 === 2) j++;
+    }
+  }
+  _getMeasureHeight (measure) {
+    return this.noteRange * this.yScale + 2 * this.fontSize;
+  }
+  _getMeasureWidth (measure) {
+    let width = -Infinity;
+    for (let i = 0; i < measure.notes.length; i++) {
+      if (measure.notes[i].length + measure.notes[i].offset > width) {
+        width = measure.notes[i].length + measure.notes[i].offset;
+      }
+    }
+    return width * this.xScale;
+  }
   _getLyric (lyric) {
     if (!lyric) return '';
     let text = lyric.querySelector('text').innerHTML;
@@ -133,7 +164,23 @@ export class PianoRollToolkit {
     // TODO: make sure that C flat gets placed in the correct octave.
     return stepMap[step] + parseInt(alter) + parseInt(octave) * 12;
   }
-  _rectangle (x, y, w, h, lyric, color) {
+  _measure (measure) {
+    let measureElement = new Document().createElement('g');
+    let notes = measure.notes;
+    for (let i = 0; i < notes.length; i++) {
+      let note = notes[i];
+      let x = note.offset;
+      let w = note.duration;
+      let y = this.highNote - note.pitch;
+      let h = 1;
+      let lyric = note.lyric;
+      measureElement.appendChild(
+        this._rectangle(x, y, w, h, lyric, note.voice)
+      );
+    }
+    return measureElement;
+  }
+  _rectangle (x, y, w, h, lyric, voice) {
     let g = new Document().createElement('g');
     let sx = this.xScale * x;
     let sw = this.xScale * w;
@@ -144,7 +191,8 @@ export class PianoRollToolkit {
     rect.setAttribute('width', sw);
     rect.setAttribute('y', sy);
     rect.setAttribute('height', sh);
-    rect.setAttribute('fill', color);
+    rect.setAttribute('data-voice', voice);
+    rect.setAttribute('stroke-width', 0);
     g.appendChild(rect);
     let text = new Document().createElement('text');
     text.setAttribute('x', sx);
