@@ -1,3 +1,7 @@
+:root {
+  --text-color: #e7ad52;
+}
+
 /* reveal.js overrides for dynamic presentation */
 .reveal .dynamic {
   max-width: none;
@@ -23,8 +27,12 @@
   background-color: rgba(127, 127, 127, 0.2);
 }
 
+.reveal section[data-musicxml] svg path,
 .reveal section[data-musicxml] svg {
-    background-color: white;
+  stroke: white;
+  stroke: var(--text-color);
+  fill: white;
+  fill: var(--text-color);
 }
 
 .reveal.reveal .slides > section,
