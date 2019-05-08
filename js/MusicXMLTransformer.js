@@ -1,6 +1,16 @@
+/* globals DOMParser, XMLSerializer */
 export class MusicXMLTransformer {
-  constructor (musicXMLDoc) {
-    this.doc = musicXMLDoc;
+  getData () {
+    return new XMLSerializer().serializeToString(this.doc.documentElement);
+  }
+
+  loadData (data) {
+    let parser = new DOMParser();
+    let doc = parser.parseFromString(data, 'text/xml');
+    return this.loadDataFromDoc(doc);
+  }
+  loadDataFromDoc (doc) {
+    this.doc = doc;
   }
 
   showSection (sectionName) {
@@ -15,6 +25,8 @@ export class MusicXMLTransformer {
     this.hideOtherMeasures();
     this.renumberMeasures();
   }
+
+  // Private methods
 
   hideOtherLyrics (sectionName) {
     this.doc

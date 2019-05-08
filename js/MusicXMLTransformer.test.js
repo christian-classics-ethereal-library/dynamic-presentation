@@ -1,4 +1,4 @@
-/* globals DOMParser, expect, test, XMLSerializer */
+/* globals expect, test */
 import { MusicXMLTransformer } from './MusicXMLTransformer';
 import fs from 'fs';
 import path from 'path';
@@ -23,46 +23,40 @@ test('files loaded properly', () => {
 });
 
 test('hideOtherLyrics works fine', () => {
-  let parser = new DOMParser();
-  let doc = parser.parseFromString(xml61g, 'text/xml');
-  let mxt = new MusicXMLTransformer(doc);
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml61g);
   mxt.hideOtherLyrics('Verse');
-  let xml61gX = new XMLSerializer().serializeToString(doc.documentElement);
+  let xml61gX = mxt.getData();
   expect(xml61gX).toMatchSnapshot();
 
-  let doc2 = parser.parseFromString(xml61g, 'text/xml');
-  let mxt2 = new MusicXMLTransformer(doc2);
-  mxt2.hideOtherLyrics('Chorus');
-  let xml61gX2 = new XMLSerializer().serializeToString(doc2.documentElement);
+  mxt.loadData(xml61g);
+  mxt.hideOtherLyrics('Chorus');
+  let xml61gX2 = mxt.getData();
   expect(xml61gX2).toMatchSnapshot();
 });
 
 test('hideOtherVerses works fine', () => {
-  let parser = new DOMParser();
-  let doc = parser.parseFromString(xml61b, 'text/xml');
-  let mxt = new MusicXMLTransformer(doc);
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml61b);
   mxt.hideOtherVerses(1);
-  let xml61bX = new XMLSerializer().serializeToString(doc.documentElement);
+  let xml61bX = mxt.getData();
   expect(xml61bX).toMatchSnapshot();
 
-  let doc2 = parser.parseFromString(xml61b, 'text/xml');
-  let mxt2 = new MusicXMLTransformer(doc2);
-  mxt2.hideOtherVerses(2);
-  let xml61bX2 = new XMLSerializer().serializeToString(doc2.documentElement);
+  mxt.loadData(xml61b);
+  mxt.hideOtherVerses(2);
+  let xml61bX2 = mxt.getData();
   expect(xml61bX2).toMatchSnapshot();
 
-  let doc3 = parser.parseFromString(xml61b, 'text/xml');
-  let mxt3 = new MusicXMLTransformer(doc3);
-  mxt3.hideOtherVerses(3);
-  let xml61bX3 = new XMLSerializer().serializeToString(doc3.documentElement);
+  mxt.loadData(xml61b);
+  mxt.hideOtherVerses(3);
+  let xml61bX3 = mxt.getData();
   expect(xml61bX3).toMatchSnapshot();
 });
 
 test('makeAllWordsVerse1 works fine', () => {
-  let parser = new DOMParser();
-  let doc = parser.parseFromString(xml61b, 'text/xml');
-  let mxt = new MusicXMLTransformer(doc);
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml61b);
   mxt.makeAllWordsVerse1();
-  let xml61bX = new XMLSerializer().serializeToString(doc.documentElement);
+  let xml61bX = mxt.getData();
   expect(xml61bX).toMatchSnapshot();
 });

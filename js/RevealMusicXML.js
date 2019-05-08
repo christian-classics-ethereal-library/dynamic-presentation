@@ -1,7 +1,8 @@
 /* globals fetch */
 export class RevealMusicXML {
-  constructor (toolkit) {
+  constructor (toolkit, transformer) {
     this.toolkit = toolkit;
+    this.transformer = transformer;
   }
 
   /**
