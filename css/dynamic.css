@@ -23,6 +23,10 @@
   background-color: rgba(127, 127, 127, 0.2);
 }
 
+.reveal section[data-musicxml] svg {
+    background-color: white;
+}
+
 .reveal.reveal .slides > section,
 .reveal.reveal .slides > section > section {
   padding: 0px;
