@@ -73,6 +73,8 @@ export class PianoRollToolkit {
   }
   renderToSVG (page, options) {
     let svg = new Document().createElement('svg');
+    svg.setAttribute('font-family', 'Monospace');
+    svg.setAttribute('font-size', this.fontSize);
     svg.setAttribute('width', this.width);
     svg.setAttribute('height', this.height);
     this.pages[page].forEach(measurePlacement => {
@@ -108,28 +110,42 @@ export class PianoRollToolkit {
   // Private functions
 
   _assignMeasuresToPages () {
-    // let rowHeight = this._getMeasureHeight(this.data.measures[0]);
-    // let rowsPerSlide = Math.floor(this.height / rowHeight);
+    let rowHeight = this._getMeasureHeight();
+    let rowsPerSlide = Math.floor(this.height / rowHeight);
     this.pages = [[], []];
     let j = 1;
+    let row = 0;
+    let xOffset = 0;
     for (let i = 1; i <= this.data.measures.length; i++) {
-      if (i % 3 === 0) {
-        this.pages[j] = [];
+      let measure = this.data.measures[i];
+      if (measure) {
+        let mWidth = this._getMeasureWidth(measure);
+        if (xOffset + mWidth > this.width) {
+          xOffset = 0;
+          if (row + 1 < rowsPerSlide) {
+            row++;
+          } else {
+            j++;
+            this.pages[j] = [];
+            row = 0;
+          }
+        }
+        let xTransform = xOffset;
+        let yTransform = row * rowHeight;
+        xOffset += mWidth;
+        this.pages[j].push({ x: xTransform, y: yTransform, i: i });
       }
-      let xTransform = 0;
-      let yTransform = 1;
-      this.pages[j].push({ x: xTransform, y: yTransform, i: i });
-      if (i % 3 === 2) j++;
     }
   }
-  _getMeasureHeight (measure) {
+  _getMeasureHeight () {
     return this.noteRange * this.yScale + 2 * this.fontSize;
   }
   _getMeasureWidth (measure) {
+    // TODO: Better way of getting duration of a measure.
     let width = -Infinity;
     for (let i = 0; i < measure.notes.length; i++) {
-      if (measure.notes[i].length + measure.notes[i].offset > width) {
-        width = measure.notes[i].length + measure.notes[i].offset;
+      if (measure.notes[i].duration + measure.notes[i].offset > width) {
+        width = measure.notes[i].duration + measure.notes[i].offset;
       }
     }
     return width * this.xScale;
@@ -199,9 +215,8 @@ export class PianoRollToolkit {
     // text-setAttribute('data-textlength', sw);
     text.setAttribute('lengthAdjust', 'spacingAndGlyphs');
     text.setAttribute('dx', 1);
-    text.setAttribute('y', '100%');
-    text.setAttribute('dy', this.fontSize * (-1 / 2));
-    text.setAttribute('font-size', this.fontSize);
+    text.setAttribute('y', this.noteRange * this.yScale);
+    text.setAttribute('dy', this.fontSize);
 
     text.innerHTML = lyric;
     g.appendChild(text);
