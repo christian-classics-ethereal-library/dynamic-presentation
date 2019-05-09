@@ -1,20 +1,49 @@
-/* globals fetch */
+/* globals DOMParser, fetch */
 export class RevealMusicArranger {
   init () {
     return this._processSlides().then(() => Promise.resolve());
   }
 
-  _getVerseCount (data) {
-    return 3;
+  _getArrangement (data, arrangementString) {
+    let arrangement = [];
+    if (arrangementString) {
+      arrangementString.split(',').forEach(e => {
+        // TODO: Allow shorthand format (v1,v2,c,v3) to be used.
+        arrangement.push(e);
+      });
+    } else {
+      let parser = new DOMParser();
+      let doc = parser.parseFromString(data, 'text/xml');
+      // TODO: Automatically arrange it by traversing through measures.
+      let nonverses = {};
+      doc.querySelectorAll('lyric[name]').forEach(lyric => {
+        let i = lyric.getAttribute('name');
+        nonverses[i] = i;
+      });
+      let verses = [];
+      doc.querySelectorAll('lyric:not([name])').forEach(lyric => {
+        let i = lyric.getAttribute('number');
+        verses[i] = i;
+      });
+      verses.forEach(v => {
+        arrangement.push(`verse${v}`);
+        Object.keys(nonverses).forEach(nv => {
+          arrangement.push(nv);
+        });
+      });
+    }
+    return arrangement;
   }
 
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicarranger');
-    const arrangement = section.getAttribute('data-musicarranger-arrangement');
+    const arrangementString = section.getAttribute(
+      'data-musicarranger-arrangement'
+    );
     return fetch(url)
       .then(res => res.text())
       .then(text => {
-        section.outerHTML = this._slidify(text, arrangement);
+        section.outerHTML = this._slidify(text, arrangementString);
       });
   }
 
@@ -33,17 +62,17 @@ export class RevealMusicArranger {
     return Promise.all(promises);
   }
 
-  _slidify (data, arrangement) {
-    let max = this._getVerseCount(data);
+  _slidify (data, arrangementString) {
+    let arrangement = this._getArrangement(data, arrangementString);
     let string = '';
-    for (let i = 1; i <= max; i++) {
+    arrangement.forEach(section => {
       string +=
-        `<section data-musicxml data-musicxml-transform="verse${i}">` +
+        `<section data-musicxml data-musicxml-transform="${section}">` +
         "<script type='text/template'>" +
         data +
         '</script>' +
         '</section>';
-    }
+    });
     return string;
   }
 }
