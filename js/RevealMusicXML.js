@@ -37,7 +37,7 @@ export class RevealMusicXML {
 
   _processSlides () {
     let promises = [];
-    document.querySelectorAll('[data-musicxml]').forEach((section, i) => {
+    document.querySelectorAll('[data-musicxml]').forEach(section => {
       if (section.getAttribute('data-musicxml').length) {
         promises.push(this._loadExternalMusicXML(section));
       } else {

@@ -1,7 +1,8 @@
 /* globals Reveal, verovio */
-import { RevealMusicXML } from './RevealMusicXML.js';
-import { PianoRollToolkit } from './PianoRollToolkit.js';
-import { MusicXMLTransformer } from './MusicXMLTransformer.js';
+import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
+import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
+import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
+import { RevealMusicXML } from '../js/RevealMusicXML.js';
 
 function urlParam (name) {
   var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(
@@ -9,6 +10,8 @@ function urlParam (name) {
   );
   return results !== null ? results[1] || 0 : false;
 }
+
+let rma = new RevealMusicArranger();
 
 let mxt = new MusicXMLTransformer();
 let tk;
@@ -19,4 +22,9 @@ if (urlParam('toolkit') === 'verovio') {
   tk = new PianoRollToolkit();
 }
 let rmx = new RevealMusicXML(tk, mxt);
-Reveal.registerPlugin('musicxml', rmx);
+
+// TODO: Use Reveal.registerPlugin when we can be sure that one loads before the other.
+rma
+  .init()
+  .then(() => rmx.init())
+  .then(() => Reveal.slide(0, 0));
