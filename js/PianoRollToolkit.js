@@ -215,12 +215,18 @@ export class PianoRollToolkit {
     let sy = this.yScale * y;
     let sh = this.yScale * h;
     let rect = new Document().createElement('rect');
+    // Make the rectangles rounded.
+    let diameter = this.yScale;
     rect.setAttribute('x', sx);
-    rect.setAttribute('width', sw);
+    rect.setAttribute('dx', diameter / 2);
+    rect.setAttribute('width', sw - diameter);
     rect.setAttribute('y', sy);
-    rect.setAttribute('height', sh);
+    rect.setAttribute('dy', diameter / 2);
+    let height = sh - diameter;
+    rect.setAttribute('height', height > 0 ? height : 1);
     rect.setAttribute('data-voice', voice);
-    rect.setAttribute('stroke-width', 0);
+    rect.setAttribute('stroke-width', diameter);
+    rect.setAttribute('stroke-linejoin', 'round');
     g.appendChild(rect);
     let text = new Document().createElement('text');
     text.setAttribute('x', sx);
