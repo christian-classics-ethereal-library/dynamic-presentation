@@ -1,5 +1,9 @@
 :root {
   --text-color: #e7ad52;
+  --soprano-color: #7fb0ff;
+  --alto-color: #b0ff7f;
+  --tenor-color: #ffce7f;
+  --bass-color: #ce7fff;
 }
 
 /* reveal.js overrides for dynamic presentation */
@@ -35,6 +39,28 @@
   fill: var(--text-color);
 }
 
+.reveal section[data-musicxml] svg g {
+  /* mix-blend-mode makes overlapping elements brighten eachother up. */
+  mix-blend-mode: hard-light;
+}
+
+.reveal section[data-musicxml] svg g.voice0 {
+  stroke: var(--soprano-color);
+  fill: var(--soprano-color);
+}
+.reveal section[data-musicxml] svg g.voice1 {
+  stroke: var(--alto-color);
+  fill: var(--alto-color);
+}
+.reveal section[data-musicxml] svg g.voice2 {
+  stroke: var(--tenor-color);
+  fill: var(--tenor-color);
+}
+.reveal section[data-musicxml] svg g.voice3 {
+  stroke: var(--bass-color);
+  fill: var(--bass-color);
+}
+
 .reveal.reveal .slides > section,
 .reveal.reveal .slides > section > section {
   padding: 0px;
@@ -46,11 +72,6 @@
   margin: auto;
   padding: 20px 20px 80px 20px;
   font-size: 20px;
-}
-
-.dynamic svg text {
-  fill: white;
-  font-family: monospace;
 }
 
 a#openDynamicOptions {

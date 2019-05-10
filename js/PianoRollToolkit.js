@@ -25,6 +25,7 @@ export class PianoRollToolkit {
     this.highNote = -Infinity;
     this.data = {};
     this.data.measures = [];
+    this.data.voices = {};
     this.doc.querySelectorAll('measure').forEach(measure => {
       const measureNumber = measure.getAttribute('number');
       this.data.measures[measureNumber] = {
@@ -60,6 +61,7 @@ export class PianoRollToolkit {
             pitch: pitchVal,
             voice: partID + voice
           });
+          this.data.voices[partID + voice] = partID + voice;
         });
         offset[voice] = (offset[voice] || 0) + duration;
       }
@@ -69,6 +71,10 @@ export class PianoRollToolkit {
 
     // Compute some things about the song.
     this.noteRange = this.highNote - this.lowNote + 1;
+    // Assign numbers to the voices
+    Object.keys(this.data.voices).forEach((voice, i) => {
+      this.data.voices[voice] = i;
+    });
 
     this._assignMeasuresToPages();
   }
@@ -210,6 +216,7 @@ export class PianoRollToolkit {
   }
   _rectangle (x, y, w, h, lyric, voice) {
     let g = new Document().createElement('g');
+    g.setAttribute('class', `voice${this.data.voices[voice]}`);
     let sx = this.xScale * x;
     let sw = this.xScale * w;
     let sy = this.yScale * y;
@@ -224,7 +231,6 @@ export class PianoRollToolkit {
     rect.setAttribute('dy', diameter / 2);
     let height = sh - diameter;
     rect.setAttribute('height', height > 0 ? height : 1);
-    rect.setAttribute('data-voice', voice);
     rect.setAttribute('stroke-width', diameter);
     rect.setAttribute('stroke-linejoin', 'round');
     g.appendChild(rect);
