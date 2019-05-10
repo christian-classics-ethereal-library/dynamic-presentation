@@ -224,11 +224,9 @@ export class PianoRollToolkit {
     let rect = new Document().createElement('rect');
     // Make the rectangles rounded.
     let diameter = this.yScale;
-    rect.setAttribute('x', sx);
-    rect.setAttribute('dx', diameter / 2);
+    rect.setAttribute('x', sx + diameter / 2);
     rect.setAttribute('width', sw - diameter);
-    rect.setAttribute('y', sy);
-    rect.setAttribute('dy', diameter / 2);
+    rect.setAttribute('y', sy + diameter / 2);
     let height = sh - diameter;
     rect.setAttribute('height', height > 0 ? height : 1);
     rect.setAttribute('stroke-width', diameter);

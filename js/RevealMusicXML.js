@@ -56,9 +56,12 @@ export class RevealMusicXML {
     let zoom = 50;
     // TODO: Fix this to take Reveal's width and height;
     this.toolkit.setOptions({
+      // See definition of pageHeight and pageWidth (https://github.com/rism-ch/verovio/issues/1055).
       pageHeight: (700 * 100) / zoom,
       pageWidth: (960 * 100) / zoom,
       scale: zoom,
+      // TODO: change to "line" when that's available (https://github.com/rism-ch/verovio/issues/1056).
+      breaks: 'auto',
       adjustPageHeight: true
     });
     this.toolkit.loadData(data);
