@@ -7,6 +7,7 @@ export class PianoRollToolkit {
     this.xScale = this.scale;
     this.yScale = this.scale / 5;
     this.fontSize = 20;
+    this.adjustPageHeight = false;
   }
   getPageCount () {
     // this.pages has an empty item in it.
@@ -77,12 +78,16 @@ export class PianoRollToolkit {
     svg.setAttribute('font-size', this.fontSize);
     svg.setAttribute('width', this.width);
     svg.setAttribute('height', this.height);
+    let maxYOffset = -Infinity;
     this.pages[page].forEach(measurePlacement => {
       let measure = this.data.measures[measurePlacement.i];
       if (measure) {
         let measureElement = this._measure(
           this.data.measures[measurePlacement.i]
         );
+        if (measurePlacement.y > maxYOffset) {
+          maxYOffset = measurePlacement.y;
+        }
         measureElement.setAttribute(
           'transform',
           `translate(${measurePlacement.x} ${measurePlacement.y})`
@@ -90,6 +95,10 @@ export class PianoRollToolkit {
         svg.appendChild(measureElement);
       }
     });
+    if (this.adjustPageHeight) {
+      let adjustedHeight = this._getMeasureHeight() + maxYOffset;
+      svg.setAttribute('height', adjustedHeight);
+    }
     return new XMLSerializer().serializeToString(svg);
   }
   setOptions (options) {
@@ -105,6 +114,9 @@ export class PianoRollToolkit {
     }
     this.xScale = this.scale;
     this.yScale = this.scale / 5;
+    if (options.adjustPageHeight) {
+      this.adjustPageHeight = options.adjustPageHeight;
+    }
   }
 
   // Private functions
