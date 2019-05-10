@@ -109,7 +109,7 @@ function setFontSize (s) {
   $('.dynamic svg g text').each(function () {
     this.setAttribute('font-size', s + 'pt');
     this.setAttribute('dy', (-1 / 2) * s);
-    squishText(this);
+    // squishText(this);
   });
   resizeSVGHeight();
 }
@@ -152,7 +152,7 @@ function setNoteWidth (w) {
     } else if (typeof this.attributes['data-tl'] !== 'undefined') {
       width = parseFloat(this.attributes['data-tl']['value']) * w;
       this.setAttribute('data-textlength', width);
-      squishText(this);
+      // squishText(this);
     }
   });
   resizeSVGWidth();
@@ -182,7 +182,7 @@ function switchVerse (verse, verseAttr, hidePrevious = true) {
     // Add a non-breaking space if it is the end of a word.
     text = text.replace(/([^-])$/, '$1&nbsp;');
     els[i].innerHTML = text;
-    squishText(els[i]);
+    // squishText(els[i]);
   }
 }
 
@@ -477,41 +477,6 @@ function setViewBoxes () {
     this.setAttribute('viewBox', x + ' 0 ' + width + ' ' + height);
   });
   $('.dynamic').css('opacity', 1);
-}
-
-/**
- * @brief Squish text so it doesn't go beyond the boundaries of its box.
- *  Also possibly removes hypens or adds non-breaking spaces to squished text elements.
- * @param el The element that you want to squish the text on.
- * @precondition The text in the element ends with a non-breaking space if it is the end of a word.
- */
-function squishText (el) {
-  // If there is no text here, we don't have to do anything.
-  if (typeof el.childNodes[0] === 'undefined') return;
-  var text = el.childNodes[0].nodeValue;
-  // Setting a specific letter width isn't perfect since "One" is wider than "ly,"
-  var widthPerLetter = getFontPixelSize() * 0.7;
-  var boxWidth = $(el).attr('data-textlength');
-
-  // Add a hyphen if it doesn't end in a hypen or a non-breaking space.
-  if (!text.match(/[\xA0-]$/)) {
-    text += '-';
-  }
-
-  if (text.length * widthPerLetter >= boxWidth) {
-    // Apply the textLength attribute if we need to squish these letters.
-    $(el).attr('textLength', boxWidth);
-
-    // If we need to squish this letter, it's okay to remove any trailing hyphens,
-    // as long as removing those won't stretch the letter out.
-    // (this syllable is the middle of a word, but is squished against its continuation)
-    if ((text.length - 1) * widthPerLetter >= boxWidth) {
-      text = text.replace(/-$/, '');
-    }
-  } else {
-    $(el).attr('textLength', null);
-  }
-  el.innerHTML = text;
 }
 
 function urlParam (name) {

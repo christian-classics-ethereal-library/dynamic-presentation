@@ -173,9 +173,9 @@ export class PianoRollToolkit {
     let text = lyric.querySelector('text').innerHTML;
     let syllabic = lyric.querySelector('syllabic').innerHTML;
     if (syllabic === 'begin') return text + '-';
-    else if (syllabic === 'end') return '-' + text;
-    else if (syllabic === 'middle') return '-' + text + '-';
-    else return text;
+    else if (syllabic === 'end') return text + '\xa0';
+    else if (syllabic === 'middle') return text + '-';
+    else return text + '\xa0';
   }
   _getPitch (pitch) {
     let step = pitch.querySelector('step').innerHTML;
@@ -236,14 +236,50 @@ export class PianoRollToolkit {
     g.appendChild(rect);
     let text = new Document().createElement('text');
     text.setAttribute('x', sx);
-    // text-setAttribute('data-textlength', sw);
+    text.setAttribute('data-textlength', sw);
     text.setAttribute('lengthAdjust', 'spacingAndGlyphs');
     text.setAttribute('dx', 1);
     text.setAttribute('y', this.noteRange * this.yScale);
     text.setAttribute('dy', this.fontSize);
-
     text.innerHTML = lyric;
+    this._squishText(text);
+
     g.appendChild(text);
     return g;
+  }
+  /**
+   * @brief Squish text so it doesn't go beyond the boundaries of its box.
+   *  Also possibly removes hypens or adds non-breaking spaces to squished text elements.
+   * @param el The element that you want to squish the text on.
+   * @precondition The text in the element ends with a non-breaking space if it is the end of a word.
+   */
+  _squishText (el) {
+    // If there is no text here, we don't have to do anything.
+    if (typeof el.childNodes[0] === 'undefined') return;
+    var text = el.childNodes[0].nodeValue;
+    // Setting a specific letter width isn't perfect since "One" is wider than "ly,",
+    // For now, we are using a monospace font to account for this.
+    var widthPerLetter = this.fontSize * 0.7;
+    var boxWidth = el.getAttribute('data-textlength');
+
+    // Add a hyphen if it doesn't end in a hypen or a non-breaking space.
+    if (!text.match(/[\xA0-]$/)) {
+      text += '-';
+    }
+
+    if (text.length * widthPerLetter >= boxWidth) {
+      // Apply the textLength attribute if we need to squish these letters.
+      el.setAttribute('textLength', boxWidth);
+
+      // If we need to squish this letter, it's okay to remove any trailing hyphens,
+      // as long as removing those won't stretch the letter out.
+      // (this syllable is the middle of a word, but is squished against its continuation)
+      if ((text.length - 1) * widthPerLetter >= boxWidth) {
+        text = text.replace(/-$/, '');
+      }
+    } else {
+      el.setAttribute('textLength', null);
+    }
+    el.innerHTML = text;
   }
 }
