@@ -160,7 +160,10 @@ export class PianoRollToolkit {
       let measure = this.data.measures[i];
       if (measure) {
         let mWidth = this._getMeasureWidth(measure);
-        if (xOffset + mWidth > this.width) {
+        if (
+          xOffset + mWidth > this.width ||
+          (this.useSectionBreaks && measure.sectionBreak)
+        ) {
           xOffset = 0;
           if (row + 1 < rowsPerSlide) {
             row++;
