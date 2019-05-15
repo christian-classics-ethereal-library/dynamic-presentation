@@ -60,8 +60,9 @@ export class RevealMusicXML {
       pageHeight: (700 * 100) / zoom,
       pageWidth: (960 * 100) / zoom,
       scale: zoom,
-      // TODO: change to "line" when that's available (https://github.com/rism-ch/verovio/issues/1056).
-      breaks: 'auto',
+      // TODO: change to proper definition of "line" when that gets implemented
+      // (https://github.com/rism-ch/verovio/issues/1056).
+      breaks: 'line',
       adjustPageHeight: true
     });
     this.toolkit.loadData(data);
