@@ -31,12 +31,22 @@ export class PianoRollToolkit {
       this.data.measures[measureNumber] = {
         notes: [],
         chordSymbols: [],
-        duration: 0
+        duration: 0,
+        pageBreak: false,
+        sectionBreak: false
       };
     });
     this.doc.querySelectorAll('measure').forEach(measure => {
       const measureNumber = measure.getAttribute('number');
       const partID = measure.closest('part').getAttribute('id');
+
+      if (measure.querySelector('print[new-system="yes"]')) {
+        this.data.measures[measureNumber].sectionBreak = true;
+      }
+      if (measure.querySelector('print[new-page="yes"]')) {
+        this.data.measures[measureNumber].sectionBreak = true;
+        this.data.measures[measureNumber].pageBreak = true;
+      }
 
       // Go through the notes and rests sequentially so we can get their offsets straight.
       let notes = measure.querySelectorAll('note');
@@ -64,6 +74,9 @@ export class PianoRollToolkit {
           this.data.voices[partID + voice] = partID + voice;
         });
         offset[voice] = (offset[voice] || 0) + duration;
+        if (offset[voice] > this.data.measures[measureNumber].duration) {
+          this.data.measures[measureNumber].duration = offset[voice];
+        }
       }
       // TODO: Show chord symbols in dynamic presentation?
       // measure.querySelectorAll('harmony')
@@ -123,11 +136,20 @@ export class PianoRollToolkit {
     if (options.adjustPageHeight) {
       this.adjustPageHeight = options.adjustPageHeight;
     }
+    if (options.breaks) {
+      if (options.breaks === 'line' || options.breaks === 'encoded') {
+        // Using section breaks will automatically change the xScale.
+        this.useSectionBreaks = true;
+      }
+    }
   }
 
   // Private functions
 
   _assignMeasuresToPages () {
+    if (this.useSectionBreaks) {
+      this.xScale = this.width / this._getMaxSectionDuration();
+    }
     let rowHeight = this._getMeasureHeight();
     let rowsPerSlide = Math.floor(this.height / rowHeight);
     this.pages = [[], []];
@@ -138,7 +160,10 @@ export class PianoRollToolkit {
       let measure = this.data.measures[i];
       if (measure) {
         let mWidth = this._getMeasureWidth(measure);
-        if (xOffset + mWidth > this.width) {
+        if (
+          xOffset + mWidth > this.width ||
+          (this.useSectionBreaks && measure.sectionBreak)
+        ) {
           xOffset = 0;
           if (row + 1 < rowsPerSlide) {
             row++;
@@ -155,18 +180,28 @@ export class PianoRollToolkit {
       }
     }
   }
+  _getMaxSectionDuration () {
+    let msd = -Infinity;
+    let sectionDur = 0;
+    for (let i = 0; i <= this.data.measures.length; i++) {
+      let measure = this.data.measures[i];
+      if (measure) {
+        sectionDur += measure.duration;
+        if (sectionDur > msd) {
+          msd = sectionDur;
+        }
+        if (measure.sectionBreak) {
+          sectionDur = 0;
+        }
+      }
+    }
+    return msd;
+  }
   _getMeasureHeight () {
     return this.noteRange * this.yScale + 2 * this.fontSize;
   }
   _getMeasureWidth (measure) {
-    // TODO: Better way of getting duration of a measure.
-    let width = -Infinity;
-    for (let i = 0; i < measure.notes.length; i++) {
-      if (measure.notes[i].duration + measure.notes[i].offset > width) {
-        width = measure.notes[i].duration + measure.notes[i].offset;
-      }
-    }
-    return width * this.xScale;
+    return measure.duration * this.xScale;
   }
   _getLyric (lyric) {
     if (!lyric) return '';
