@@ -1,12 +1,6 @@
 var Reveal = require('reveal.js');
 
 Reveal.addKeyBinding(
-  { keyCode: 68, key: 'D', description: 'Toggle Dynamic Presentation Options' },
-  function () {
-    window.toggleDynamicOptions();
-  }
-);
-Reveal.addKeyBinding(
   { keyCode: 77, key: 'M', description: 'Play/Stop audio' },
   function () {
     window.playPauseAudio();
