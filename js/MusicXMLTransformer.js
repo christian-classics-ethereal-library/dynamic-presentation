@@ -46,7 +46,7 @@ export class MusicXMLTransformer {
           barStyle.innerHTML === 'dotted' || barStyle.innerHTML === 'dashed'
       )
     ) {
-      this.removeSystemBreaks();
+      this.removeSystemAndPageBreaks();
       this.useDottedDashedAsSystemBreaks();
     }
   }
@@ -95,8 +95,9 @@ export class MusicXMLTransformer {
     });
   }
 
-  removeSystemBreaks () {
+  removeSystemAndPageBreaks () {
     this.doc.querySelectorAll('measure print').forEach(print => {
+      print.removeAttribute('new-page');
       print.removeAttribute('new-system');
     });
   }

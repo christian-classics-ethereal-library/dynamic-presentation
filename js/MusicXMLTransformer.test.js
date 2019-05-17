@@ -3,25 +3,22 @@ import { MusicXMLTransformer } from './MusicXMLTransformer';
 import fs from 'fs';
 import path from 'path';
 
+const xmlFiles = '../../../examplemedia/musicxmlTestSuite/xmlFiles/';
+
 const xml46a = fs.readFileSync(
-  path.resolve(
-    __dirname,
-    '../../../examplemedia/musicxmlTestSuite/xmlFiles/46a-Barlines.xml'
-  ),
+  path.resolve(__dirname, xmlFiles + '46a-Barlines.xml'),
+  'utf8'
+);
+const xml52b = fs.readFileSync(
+  path.resolve(__dirname, xmlFiles + '52b-Breaks.xml'),
   'utf8'
 );
 const xml61b = fs.readFileSync(
-  path.resolve(
-    __dirname,
-    '../../../examplemedia/musicxmlTestSuite/xmlFiles/61b-MultipleLyrics.xml'
-  ),
+  path.resolve(__dirname, xmlFiles + '61b-MultipleLyrics.xml'),
   'utf8'
 );
 const xml61g = fs.readFileSync(
-  path.resolve(
-    __dirname,
-    '../../../examplemedia/musicxmlTestSuite/xmlFiles/61g-Lyrics-NameNumber.xml'
-  ),
+  path.resolve(__dirname, xmlFiles + '61g-Lyrics-NameNumber.xml'),
   'utf8'
 );
 
@@ -75,4 +72,12 @@ test('useDottedDashedAsSystemBreaks works fine', () => {
   mxt.useDottedDashedAsSystemBreaks();
   let xml46aX = mxt.getData();
   expect(xml46aX).toMatchSnapshot();
+});
+
+test('removeSystemAndPageBreaks works fine', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml52b);
+  mxt.removeSystemAndPageBreaks();
+  let xml52bX = mxt.getData();
+  expect(xml52bX).toMatchSnapshot();
 });
