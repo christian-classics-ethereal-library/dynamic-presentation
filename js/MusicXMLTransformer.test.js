@@ -2,6 +2,14 @@
 import { MusicXMLTransformer } from './MusicXMLTransformer';
 import fs from 'fs';
 import path from 'path';
+
+const xml46a = fs.readFileSync(
+  path.resolve(
+    __dirname,
+    '../../../examplemedia/musicxmlTestSuite/xmlFiles/46a-Barlines.xml'
+  ),
+  'utf8'
+);
 const xml61b = fs.readFileSync(
   path.resolve(
     __dirname,
@@ -59,4 +67,12 @@ test('makeAllWordsVerse1 works fine', () => {
   mxt.makeAllWordsVerse1();
   let xml61bX = mxt.getData();
   expect(xml61bX).toMatchSnapshot();
+});
+
+test('useDottedDashedAsSystemBreaks works fine', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml46a);
+  mxt.useDottedDashedAsSystemBreaks();
+  let xml46aX = mxt.getData();
+  expect(xml46aX).toMatchSnapshot();
 });
