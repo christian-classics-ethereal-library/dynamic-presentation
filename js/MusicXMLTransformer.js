@@ -1,4 +1,4 @@
-/* globals DOMParser, XMLSerializer */
+/* globals Document, DOMParser, XMLSerializer */
 export class MusicXMLTransformer {
   getData () {
     return new XMLSerializer().serializeToString(this.doc.documentElement);
@@ -35,6 +35,20 @@ export class MusicXMLTransformer {
     this.makeAllWordsVerse1();
     this.hideOtherMeasures();
     this.renumberMeasures();
+
+    let barStyles = Array.from(
+      this.doc.querySelectorAll('measure barline[location="right"] bar-style')
+    );
+    if (
+      barStyles &&
+      barStyles.some(
+        barStyle =>
+          barStyle.innerHTML === 'dotted' || barStyle.innerHTML === 'dashed'
+      )
+    ) {
+      this.removeSystemBreaks();
+      this.useDottedDashedAsSystemBreaks();
+    }
   }
 
   hideOtherLyrics (sectionName) {
@@ -81,6 +95,12 @@ export class MusicXMLTransformer {
     });
   }
 
+  removeSystemBreaks () {
+    this.doc.querySelectorAll('measure print').forEach(print => {
+      print.removeAttribute('new-system');
+    });
+  }
+
   renumberMeasures () {
     this.doc.querySelectorAll('part').forEach(part => {
       let measures = part.querySelectorAll('measure');
@@ -88,5 +108,27 @@ export class MusicXMLTransformer {
         measures[i].setAttribute('number', i + 1);
       }
     });
+  }
+
+  useDottedDashedAsSystemBreaks () {
+    this.doc
+      .querySelectorAll('measure barline[location="right"] bar-style')
+      .forEach(barStyle => {
+        if (
+          barStyle.innerHTML === 'dotted' ||
+          barStyle.innerHTML === 'dashed'
+        ) {
+          let measure = barStyle.closest('measure');
+          let nextMeasure = measure.nextElementSibling;
+          if (nextMeasure) {
+            let print = nextMeasure.querySelector('print');
+            if (!print) {
+              print = new Document().createElement('print');
+              nextMeasure.appendChild(print);
+            }
+            print.setAttribute('new-system', 'yes');
+          }
+        }
+      });
   }
 }
