@@ -56,9 +56,9 @@ export class RevealMusicXML {
     let zoom = 50;
     // TODO: Use API to get width and height when that gets implemented
     // (https://github.com/hakimel/reveal.js/issues/2409).
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-undef
     let pixelHeight = parseFloat(jQuery('.slides').css('height'));
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-undef
     let pixelWidth = parseFloat(jQuery('.slides').css('width'));
     this.toolkit.setOptions({
       pageHeight: pixelHeight * (100 / zoom),
