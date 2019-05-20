@@ -32,6 +32,9 @@ export class RevealMusicArranger {
         });
       });
     }
+    if (!arrangement.length) {
+      arrangement = ['instrumental'];
+    }
     return arrangement;
   }
 

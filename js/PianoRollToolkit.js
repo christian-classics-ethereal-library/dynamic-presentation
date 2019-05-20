@@ -52,7 +52,9 @@ export class PianoRollToolkit {
       let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
         const duration = parseInt(notes[i].querySelector('duration').innerHTML);
-        const voice = notes[i].querySelector('voice').innerHTML;
+        const voice = notes[i].querySelector('voice')
+          ? notes[i].querySelector('voice').innerHTML
+          : 0;
         const lyric = this._getLyric(notes[i].querySelector('lyric'));
         // Another way in musicXML to do chords is to just add a chord element inside a note
         // (in which case, the offset doesn't advance, and the note starts with the previous one).
@@ -90,6 +92,16 @@ export class PianoRollToolkit {
 
     // Compute some things about the song.
     this.noteRange = this.highNote - this.lowNote + 1;
+    let durations = 0;
+    let count = 0;
+    this.data.measures.forEach(m => {
+      m.notes.forEach(n => {
+        count++;
+        durations += n.duration;
+      });
+    });
+    this.averageDuration = durations / count;
+
     // Assign numbers to the voices
     Object.keys(this.data.voices).forEach((voice, i) => {
       this.data.voices[voice] = i;
@@ -152,8 +164,10 @@ export class PianoRollToolkit {
   // Private functions
 
   _assignMeasuresToPages () {
-    if (this.useSectionBreaks) {
+    if (this.useSectionBreaks && this.data.measures.some(m => m.sectionBreak)) {
       this.xScale = this.width / this._getMaxSectionDuration();
+    } else if (this.averageDuration > 50) {
+      this.xScale = this.scale / Math.ceil(this.averageDuration / 2);
     }
     let rowHeight = this._getMeasureHeight();
     let rowsPerSlide = Math.floor(this.height / rowHeight);

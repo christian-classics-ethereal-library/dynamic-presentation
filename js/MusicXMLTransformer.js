@@ -33,7 +33,9 @@ export class MusicXMLTransformer {
     }
     // So there isn't an odd gap between top and bottom.
     this.makeAllWordsVerse1();
-    this.hideOtherMeasures();
+    if (sectionName.slice(0, 12) !== 'instrumental') {
+      this.hideOtherMeasures();
+    }
     this.renumberMeasures();
 
     let barStyles = Array.from(
