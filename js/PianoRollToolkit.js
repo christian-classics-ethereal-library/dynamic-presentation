@@ -1,13 +1,11 @@
 /* globals Document, DOMParser, XMLSerializer */
 export class PianoRollToolkit {
   constructor () {
-    this.scale = 50;
+    this.scale = 100;
     this.width = 300;
     this.height = 150;
-    this.xScale = this.scale;
-    this.yScale = this.scale / 5;
-    this.fontSize = 20;
     this.adjustPageHeight = false;
+    this._configValues();
   }
   getPageCount () {
     // this.pages has an empty item in it.
@@ -131,8 +129,6 @@ export class PianoRollToolkit {
     if (options.pageHeight) {
       this.height = (options.pageHeight / 100) * this.scale;
     }
-    this.xScale = this.scale;
-    this.yScale = this.scale / 5;
     if (options.adjustPageHeight) {
       this.adjustPageHeight = options.adjustPageHeight;
     }
@@ -142,6 +138,7 @@ export class PianoRollToolkit {
         this.useSectionBreaks = true;
       }
     }
+    this._configValues();
   }
 
   // Private functions
@@ -179,6 +176,11 @@ export class PianoRollToolkit {
         this.pages[j].push({ x: xTransform, y: yTransform, i: i });
       }
     }
+  }
+  _configValues () {
+    this.xScale = this.scale;
+    this.yScale = this.scale / 5;
+    this.fontSize = this.scale / 2.5;
   }
   _getMaxSectionDuration () {
     let msd = -Infinity;
