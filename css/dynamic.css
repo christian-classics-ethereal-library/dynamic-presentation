@@ -27,9 +27,11 @@
   fill: var(--text-color);
 }
 
-.reveal section[data-musicxml] svg g {
+.reveal section[data-musicxml] svg g.voice1,
+.reveal section[data-musicxml] svg g.voice3 {
   /* mix-blend-mode makes overlapping elements brighten eachother up. */
-  mix-blend-mode: hard-light;
+  mix-blend-mode: screen;
+  isolation: isolate;
 }
 
 .reveal section[data-musicxml] svg g.voice0 {

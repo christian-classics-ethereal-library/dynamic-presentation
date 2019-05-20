@@ -54,11 +54,15 @@ export class RevealMusicXML {
 
   _slidify (data) {
     let zoom = 50;
-    // TODO: Fix this to take Reveal's width and height;
+    // TODO: Use API to get width and height when that gets implemented
+    // (https://github.com/hakimel/reveal.js/issues/2409).
+    // eslint-disable-next-line no-undef
+    let pixelHeight = parseFloat(jQuery('.slides').css('height'));
+    // eslint-disable-next-line no-undef
+    let pixelWidth = parseFloat(jQuery('.slides').css('width'));
     this.toolkit.setOptions({
-      // See definition of pageHeight and pageWidth (https://github.com/rism-ch/verovio/issues/1055).
-      pageHeight: (700 * 100) / zoom,
-      pageWidth: (960 * 100) / zoom,
+      pageHeight: pixelHeight * (100 / zoom),
+      pageWidth: pixelWidth * (100 / zoom),
       scale: zoom,
       // TODO: change to proper definition of "line" when that gets implemented
       // (https://github.com/rism-ch/verovio/issues/1056).
