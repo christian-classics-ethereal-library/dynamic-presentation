@@ -49,11 +49,14 @@ export class PianoRollToolkit {
       // Go through the notes and rests sequentially so we can get their offsets straight.
       let notes = measure.querySelectorAll('note');
       let offset = {};
-
+      let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
         const duration = parseInt(notes[i].querySelector('duration').innerHTML);
         const voice = notes[i].querySelector('voice').innerHTML;
         const lyric = this._getLyric(notes[i].querySelector('lyric'));
+        // Another way in musicXML to do chords is to just add a chord element inside a note
+        // (in which case, the offset doesn't advance, and the note starts with the previous one).
+        const isInternalChord = notes[i].querySelector('chord');
         notes[i].querySelectorAll('pitch').forEach(pitch => {
           const pitchVal = this._getPitch(pitch);
           if (pitchVal > this.highNote) {
@@ -65,16 +68,21 @@ export class PianoRollToolkit {
           this.data.measures[measureNumber].notes.push({
             duration: duration,
             lyric: lyric,
-            offset: offset[voice] || 0,
+            offset: isInternalChord
+              ? offset[voice] - previousDuration
+              : offset[voice] || 0,
             pitch: pitchVal,
             voice: partID + voice
           });
           this.data.voices[partID + voice] = partID + voice;
         });
-        offset[voice] = (offset[voice] || 0) + duration;
+        if (!isInternalChord) {
+          offset[voice] = (offset[voice] || 0) + duration;
+        }
         if (offset[voice] > this.data.measures[measureNumber].duration) {
           this.data.measures[measureNumber].duration = offset[voice];
         }
+        previousDuration = duration;
       }
       // TODO: Show chord symbols in dynamic presentation?
       // measure.querySelectorAll('harmony')
