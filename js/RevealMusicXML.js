@@ -66,6 +66,7 @@ export class RevealMusicXML {
   _reslidify () {
     this.toolkits.forEach((toolkit, i) => {
       this._setOptions(toolkit);
+      toolkit.redoLayout();
       let section = document.getElementById(`RevealMusicXML${i}`);
       this._render(section, toolkit);
     });
@@ -100,7 +101,9 @@ export class RevealMusicXML {
     this._setOptions(toolkit);
     toolkit.loadData(data);
     this._render(section, toolkit);
-    this.reveal.addEventListener('resize', () => {
+    // TODO: Possibly use Reveal's 'resize' event when it works with percentage sizes
+    // (https://github.com/hakimel/reveal.js/issues/2411).
+    window.addEventListener('resize', () => {
       this._reslidify();
     });
   }

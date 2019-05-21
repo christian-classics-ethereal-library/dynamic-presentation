@@ -109,6 +109,9 @@ export class PianoRollToolkit {
 
     this._assignMeasuresToPages();
   }
+  redoLayout () {
+    this._assignMeasuresToPages();
+  }
   renderToSVG (page, options) {
     let svg = new Document().createElement('svg');
     svg.setAttribute('font-family', 'Monospace');
