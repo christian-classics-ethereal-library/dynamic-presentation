@@ -1,9 +1,10 @@
-/* globals fetch */
+/* globals fetch, Reveal */
 export class RevealMusicXML {
   constructor (ToolkitType, transformer) {
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.transformer = transformer;
+    this.reveal = Reveal;
   }
 
   /**
@@ -64,16 +65,15 @@ export class RevealMusicXML {
   }
   _reslidify () {
     this.toolkits.forEach((toolkit, i) => {
+      this._setOptions(toolkit);
       let section = document.getElementById(`RevealMusicXML${i}`);
       this._render(section, toolkit);
     });
+    let indices = this.reveal.getIndices();
+    this.reveal.slide(indices.h, indices.v, indices.f);
   }
 
-  _slidify (section, data) {
-    let i = this.toolkits.length;
-    this.toolkits[i] = new this.ToolkitType();
-    let toolkit = this.toolkits[i];
-    section.setAttribute('id', `RevealMusicXML${i}`);
+  _setOptions (toolkit) {
     let zoom = 50;
     // TODO: Use API to get width and height when that gets implemented
     // (https://github.com/hakimel/reveal.js/issues/2409).
@@ -90,7 +90,18 @@ export class RevealMusicXML {
       breaks: 'line',
       adjustPageHeight: true
     });
+  }
+
+  _slidify (section, data) {
+    let i = this.toolkits.length;
+    this.toolkits[i] = new this.ToolkitType();
+    let toolkit = this.toolkits[i];
+    section.setAttribute('id', `RevealMusicXML${i}`);
+    this._setOptions(toolkit);
     toolkit.loadData(data);
     this._render(section, toolkit);
+    this.reveal.addEventListener('resize', () => {
+      this._reslidify();
+    });
   }
 }
