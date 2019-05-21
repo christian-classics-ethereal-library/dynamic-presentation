@@ -335,7 +335,7 @@ export class PianoRollToolkit {
         text = text.replace(/-$/, '');
       }
     } else {
-      el.setAttribute('textLength', null);
+      el.removeAttribute('textLength');
     }
     el.innerHTML = text;
   }

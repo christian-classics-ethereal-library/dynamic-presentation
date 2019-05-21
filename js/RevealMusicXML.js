@@ -1,7 +1,8 @@
 /* globals fetch */
 export class RevealMusicXML {
-  constructor (toolkit, transformer) {
-    this.toolkit = toolkit;
+  constructor (ToolkitType, transformer) {
+    this.ToolkitType = ToolkitType;
+    this.toolkits = [];
     this.transformer = transformer;
   }
 
@@ -10,7 +11,7 @@ export class RevealMusicXML {
    * @return A promise.
    */
   init () {
-    if (typeof this.toolkit === 'undefined') {
+    if (typeof this.ToolkitType === 'undefined') {
       throw new Error(
         'RevealMusicXML needs to be constructed with a rendering toolkit.'
       );
@@ -31,7 +32,7 @@ export class RevealMusicXML {
       .then(res => res.text())
       .then(text => this.transformer.transform(text, transformation))
       .then(text => {
-        section.innerHTML = this._slidify(text);
+        this._slidify(section, text);
       });
   }
 
@@ -41,7 +42,8 @@ export class RevealMusicXML {
       if (section.getAttribute('data-musicxml').length) {
         promises.push(this._loadExternalMusicXML(section));
       } else {
-        section.innerHTML = this._slidify(
+        this._slidify(
+          section,
           this.transformer.transform(
             section.querySelector('script[type="text/template"]').innerHTML,
             section.getAttribute('data-musicxml-transform')
@@ -52,7 +54,26 @@ export class RevealMusicXML {
     return Promise.all(promises);
   }
 
-  _slidify (data) {
+  _render (section, toolkit) {
+    let max = toolkit.getPageCount();
+    section.innerHTML = '';
+    for (let i = 1; i <= max; i++) {
+      let cSection = section.appendChild(document.createElement('section'));
+      cSection.innerHTML = toolkit.renderToSVG(i, {});
+    }
+  }
+  _reslidify () {
+    this.toolkits.forEach((toolkit, i) => {
+      let section = document.getElementById(`RevealMusicXML${i}`);
+      this._render(section, toolkit);
+    });
+  }
+
+  _slidify (section, data) {
+    let i = this.toolkits.length;
+    this.toolkits[i] = new this.ToolkitType();
+    let toolkit = this.toolkits[i];
+    section.setAttribute('id', `RevealMusicXML${i}`);
     let zoom = 50;
     // TODO: Use API to get width and height when that gets implemented
     // (https://github.com/hakimel/reveal.js/issues/2409).
@@ -60,7 +81,7 @@ export class RevealMusicXML {
     let pixelHeight = parseFloat(jQuery('.slides').css('height'));
     // eslint-disable-next-line no-undef
     let pixelWidth = parseFloat(jQuery('.slides').css('width'));
-    this.toolkit.setOptions({
+    toolkit.setOptions({
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),
       scale: zoom,
@@ -69,12 +90,7 @@ export class RevealMusicXML {
       breaks: 'line',
       adjustPageHeight: true
     });
-    this.toolkit.loadData(data);
-    let max = this.toolkit.getPageCount();
-    let string = '';
-    for (let i = 1; i <= max; i++) {
-      string += '<section>' + this.toolkit.renderToSVG(i, {}) + '</section>';
-    }
-    return string;
+    toolkit.loadData(data);
+    this._render(section, toolkit);
   }
 }

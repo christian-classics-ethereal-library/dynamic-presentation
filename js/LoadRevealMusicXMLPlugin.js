@@ -17,9 +17,9 @@ let mxt = new MusicXMLTransformer();
 let tk;
 if (urlParam('toolkit') === 'verovio') {
   // eslint-disable-next-line
-  tk = new verovio.toolkit();
+  tk = verovio.toolkit;
 } else {
-  tk = new PianoRollToolkit();
+  tk = PianoRollToolkit;
 }
 let rmx = new RevealMusicXML(tk, mxt);
 
