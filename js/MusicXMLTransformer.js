@@ -15,9 +15,11 @@ export class MusicXMLTransformer {
 
   /* transform is called by the Reveal Plugin */
   transform (data, transformationName) {
+    transformationName = transformationName || '';
+    let sectionName = transformationName.split(';')[0];
     if (transformationName) {
       this.loadData(data);
-      this.showSection(transformationName);
+      this.showSection(sectionName);
       return this.getData();
     } else {
       return data;

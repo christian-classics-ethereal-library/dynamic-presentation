@@ -4,6 +4,11 @@ export class RevealMusicArranger {
     return this._processSlides().then(() => Promise.resolve());
   }
 
+  /**
+   * @brief Determine the arrangement from the arrangementString, or automatically.
+   * @param arrangementString is a string like `verse1,chorus,verse2,chorus`, or the empty string.
+   * @return list.
+   */
   _getArrangement (data, arrangementString) {
     let arrangement = [];
     if (arrangementString) {
@@ -40,13 +45,11 @@ export class RevealMusicArranger {
 
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicarranger');
-    const arrangementString = section.getAttribute(
-      'data-musicarranger-arrangement'
-    );
+    const formatString = section.getAttribute('data-musicarranger-format');
     return fetch(url)
       .then(res => res.text())
       .then(text => {
-        section.outerHTML = this._slidify(text, arrangementString);
+        section.outerHTML = this._slidify(text, formatString);
       });
   }
 
@@ -58,19 +61,26 @@ export class RevealMusicArranger {
       } else {
         section.outerHTML = this._slidify(
           section.querySelector('script[type="text/template"]').innerHTML,
-          section.getAttribute('data-musiarranger-arrangement')
+          section.getAttribute('data-musiarranger-format')
         );
       }
     });
     return Promise.all(promises);
   }
 
-  _slidify (data, arrangementString) {
+  /**
+   * @brief Create the slide content based on a formatString and the musicXML data.
+   * @param formatString Looks like `verse1,chorus,verse2,chorus;option1=value1,option2=value2`.
+   */
+  _slidify (data, formatString) {
+    formatString = formatString || '';
+    let arrangementString = formatString.split(';')[0];
+    let optionString = formatString.split(';')[1] || '';
     let arrangement = this._getArrangement(data, arrangementString);
     let string = '';
     arrangement.forEach(section => {
       string +=
-        `<section data-musicxml data-musicxml-transform="${section}">` +
+        `<section data-musicxml data-musicxml-transform="${section};${optionString}">` +
         "<script type='text/template'>" +
         data +
         '</script>' +
