@@ -16,10 +16,14 @@ export class MusicXMLTransformer {
   /* transform is called by the Reveal Plugin */
   transform (data, transformationJson) {
     let trans = JSON.parse(transformationJson);
-    let sectionName = trans.sectionName;
-    if (sectionName) {
+    if (trans.sectionName || trans.options) {
       this.loadData(data);
-      this.showSection(sectionName);
+      if (trans.sectionName) {
+        this.showSection(trans.sectionName);
+      }
+      if (trans.options.phrases) {
+        this.phrasesPerLine(trans.options.phrases);
+      }
       return this.getData();
     } else {
       return data;
@@ -97,6 +101,22 @@ export class MusicXMLTransformer {
     this.doc.querySelectorAll('lyric').forEach(lyric => {
       lyric.setAttribute('number', '1');
     });
+  }
+
+  /**
+   * @brief Combine Systems together so that there are n old systems per new system.
+   */
+  phrasesPerLine (n) {
+    this.doc
+      .querySelectorAll(
+        'measure print[new-page=yes], measure print[new-system=yes]'
+      )
+      .forEach((print, i) => {
+        if (i % n !== n - 1) {
+          print.removeAttribute('new-page');
+          print.removeAttribute('new-system');
+        }
+      });
   }
 
   removeSystemAndPageBreaks () {

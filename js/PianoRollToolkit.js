@@ -128,6 +128,7 @@ export class PianoRollToolkit {
         if (measurePlacement.y > maxYOffset) {
           maxYOffset = measurePlacement.y;
         }
+        measureElement.setAttribute('id', `measure${measurePlacement.i}`);
         measureElement.setAttribute(
           'transform',
           `translate(${measurePlacement.x} ${measurePlacement.y})`
@@ -167,8 +168,14 @@ export class PianoRollToolkit {
   // Private functions
 
   _assignMeasuresToPages () {
-    if (this.useSectionBreaks && this.data.measures.some(m => m.sectionBreak)) {
-      this.xScale = this.width / this._getMaxSectionDuration();
+    if (this.useSectionBreaks) {
+      if (this.data.measures.some(m => m.sectionBreak)) {
+        this.xScale = this.width / this._getMaxSectionDuration();
+      } else {
+        this._debug(
+          'useSectionBreaks is set, but no section breaks were found in this piece.'
+        );
+      }
     } else if (this.averageDuration > 50) {
       this.xScale = this.scale / Math.ceil(this.averageDuration / 2);
     }
@@ -207,6 +214,11 @@ export class PianoRollToolkit {
     this.yScale = this.scale / 5;
     this.fontSize = this.scale / 2.5;
   }
+
+  _debug (message) {
+    console.log(`PianoRollToolkit: ${message}`);
+  }
+
   _getMaxSectionDuration () {
     let msd = -Infinity;
     let sectionDur = 0;
