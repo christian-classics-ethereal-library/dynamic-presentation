@@ -41,13 +41,10 @@ export class RevealMusicArranger {
 
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicarranger');
-    const info = JSON.parse(
-      section.getAttribute('data-musicarranger-info') || '{}'
-    );
     return fetch(url)
       .then(res => res.text())
       .then(text => {
-        section.outerHTML = this._slidify(text, info);
+        this._slidify(section, text);
       });
   }
 
@@ -57,9 +54,9 @@ export class RevealMusicArranger {
       if (section.getAttribute('data-musicarranger').length) {
         promises.push(this._loadExternalMusicXML(section));
       } else {
-        section.outerHTML = this._slidify(
-          section.querySelector('script[type="text/template"]').innerHTML,
-          JSON.parse(section.getAttribute('data-musicarranger-info') || '{}')
+        this._slidify(
+          section,
+          section.querySelector('script[type="text/template"]').innerHTML
         );
       }
     });
@@ -69,19 +66,32 @@ export class RevealMusicArranger {
   /**
    * @brief Create the slide content based on the musicXML data, and some info.
    */
-  _slidify (data, info) {
-    let arrangement = this._getArrangement(data, info['arrangement'] || []);
-    let options = info['options'] || {};
-    let string = '';
-    arrangement.forEach(section => {
-      let optionString = JSON.stringify(options);
-      string +=
-        `<section data-musicxml data-musicxml-transform="${section};${optionString}">` +
-        "<script type='text/template'>" +
-        data +
-        '</script>' +
-        '</section>';
+  _slidify (section, data) {
+    let info = JSON.parse(
+      section.getAttribute('data-musicarranger-info') || '{}'
+    );
+    let arrangement = this._getArrangement(data, info.arrangement || []);
+
+    section.innerHTML = '';
+
+    arrangement.forEach(sectionName => {
+      let newSection = document.createElement('section');
+      section.appendChild(newSection);
+
+      let sectionInfo = {
+        sectionName: sectionName,
+        options: info.options
+      };
+      newSection.setAttribute(
+        'data-musicxml-transform',
+        JSON.stringify(sectionInfo)
+      );
+      newSection.setAttribute('data-musicxml', '');
+      newSection.innerHTML =
+        "<script type='text/template'>" + data + '</script>';
     });
-    return string;
+
+    // Remove this outer <section> element.
+    section.outerHTML = section.innerHTML;
   }
 }

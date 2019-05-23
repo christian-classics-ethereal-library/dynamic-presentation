@@ -14,10 +14,10 @@ export class MusicXMLTransformer {
   }
 
   /* transform is called by the Reveal Plugin */
-  transform (data, transformationName) {
-    transformationName = transformationName || '';
-    let sectionName = transformationName.split(';')[0];
-    if (transformationName) {
+  transform (data, transformationJson) {
+    let trans = JSON.parse(transformationJson);
+    let sectionName = trans.sectionName;
+    if (sectionName) {
       this.loadData(data);
       this.showSection(sectionName);
       return this.getData();
