@@ -3,6 +3,7 @@ import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
 import { RevealMusicXML } from '../js/RevealMusicXML.js';
+import { VerovioLineWrapper } from '../js/VerovioLineWrapper.js';
 
 function urlParam (name) {
   var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(
@@ -16,8 +17,9 @@ let rma = new RevealMusicArranger();
 let mxt = new MusicXMLTransformer();
 let tk;
 if (urlParam('toolkit') === 'verovio') {
-  // eslint-disable-next-line
   tk = verovio.toolkit;
+} else if (urlParam('toolkit') === 'veroviostatic') {
+  tk = VerovioLineWrapper;
 } else {
   tk = PianoRollToolkit;
 }
