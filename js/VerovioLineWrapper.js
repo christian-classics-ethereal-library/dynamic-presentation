@@ -6,6 +6,7 @@ export class VerovioLineWrapper {
     // eslint-disable-next-line new-cap
     this.toolkit = new verovio.toolkit();
     this.vOptions = {};
+    this.vPageCount = Infinity;
   }
 
   getPageCount () {
@@ -15,8 +16,9 @@ export class VerovioLineWrapper {
     let vPageHeight = parseFloat(svgDoc.activeElement.getAttribute('height'));
     let screenHeight = this.vOptions.pageHeight * (this.vOptions.scale / 100);
     this.systemsPerPage = Math.floor(screenHeight / vPageHeight);
+    this.vPageCount = this.toolkit.getPageCount();
 
-    return Math.ceil(this.toolkit.getPageCount() / this.systemsPerPage);
+    return Math.ceil(this.vPageCount / this.systemsPerPage);
   }
 
   getTimeForElement (id) {
@@ -52,7 +54,9 @@ export class VerovioLineWrapper {
       let string = '';
       for (let i = 0; i < this.systemsPerPage; i++) {
         let vPage = (page - 1) * this.systemsPerPage + i + 1;
-        string += this.toolkit.renderToSVG(vPage, options);
+        if(vPage <= this.vPageCount) {
+            string += this.toolkit.renderToSVG(vPage, options);
+        }
       }
       return string;
     } else {
