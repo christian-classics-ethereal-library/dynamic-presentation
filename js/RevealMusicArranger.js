@@ -9,13 +9,9 @@ export class RevealMusicArranger {
    * @param arrangementString is a string like `verse1,chorus,verse2,chorus`, or the empty string.
    * @return list.
    */
-  _getArrangement (data, arrangementString) {
-    let arrangement = [];
-    if (arrangementString) {
-      arrangementString.split(',').forEach(e => {
-        // TODO: Allow shorthand format (v1,v2,c,v3) to be used.
-        arrangement.push(e);
-      });
+  _getArrangement (data, arrangement) {
+    if (arrangement.length) {
+      return arrangement;
     } else {
       let parser = new DOMParser();
       let doc = parser.parseFromString(data, 'text/xml');
@@ -45,11 +41,13 @@ export class RevealMusicArranger {
 
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicarranger');
-    const formatString = section.getAttribute('data-musicarranger-format');
+    const info = JSON.parse(
+      section.getAttribute('data-musicarranger-info') || '{}'
+    );
     return fetch(url)
       .then(res => res.text())
       .then(text => {
-        section.outerHTML = this._slidify(text, formatString);
+        section.outerHTML = this._slidify(text, info);
       });
   }
 
@@ -61,7 +59,7 @@ export class RevealMusicArranger {
       } else {
         section.outerHTML = this._slidify(
           section.querySelector('script[type="text/template"]').innerHTML,
-          section.getAttribute('data-musiarranger-format')
+          JSON.parse(section.getAttribute('data-musicarranger-info') || '{}')
         );
       }
     });
@@ -69,16 +67,14 @@ export class RevealMusicArranger {
   }
 
   /**
-   * @brief Create the slide content based on a formatString and the musicXML data.
-   * @param formatString Looks like `verse1,chorus,verse2,chorus;option1=value1,option2=value2`.
+   * @brief Create the slide content based on the musicXML data, and some info.
    */
-  _slidify (data, formatString) {
-    formatString = formatString || '';
-    let arrangementString = formatString.split(';')[0];
-    let optionString = formatString.split(';')[1] || '';
-    let arrangement = this._getArrangement(data, arrangementString);
+  _slidify (data, info) {
+    let arrangement = this._getArrangement(data, info['arrangement'] || []);
+    let options = info['options'] || {};
     let string = '';
     arrangement.forEach(section => {
+      let optionString = JSON.stringify(options);
       string +=
         `<section data-musicxml data-musicxml-transform="${section};${optionString}">` +
         "<script type='text/template'>" +
