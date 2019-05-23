@@ -38,9 +38,12 @@ export class VerovioLineWrapper {
   }
 
   redoLayout () {
-    // TODO: Allow screen width to be changed.
     // This is commented out because  it causes the layout to reflow and lose all system breaks.
     // return this.toolkit.redoLayout();
+    // Reloading the data allows verovio to re-render without losing system breaks.
+    // TODO: Check if there is a better way to do this.
+    let data = new XMLSerializer().serializeToString(this.doc);
+    this.toolkit.loadData(data);
   }
 
   renderToSVG (page, options) {
@@ -63,7 +66,6 @@ export class VerovioLineWrapper {
     // we've created this class.
     // (https://github.com/rism-ch/verovio/issues/1056).
     if (options.breaks === 'line') {
-      // this.systemsPerPage = 2;
       this.doLineWrapping = true;
       this.vOptions.breaks = 'encoded';
       this.vOptions.adjustPageHeight = true;
