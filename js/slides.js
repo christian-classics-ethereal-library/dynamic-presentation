@@ -1,3 +1,4 @@
+import { urlParam } from '../js/urlParam.js';
 var Reveal = require('reveal.js');
 
 Reveal.addKeyBinding(
@@ -6,11 +7,12 @@ Reveal.addKeyBinding(
     window.playPauseAudio();
   }
 );
-
+let width = urlParam('width') || 960;
 Reveal.initialize({
   controlsTutorial: false,
-  // TODO: use linear navigationMode when that feature is added to reveal.js.
-  // 'navigationMode': 'linear',
+  navigationMode: 'linear',
+  width: width,
+  height: '100%',
   transition: 'none'
 });
 

@@ -54,8 +54,8 @@ export class VerovioLineWrapper {
       let string = '';
       for (let i = 0; i < this.systemsPerPage; i++) {
         let vPage = (page - 1) * this.systemsPerPage + i + 1;
-        if(vPage <= this.vPageCount) {
-            string += this.toolkit.renderToSVG(vPage, options);
+        if (vPage <= this.vPageCount) {
+          string += this.toolkit.renderToSVG(vPage, options);
         }
       }
       return string;
@@ -73,6 +73,8 @@ export class VerovioLineWrapper {
       this.doLineWrapping = true;
       this.vOptions.breaks = 'encoded';
       this.vOptions.adjustPageHeight = true;
+      this.vOptions.noHeader = true;
+      this.vOptions.noFooter = true;
     }
     this.toolkit.setOptions(this.vOptions);
   }

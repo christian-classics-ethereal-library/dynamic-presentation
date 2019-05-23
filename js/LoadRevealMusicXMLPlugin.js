@@ -3,14 +3,8 @@ import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
 import { RevealMusicXML } from '../js/RevealMusicXML.js';
+import { urlParam } from '../js/urlParam.js';
 import { VerovioLineWrapper } from '../js/VerovioLineWrapper.js';
-
-function urlParam (name) {
-  var results = new RegExp('[?&]' + name + '=([^&#]*)').exec(
-    window.location.search
-  );
-  return results !== null ? results[1] || 0 : false;
-}
 
 let rma = new RevealMusicArranger();
 
