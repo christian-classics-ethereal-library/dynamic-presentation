@@ -66,6 +66,14 @@ test('hideOtherLyrics works fine', () => {
   expect(xml61gX2).toMatchSnapshot();
 });
 
+test('hideOtherMeasures removes instrumental section', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml42a);
+  mxt.hideOtherMeasures();
+  let xml42aX = mxt.getData();
+  expect(xml42aX).toMatchSnapshot();
+});
+
 test('hideOtherVerses works fine', () => {
   let mxt = new MusicXMLTransformer();
   mxt.loadData(xml61b);

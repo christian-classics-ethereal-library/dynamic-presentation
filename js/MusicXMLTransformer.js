@@ -79,7 +79,7 @@ export class MusicXMLTransformer {
 
   /**
    * @brief Remove measures from sections that don't have lyrics.
-   * @precondition renumberMeasures has run.
+   * @precondition No two different measures have the same number.
    */
   hideOtherMeasures () {
     // Determine which measures should be kept.
