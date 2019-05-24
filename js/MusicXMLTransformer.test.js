@@ -53,6 +53,17 @@ test('files loaded properly', () => {
   expect(xml61g).toMatchSnapshot();
 });
 
+test('dottedOrDashedExist returns false', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml61b);
+  expect(mxt.dottedOrDashedExist()).toBe(false);
+});
+test('dottedOrDashedExist returns true', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml46a);
+  expect(mxt.dottedOrDashedExist()).toBe(true);
+});
+
 test('hideOtherLyrics works fine', () => {
   let mxt = new MusicXMLTransformer();
   mxt.loadData(xml61g);
