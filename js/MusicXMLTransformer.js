@@ -21,12 +21,17 @@ export class MusicXMLTransformer {
       if (trans.sectionName) {
         this.showSection(trans.sectionName);
       }
+      if (this.dottedOrDashedExist()) {
+        this.removeSystemAndPageBreaks();
+        this.useDottedDashedAsSystemBreaks();
+      }
       if (trans.options.phrases) {
         this.phrasesPerLine(trans.options.phrases);
       }
       if (trans.options.melodyOnly) {
         this.hidePartsExceptMelody();
       }
+
       return this.getData();
     } else {
       return data;
@@ -46,20 +51,19 @@ export class MusicXMLTransformer {
       this.hideOtherMeasures();
     }
     this.renumberMeasures();
+  }
 
+  dottedOrDashedExist () {
     let barStyles = Array.from(
       this.doc.querySelectorAll('measure barline[location="right"] bar-style')
     );
-    if (
+    return (
       barStyles &&
       barStyles.some(
         barStyle =>
           barStyle.innerHTML === 'dotted' || barStyle.innerHTML === 'dashed'
       )
-    ) {
-      this.removeSystemAndPageBreaks();
-      this.useDottedDashedAsSystemBreaks();
-    }
+    );
   }
 
   hideOtherLyrics (sectionName) {
