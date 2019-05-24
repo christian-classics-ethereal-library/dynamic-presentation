@@ -149,16 +149,18 @@ export class MusicXMLTransformer {
    * @brief Combine Systems together so that there are n old systems per new system.
    */
   phrasesPerLine (n) {
-    this.doc
-      .querySelectorAll(
-        'measure print[new-page=yes], measure print[new-system=yes]'
-      )
-      .forEach((print, i) => {
-        if (i % n !== n - 1) {
-          print.removeAttribute('new-page');
-          print.removeAttribute('new-system');
-        }
-      });
+    this.doc.querySelectorAll('part').forEach(part => {
+      part
+        .querySelectorAll(
+          'measure print[new-page=yes], measure print[new-system=yes]'
+        )
+        .forEach((print, i) => {
+          if (i % n !== n - 1) {
+            print.removeAttribute('new-page');
+            print.removeAttribute('new-system');
+          }
+        });
+    });
   }
 
   removeSystemAndPageBreaks () {
