@@ -13,7 +13,7 @@ export class VerovioLineWrapper {
     // Find out how many vPages can fit on a screen
     let svg = this.toolkit.renderToSVG(1, this.vOptions);
     let svgDoc = new DOMParser().parseFromString(svg, 'text/xml');
-    let vPageHeight = parseFloat(svgDoc.activeElement.getAttribute('height'));
+    let vPageHeight = parseFloat(svgDoc.documentElement.getAttribute('height'));
     let screenHeight = this.vOptions.pageHeight * (this.vOptions.scale / 100);
     this.systemsPerPage = Math.floor(screenHeight / vPageHeight);
     this.vPageCount = this.toolkit.getPageCount();
