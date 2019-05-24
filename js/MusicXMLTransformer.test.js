@@ -20,8 +20,19 @@ const xml42a = fs.readFileSync(
   ),
   'utf8'
 );
+const xml42b = fs.readFileSync(
+  path.resolve(__dirname, xmlFiles + '42b-MultiVoice-MidMeasureClefChange.xml'),
+  'utf8'
+);
 const xml46a = fs.readFileSync(
   path.resolve(__dirname, xmlFiles + '46a-Barlines.xml'),
+  'utf8'
+);
+const xml46g = fs.readFileSync(
+  path.resolve(
+    __dirname,
+    xmlFiles + '46g-PickupMeasure-Chordnames-FiguredBass.xml'
+  ),
   'utf8'
 );
 const xml52b = fs.readFileSync(
@@ -116,6 +127,21 @@ test('phrasesPerLine with multiple parts', () => {
   mxt.phrasesPerLine(2);
   let xml41iX = mxt.getData();
   expect(xml41iX).toMatchSnapshot();
+});
+
+test('renumberMeasures decreases measure numbers', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml42b);
+  mxt.renumberMeasures();
+  let xml42bX = mxt.getData();
+  expect(xml42bX).toMatchSnapshot();
+});
+test('renumberMeasures increases measure numbers', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml46g);
+  mxt.renumberMeasures();
+  let xml46gX = mxt.getData();
+  expect(xml46gX).toMatchSnapshot();
 });
 
 test('useDottedDashedAsSystemBreaks works fine', () => {
