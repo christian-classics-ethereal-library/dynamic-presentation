@@ -24,6 +24,9 @@ export class MusicXMLTransformer {
       if (trans.options.phrases) {
         this.phrasesPerLine(trans.options.phrases);
       }
+      if (trans.options.melodyOnly) {
+        this.hidePartsExceptMelody();
+      }
       return this.getData();
     } else {
       return data;
@@ -107,6 +110,33 @@ export class MusicXMLTransformer {
         }
       }
     });
+  }
+
+  hidePartsExceptMelody () {
+    // Remove the parts except the first one.
+    let parts = this.doc.querySelectorAll('part');
+    // Start at i = 1 so that the 0th part doesn't get removed.
+    for (let i = 1; i < parts.length; i++) {
+      parts[i].parentNode.removeChild(parts[i]);
+    }
+
+    // List the voices.
+    let voices = {};
+    this.doc.querySelectorAll('note voice').forEach(voice => {
+      voices[voice.innerHTML] = true;
+    });
+
+    // If voice 1 exists,
+    let keepVoice = '1';
+    if (typeof voices[keepVoice] !== 'undefined') {
+      // delete all notes of different voices.
+      this.doc.querySelectorAll('note voice').forEach(voice => {
+        if (voice.innerHTML !== keepVoice) {
+          let note = voice.closest('note');
+          note.parentNode.removeChild(note);
+        }
+      });
+    }
   }
 
   makeAllWordsVerse1 () {
