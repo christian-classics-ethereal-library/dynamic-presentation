@@ -15,7 +15,7 @@ export class MusicXMLTransformer {
 
   /* transform is called by the Reveal Plugin */
   transform (data, transformationJson) {
-    let trans = JSON.parse(transformationJson);
+    const trans = JSON.parse(transformationJson);
     if (trans.sectionName || trans.options) {
       this.loadData(data);
       if (trans.sectionName) {
@@ -37,7 +37,7 @@ export class MusicXMLTransformer {
     if (this.doc.querySelector(`lyric[name='${sectionName}']`)) {
       this.hideOtherLyrics(sectionName);
     } else if (sectionName.slice(0, 5) === 'verse') {
-      let verseNumber = parseInt(sectionName.slice(5));
+      const verseNumber = parseInt(sectionName.slice(5));
       this.hideOtherVerses(verseNumber);
     }
     // So there isn't an odd gap between top and bottom.
@@ -85,7 +85,7 @@ export class MusicXMLTransformer {
     // Determine which measures should be kept.
     let keepMeasures = {};
     this.doc.querySelectorAll('measure lyric').forEach(lyric => {
-      let measureNumber = lyric.closest('measure').getAttribute('number');
+      const measureNumber = lyric.closest('measure').getAttribute('number');
       keepMeasures[measureNumber] = true;
     });
 
@@ -94,7 +94,7 @@ export class MusicXMLTransformer {
       let attributesTag;
       let measures = part.querySelectorAll('measure');
       for (let i = 0; i < measures.length; i++) {
-        let measureNumber = measures[i].getAttribute('number');
+        const measureNumber = measures[i].getAttribute('number');
         if (typeof keepMeasures[measureNumber] === 'undefined') {
           if (measures[i].querySelector('attributes')) {
             // Keep the last attributes tag from a measure that we do delete,
@@ -185,7 +185,7 @@ export class MusicXMLTransformer {
           barStyle.innerHTML === 'dotted' ||
           barStyle.innerHTML === 'dashed'
         ) {
-          let measure = barStyle.closest('measure');
+          const measure = barStyle.closest('measure');
           let nextMeasure = measure.nextElementSibling;
           if (nextMeasure) {
             let print = nextMeasure.querySelector('print');
