@@ -5,6 +5,17 @@ import path from 'path';
 
 const xmlFiles = '../../../examplemedia/musicxmlTestSuite/xmlFiles/';
 
+const xml41a = fs.readFileSync(
+  path.resolve(__dirname, xmlFiles + '41a-MultiParts-Partorder.xml'),
+  'utf8'
+);
+const xml42a = fs.readFileSync(
+  path.resolve(
+    __dirname,
+    xmlFiles + '42a-MultiVoice-TwoVoicesOnStaff-Lyrics.xml'
+  ),
+  'utf8'
+);
 const xml46a = fs.readFileSync(
   path.resolve(__dirname, xmlFiles + '46a-Barlines.xml'),
   'utf8'
@@ -56,6 +67,21 @@ test('hideOtherVerses works fine', () => {
   mxt.hideOtherVerses(3);
   let xml61bX3 = mxt.getData();
   expect(xml61bX3).toMatchSnapshot();
+});
+
+test('hidePartsExceptMelody removes other parts', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml41a);
+  mxt.hidePartsExceptMelody();
+  let xml41aX = mxt.getData();
+  expect(xml41aX).toMatchSnapshot();
+});
+test('hidePartsExceptMelody removes other voices', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml42a);
+  mxt.hidePartsExceptMelody();
+  let xml42aX = mxt.getData();
+  expect(xml42aX).toMatchSnapshot();
 });
 
 test('makeAllWordsVerse1 works fine', () => {

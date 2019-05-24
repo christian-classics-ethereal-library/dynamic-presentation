@@ -1000,6 +1000,253 @@ exports[`hideOtherVerses works fine 3`] = `
 </score-partwise>"
 `;
 
+exports[`hidePartsExceptMelody removes other parts 1`] = `
+"<score-partwise>
+	<identification> 
+		<miscellaneous>
+			<miscellaneous-field name=\\"description\\">A piece with 
+                            four parts (P0, P1, P2, P3; different from what 
+			    Finale creates!). Are they converted in the correct 
+			    order?</miscellaneous-field>
+		</miscellaneous>
+	</identification> 
+	<part-list>
+		<score-part id=\\"P0\\">
+			<part-name>Part 1</part-name>
+		</score-part>
+		<score-part id=\\"P1\\">
+			<part-name>Part 2</part-name>
+		</score-part>
+		<score-part id=\\"P2\\">
+			<part-name>Part 3</part-name>
+		</score-part>
+		<score-part id=\\"P3\\">
+			<part-name>Part 4</part-name>
+		</score-part>
+	</part-list>
+	<part id=\\"P0\\">
+		<measure number=\\"1\\">
+			<attributes>
+				<divisions>960</divisions>
+				<key>
+				<fifths>1</fifths>
+				<mode>major</mode>
+				</key>
+				<time>
+				<beats>4</beats>
+				<beat-type>4</beat-type>
+				</time>
+				<clef>
+				<sign>G</sign>
+				<line>2</line>
+				</clef>
+			</attributes>
+			<note>
+				<pitch>
+					<step>C</step>
+					<octave>4</octave>
+				</pitch>
+				<duration>960</duration>
+				<voice>1</voice>
+				<type>quarter</type>
+			</note>
+			<note>
+				<rest/>
+				<duration>960</duration>
+				<voice>1</voice>
+				<type>quarter</type>
+			</note>
+			<note>
+				<rest/>
+				<duration>1920</duration>
+				<voice>1</voice>
+				<type>half</type>
+			</note>
+		</measure>
+	</part>
+	
+	
+	
+</score-partwise>"
+`;
+
+exports[`hidePartsExceptMelody removes other voices 1`] = `
+"<score-partwise>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name=\\"description\\">Two voices share one staff. Each 
+        voice is assigned some lyrics.</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id=\\"P1\\">
+      <part-name>MusicXML Part</part-name>
+    </score-part>
+  </part-list>
+  <!--=========================================================-->
+  <part id=\\"P1\\">
+    <measure number=\\"1\\">
+      <attributes>
+        <divisions>8</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+        </key>
+        <time symbol=\\"common\\">
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>16</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <notations>
+          <articulations>
+            <accent placement=\\"below\\"/>
+          </articulations>
+          <fermata type=\\"upright\\"/>
+        </notations>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>This</text>
+        </lyric>
+      </note>
+      <direction placement=\\"below\\">
+        <direction-type>
+          <dynamics>
+            <mf/>
+          </dynamics>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>is</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>the</text>
+        </lyric>
+      </note>
+      <backup>
+        <duration>32</duration>
+      </backup>
+      
+      
+      
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"2\\">
+      <note>
+        <rest>
+          <display-step>A</display-step>
+          <display-octave>5</display-octave>
+        </rest>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>lyrics</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>12</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot/>
+        <stem>up</stem>
+        <notations>
+          <slur number=\\"1\\" type=\\"start\\"/>
+        </notations>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>of</text>
+        </lyric>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        <notations>
+          <slur number=\\"1\\" type=\\"stop\\"/>
+        </notations>
+        <lyric number=\\"1\\">
+          <syllabic>single</syllabic>
+          <text>Voice1</text>
+        </lyric>
+      </note>
+      <backup>
+        <duration>32</duration>
+      </backup>
+      
+      
+      
+      
+    </measure>
+    <!--=======================================================-->
+    <measure number=\\"3\\">
+      <note>
+        <rest/>
+        <duration>32</duration>
+        <voice>1</voice>
+      </note>
+      <barline location=\\"right\\">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+  <!--=========================================================-->
+</score-partwise>"
+`;
+
 exports[`makeAllWordsVerse1 works fine 1`] = `
 "<score-partwise>
   <identification>
