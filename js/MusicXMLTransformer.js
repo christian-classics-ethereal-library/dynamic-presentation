@@ -74,13 +74,25 @@ export class MusicXMLTransformer {
       });
   }
 
+  /**
+   * @brief Remove measures from sections that don't have lyrics.
+   * @precondition renumberMeasures has run.
+   */
   hideOtherMeasures () {
+    // Determine which measures should be kept.
+    let keepMeasures = {};
+    this.doc.querySelectorAll('measure lyric').forEach(lyric => {
+      let measureNumber = lyric.closest('measure').getAttribute('number');
+      keepMeasures[measureNumber] = true;
+    });
+
+    // Remove the measures that we aren't keeping.
     this.doc.querySelectorAll('part').forEach(part => {
       let attributesTag;
       let measures = part.querySelectorAll('measure');
       for (let i = 0; i < measures.length; i++) {
-        // TODO: Better determination of which measures should be deleted.
-        if (!measures[i].querySelector('lyric')) {
+        let measureNumber = measures[i].getAttribute('number');
+        if (typeof keepMeasures[measureNumber] === 'undefined') {
           if (measures[i].querySelector('attributes')) {
             // Keep the last attributes tag from a measure that we do delete,
             attributesTag = measures[i].querySelector('attributes');
