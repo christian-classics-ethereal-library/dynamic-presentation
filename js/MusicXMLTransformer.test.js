@@ -9,6 +9,10 @@ const xml41a = fs.readFileSync(
   path.resolve(__dirname, xmlFiles + '41a-MultiParts-Partorder.xml'),
   'utf8'
 );
+const xml41i = fs.readFileSync(
+  path.resolve(__dirname, xmlFiles + '41i-PartNameDisplay-Override.xml'),
+  'utf8'
+);
 const xml42a = fs.readFileSync(
   path.resolve(
     __dirname,
@@ -90,6 +94,28 @@ test('makeAllWordsVerse1 works fine', () => {
   mxt.makeAllWordsVerse1();
   let xml61bX = mxt.getData();
   expect(xml61bX).toMatchSnapshot();
+});
+
+test('phrasesPerLine where n = 2', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml52b);
+  mxt.phrasesPerLine(2);
+  let xml52bX = mxt.getData();
+  expect(xml52bX).toMatchSnapshot();
+});
+test('phrasesPerLine where n = 3', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml52b);
+  mxt.phrasesPerLine(3);
+  let xml52bX = mxt.getData();
+  expect(xml52bX).toMatchSnapshot();
+});
+test('phrasesPerLine with multiple parts', () => {
+  let mxt = new MusicXMLTransformer();
+  mxt.loadData(xml41i);
+  mxt.phrasesPerLine(2);
+  let xml41iX = mxt.getData();
+  expect(xml41iX).toMatchSnapshot();
 });
 
 test('useDottedDashedAsSystemBreaks works fine', () => {
