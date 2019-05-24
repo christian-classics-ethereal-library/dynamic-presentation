@@ -112,6 +112,9 @@ export class MusicXMLTransformer {
     });
   }
 
+  /**
+   * @brief Remove parts and voices that are not the melody line.
+   */
   hidePartsExceptMelody () {
     // Remove the parts except the first one.
     let parts = this.doc.querySelectorAll('part');
