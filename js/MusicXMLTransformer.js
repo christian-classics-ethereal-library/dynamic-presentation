@@ -15,7 +15,7 @@ export class MusicXMLTransformer {
 
   /* transform is called by the Reveal Plugin */
   transform (data, transformationJson) {
-    let trans = JSON.parse(transformationJson);
+    const trans = JSON.parse(transformationJson);
     if (trans.sectionName || trans.options) {
       this.loadData(data);
       if (trans.sectionName) {
@@ -23,6 +23,9 @@ export class MusicXMLTransformer {
       }
       if (trans.options.phrases) {
         this.phrasesPerLine(trans.options.phrases);
+      }
+      if (trans.options.melodyOnly) {
+        this.hidePartsExceptMelody();
       }
       return this.getData();
     } else {
@@ -34,7 +37,7 @@ export class MusicXMLTransformer {
     if (this.doc.querySelector(`lyric[name='${sectionName}']`)) {
       this.hideOtherLyrics(sectionName);
     } else if (sectionName.slice(0, 5) === 'verse') {
-      let verseNumber = parseInt(sectionName.slice(5));
+      const verseNumber = parseInt(sectionName.slice(5));
       this.hideOtherVerses(verseNumber);
     }
     // So there isn't an odd gap between top and bottom.
@@ -74,13 +77,25 @@ export class MusicXMLTransformer {
       });
   }
 
+  /**
+   * @brief Remove measures from sections that don't have lyrics.
+   * @precondition renumberMeasures has run.
+   */
   hideOtherMeasures () {
+    // Determine which measures should be kept.
+    let keepMeasures = {};
+    this.doc.querySelectorAll('measure lyric').forEach(lyric => {
+      const measureNumber = lyric.closest('measure').getAttribute('number');
+      keepMeasures[measureNumber] = true;
+    });
+
+    // Remove the measures that we aren't keeping.
     this.doc.querySelectorAll('part').forEach(part => {
       let attributesTag;
       let measures = part.querySelectorAll('measure');
       for (let i = 0; i < measures.length; i++) {
-        // TODO: Better determination of which measures should be deleted.
-        if (!measures[i].querySelector('lyric')) {
+        const measureNumber = measures[i].getAttribute('number');
+        if (typeof keepMeasures[measureNumber] === 'undefined') {
           if (measures[i].querySelector('attributes')) {
             // Keep the last attributes tag from a measure that we do delete,
             attributesTag = measures[i].querySelector('attributes');
@@ -95,6 +110,36 @@ export class MusicXMLTransformer {
         }
       }
     });
+  }
+
+  /**
+   * @brief Remove parts and voices that are not the melody line.
+   */
+  hidePartsExceptMelody () {
+    // Remove the parts except the first one.
+    let parts = this.doc.querySelectorAll('part');
+    // Start at i = 1 so that the 0th part doesn't get removed.
+    for (let i = 1; i < parts.length; i++) {
+      parts[i].parentNode.removeChild(parts[i]);
+    }
+
+    // List the voices.
+    let voices = {};
+    this.doc.querySelectorAll('note voice').forEach(voice => {
+      voices[voice.innerHTML] = true;
+    });
+
+    // If voice 1 exists,
+    let keepVoice = '1';
+    if (typeof voices[keepVoice] !== 'undefined') {
+      // delete all notes of different voices.
+      this.doc.querySelectorAll('note voice').forEach(voice => {
+        if (voice.innerHTML !== keepVoice) {
+          let note = voice.closest('note');
+          note.parentNode.removeChild(note);
+        }
+      });
+    }
   }
 
   makeAllWordsVerse1 () {
@@ -143,7 +188,7 @@ export class MusicXMLTransformer {
           barStyle.innerHTML === 'dotted' ||
           barStyle.innerHTML === 'dashed'
         ) {
-          let measure = barStyle.closest('measure');
+          const measure = barStyle.closest('measure');
           let nextMeasure = measure.nextElementSibling;
           if (nextMeasure) {
             let print = nextMeasure.querySelector('print');
