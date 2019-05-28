@@ -11,7 +11,7 @@
 }
 
 /* reveal.js overrides for dynamic presentation */
-.reveal .dynamic {
+.reveal section[data-musicxml] {
   max-width: none;
   max-height: none;
   margin: 0;
