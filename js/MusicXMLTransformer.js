@@ -21,12 +21,17 @@ export class MusicXMLTransformer {
       if (trans.sectionName) {
         this.showSection(trans.sectionName);
       }
+      if (this.dottedOrDashedExist()) {
+        this.removeSystemAndPageBreaks();
+        this.useDottedDashedAsSystemBreaks();
+      }
       if (trans.options.phrases) {
         this.phrasesPerLine(trans.options.phrases);
       }
       if (trans.options.melodyOnly) {
         this.hidePartsExceptMelody();
       }
+
       return this.getData();
     } else {
       return data;
@@ -46,20 +51,19 @@ export class MusicXMLTransformer {
       this.hideOtherMeasures();
     }
     this.renumberMeasures();
+  }
 
+  dottedOrDashedExist () {
     let barStyles = Array.from(
       this.doc.querySelectorAll('measure barline[location="right"] bar-style')
     );
-    if (
+    return (
       barStyles &&
       barStyles.some(
         barStyle =>
           barStyle.innerHTML === 'dotted' || barStyle.innerHTML === 'dashed'
       )
-    ) {
-      this.removeSystemAndPageBreaks();
-      this.useDottedDashedAsSystemBreaks();
-    }
+    );
   }
 
   hideOtherLyrics (sectionName) {
@@ -79,7 +83,7 @@ export class MusicXMLTransformer {
 
   /**
    * @brief Remove measures from sections that don't have lyrics.
-   * @precondition renumberMeasures has run.
+   * @precondition No two different measures have the same number.
    */
   hideOtherMeasures () {
     // Determine which measures should be kept.
@@ -152,16 +156,18 @@ export class MusicXMLTransformer {
    * @brief Combine Systems together so that there are n old systems per new system.
    */
   phrasesPerLine (n) {
-    this.doc
-      .querySelectorAll(
-        'measure print[new-page=yes], measure print[new-system=yes]'
-      )
-      .forEach((print, i) => {
-        if (i % n !== n - 1) {
-          print.removeAttribute('new-page');
-          print.removeAttribute('new-system');
-        }
-      });
+    this.doc.querySelectorAll('part').forEach(part => {
+      part
+        .querySelectorAll(
+          'measure print[new-page=yes], measure print[new-system=yes]'
+        )
+        .forEach((print, i) => {
+          if (i % n !== n - 1) {
+            print.removeAttribute('new-page');
+            print.removeAttribute('new-system');
+          }
+        });
+    });
   }
 
   removeSystemAndPageBreaks () {
