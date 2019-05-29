@@ -12,14 +12,10 @@
 
 /* reveal.js overrides for dynamic presentation */
 .reveal section[data-musicxml] {
-  max-width: none;
-  max-height: none;
   margin: 0;
   border: none;
-  overflow: hidden;
   /* Prevent this div from adding any height. */
   font-size: 0;
-  text-align: left;
   transition: opacity 0.2s ease;
 }
 
