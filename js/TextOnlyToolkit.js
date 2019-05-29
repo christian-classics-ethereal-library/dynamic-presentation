@@ -13,16 +13,32 @@ export class TextOnlyToolkit extends PianoRollToolkit {
   }
 
   _assignMeasuresToPages () {
-    this.pages = [[], []];
-    this.data.measures.forEach(measure => {
-      if (measure.sectionBreak || measure.pageBreak) {
-        this.pages[1].push('<br/>');
-      }
-      measure.notes.forEach(note => {
-        if (note.lyric) {
-          this.pages[1].push(note.lyric);
+    if (!this.textLines) {
+      this.textLines = [[]];
+      let i = 0;
+      this.data.measures.forEach(measure => {
+        if (measure.sectionBreak || measure.pageBreak) {
+          this.textLines.push([]);
+          i++;
         }
+        measure.notes.forEach(note => {
+          if (note.lyric) {
+            this.textLines[i].push(note.lyric);
+          }
+        });
       });
+    }
+    // TODO: Determine linesPerPage from the screen height.
+    let linesPerPage = 4;
+
+    let numPages = Math.floor(this.textLines.length / linesPerPage);
+    this.pages = [];
+    // Page 0 is going to be empty
+    for (let i = 0; i <= numPages; i++) this.pages.push([]);
+
+    this.textLines.forEach((line, i) => {
+      let j = Math.floor(i / linesPerPage) + 1;
+      this.pages[j].push(line.join('') + '<br/>');
     });
   }
 
