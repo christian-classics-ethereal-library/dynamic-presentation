@@ -31,7 +31,7 @@ export class TextOnlyToolkit extends PianoRollToolkit {
     // TODO: Determine linesPerPage from the screen height.
     let linesPerPage = 4;
 
-    let numPages = Math.floor(this.textLines.length / linesPerPage);
+    let numPages = Math.ceil(this.textLines.length / linesPerPage);
     this.pages = [];
     // Page 0 is going to be empty
     for (let i = 0; i <= numPages; i++) this.pages.push([]);
