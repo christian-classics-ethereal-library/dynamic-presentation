@@ -16,7 +16,7 @@
         @endforeach
     @endif
     <link href="{{ asset('css/reveal.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/dynamic.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/slidesBlood.css') }}" rel="stylesheet">
     <style>
         #dynamicOptions:not(.visible) {
             opacity: 0;

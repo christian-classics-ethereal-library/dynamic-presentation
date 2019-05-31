@@ -1,0 +1,46 @@
+.reveal section[data-musicxml] svg path,
+.reveal section[data-musicxml] svg {
+  stroke: $mainColor;
+  fill: $mainColor;
+}
+
+/* reveal.js overrides for dynamic presentation */
+.reveal section[data-musicxml] {
+  margin: 0;
+  border: none;
+  /* Prevent this div from adding any height. */
+  font-size: 0;
+  transition: opacity 0.2s ease;
+}
+
+.reveal section[data-musicxml] svg g.voice1,
+.reveal section[data-musicxml] svg g.voice3 {
+  /* mix-blend-mode makes overlapping elements brighten eachother up. */
+  mix-blend-mode: screen;
+  isolation: isolate;
+}
+
+/* Pick tetradic colors based from the linkColor. */
+$voiceColors: (
+    'voice0': $linkColor,
+    'voice1': adjust-hue($linkColor, 60deg),
+    'voice2': adjust-hue($linkColor, 180deg),
+    'voice3': adjust-hue($linkColor, 240deg),
+    /* Then four more tetradic colors starting from an analogous color. */
+    'voice4': adjust-hue($linkColor, 30deg),
+    'voice5': adjust-hue($linkColor, 90deg),
+    'voice6': adjust-hue($linkColor, 210deg),
+    'voice7': adjust-hue($linkColor, 270deg),
+);
+
+@each $name, $color in $voiceColors {
+    .reveal section[data-musicxml] svg g.#{$name} {
+        stroke: $color;
+        fill: $color;
+    }
+}
+
+.reveal.reveal .slides > section,
+.reveal.reveal .slides > section > section {
+  padding: 0px;
+}

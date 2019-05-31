@@ -1,0 +1,20 @@
+/* Load the theme (with the scss variables) */
+@import '~reveal.js/css/theme/source/blood.scss';
+@import 'dynamic.scss';
+
+/* Monospace Font: Ubuntu Mono */
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono);
+.reveal section[data-musicxml] svg {
+  font-family: 'Ubuntu Mono', monospace;
+}
+
+/* Verovio Text Font: Liberation Serif */
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+.reveal.reveal section[data-musicxml] svg g.page-margin {
+  font-family: 'Liberation Serif', 'Tinos', 'Times New Roman', 'Times', serif;
+}
+
+/* Verovio SMuFL Font: Petaluma */
+:root {
+  --smufl-font: "Petaluma";
+}

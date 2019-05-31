@@ -13,7 +13,8 @@ Reveal.initialize({
   navigationMode: 'linear',
   width: width,
   height: '100%',
-  transition: 'none'
+  transition: 'fade',
+  transitionSpeed: 'fast',
 });
 
 function playPauseAudio () {
