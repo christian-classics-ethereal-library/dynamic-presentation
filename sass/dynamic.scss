@@ -13,13 +13,6 @@
   transition: opacity 0.2s ease;
 }
 
-.reveal section[data-musicxml] svg g.voice1,
-.reveal section[data-musicxml] svg g.voice3 {
-  /* mix-blend-mode makes overlapping elements brighten eachother up. */
-  mix-blend-mode: screen;
-  isolation: isolate;
-}
-
 /* Pick tetradic colors based from the linkColor. */
 $voiceColors: (
     'voice0': $linkColor,

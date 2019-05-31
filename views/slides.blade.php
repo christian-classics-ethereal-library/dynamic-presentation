@@ -16,7 +16,14 @@
         @endforeach
     @endif
     <link href="{{ asset('css/reveal.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/slidesBlood.css') }}" rel="stylesheet">
+    <link href="<?php
+    if (in_array($_GET['theme'] ?? '', ['blood', 'night', 'serif', 'simple'])) {
+        $themeName = "slides" . ucfirst($_GET['theme']) . ".css";
+    } else {
+        $themeName = 'slidesNight.css';
+    }
+        print(asset("css/{$themeName}"));
+    ?>" rel="stylesheet">
     <style>
         #dynamicOptions:not(.visible) {
             opacity: 0;

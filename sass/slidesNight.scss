@@ -1,22 +1,22 @@
 /* Load the theme (with the scss variables) */
-@import '~reveal.js/css/theme/source/blood.scss';
+@import '~reveal.js/css/theme/source/night.scss';
 @import 'dynamic.scss';
 
-/* Monospace Font: Ubuntu Mono */
-@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono);
+/* Monospace Font: Cousine */
+@import url(https://fonts.googleapis.com/css?family=Cousine);
 .reveal section[data-musicxml] svg {
-  font-family: 'Ubuntu Mono', monospace;
+  font-family: 'Cousine', monospace;
 }
 
-/* Verovio Text Font: Liberation Serif */
+/* Verovio Text Font: Tinos */
 @import url(https://fonts.googleapis.com/css?family=Tinos);
 .reveal.reveal section[data-musicxml] svg g.page-margin {
-  font-family: 'Liberation Serif', 'Tinos', 'Times New Roman', 'Times', serif;
+  font-family: 'Tinos', 'Times New Roman', 'Times', 'Liberation Serif', serif;
 }
 
-/* Verovio SMuFL Font: Petaluma */
+/* Verovio SMuFL Font: Bravura */
 html {
-  font-family: Petaluma;
+  font-family: Bravura;
 }
 
 /* Mix voice colors for dark background */

@@ -1,0 +1,28 @@
+/* Load the theme (with the scss variables) */
+@import '~reveal.js/css/theme/source/simple.scss';
+@import 'dynamic.scss';
+
+/* Monospace Font: Cousine */
+@import url(https://fonts.googleapis.com/css?family=Cousine);
+.reveal section[data-musicxml] svg {
+  font-family: 'Cousine', monospace;
+}
+
+/* Verovio Text Font: Tinos */
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+.reveal.reveal section[data-musicxml] svg g.page-margin {
+  font-family: 'Tinos', 'Times New Roman', 'Times', 'Liberation Serif', serif;
+}
+
+/* Verovio SMuFL Font: Bravura */
+html {
+  font-family: Bravura;
+}
+
+/* Mix voice colors for light background */
+.reveal section[data-musicxml] svg {
+  g.voice0,g.voice1,g.voice2,g.voice3,g.voice4,g.voice5,g.voice6,g.voice7 {
+    mix-blend-mode: color-burn;
+    isolation: isolate;
+  }
+}

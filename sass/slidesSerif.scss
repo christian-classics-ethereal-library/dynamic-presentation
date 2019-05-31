@@ -1,0 +1,28 @@
+/* Load the theme (with the scss variables) */
+@import '~reveal.js/css/theme/source/serif.scss';
+@import 'dynamic.scss';
+
+/* Monospace Font: Cutive Mono */
+@import url(https://fonts.googleapis.com/css?family=Cutive+Mono);
+.reveal section[data-musicxml] svg {
+  font-family: 'Cutive Mono', monospace;
+}
+
+/* Verovio Text Font: Times New Roman */
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+.reveal.reveal section[data-musicxml] svg g.page-margin {
+  font-family: 'Times New Roman', 'Times', 'Liberation Serif', 'Tinos', serif;
+}
+
+/* Verovio SMuFL Font: Leipzig */
+html {
+  font-family: Leipzig;
+}
+
+/* Mix voice colors for light background */
+.reveal section[data-musicxml] svg {
+  g.voice0,g.voice1,g.voice2,g.voice3,g.voice4,g.voice5,g.voice6,g.voice7 {
+    mix-blend-mode: color-burn;
+    isolation: isolate;
+  }
+}
