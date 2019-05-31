@@ -23,14 +23,14 @@
 /* Pick tetradic colors based from the linkColor. */
 $voiceColors: (
     'voice0': $linkColor,
-    'voice1': adjust-hue($linkColor, 60deg),
+    'voice1': adjust-hue($linkColor, 120deg),
     'voice2': adjust-hue($linkColor, 180deg),
-    'voice3': adjust-hue($linkColor, 240deg),
+    'voice3': adjust-hue($linkColor, 300deg),
     /* Then four more tetradic colors starting from an analogous color. */
     'voice4': adjust-hue($linkColor, 30deg),
-    'voice5': adjust-hue($linkColor, 90deg),
+    'voice5': adjust-hue($linkColor, 150deg),
     'voice6': adjust-hue($linkColor, 210deg),
-    'voice7': adjust-hue($linkColor, 270deg),
+    'voice7': adjust-hue($linkColor, 330deg),
 );
 
 @each $name, $color in $voiceColors {

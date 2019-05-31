@@ -90,7 +90,11 @@ export class RevealMusicXML {
       // TODO: change to proper definition of "line" when that gets implemented
       // (https://github.com/rism-ch/verovio/issues/1056).
       breaks: 'line',
-      adjustPageHeight: true
+      adjustPageHeight: true,
+      minLastJustification: 0,
+      font:
+        window.getComputedStyle(document.documentElement)['font-family'] ||
+        'Leipzig'
     });
   }
 
