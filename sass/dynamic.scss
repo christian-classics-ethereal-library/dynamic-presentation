@@ -13,24 +13,24 @@
   transition: opacity 0.2s ease;
 }
 
-/* Pick tetradic colors based from the linkColor. */
+/* Pick tetradic colors based from the linkColor,
+   Then four more tetradic colors starting from an analogous color.*/
 $voiceColors: (
-    'voice0': $linkColor,
-    'voice1': adjust-hue($linkColor, 120deg),
-    'voice2': adjust-hue($linkColor, 180deg),
-    'voice3': adjust-hue($linkColor, 300deg),
-    /* Then four more tetradic colors starting from an analogous color. */
-    'voice4': adjust-hue($linkColor, 30deg),
-    'voice5': adjust-hue($linkColor, 150deg),
-    'voice6': adjust-hue($linkColor, 210deg),
-    'voice7': adjust-hue($linkColor, 330deg),
+  'voice0': $linkColor,
+  'voice1': adjust-hue($linkColor, 120deg),
+  'voice2': adjust-hue($linkColor, 180deg),
+  'voice3': adjust-hue($linkColor, 300deg),
+  'voice4': adjust-hue($linkColor, 30deg),
+  'voice5': adjust-hue($linkColor, 150deg),
+  'voice6': adjust-hue($linkColor, 210deg),
+  'voice7': adjust-hue($linkColor, 330deg)
 );
 
 @each $name, $color in $voiceColors {
-    .reveal section[data-musicxml] svg g.#{$name} {
-        stroke: $color;
-        fill: $color;
-    }
+  .reveal section[data-musicxml] svg g.#{$name} {
+    stroke: $color;
+    fill: $color;
+  }
 }
 
 .reveal.reveal .slides > section,

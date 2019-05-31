@@ -14,7 +14,7 @@ Reveal.initialize({
   width: width,
   height: '100%',
   transition: 'fade',
-  transitionSpeed: 'fast',
+  transitionSpeed: 'fast'
 });
 
 function playPauseAudio () {

@@ -21,7 +21,14 @@ html {
 
 /* Mix voice colors for light background */
 .reveal section[data-musicxml] svg {
-  g.voice0,g.voice1,g.voice2,g.voice3,g.voice4,g.voice5,g.voice6,g.voice7 {
+  g.voice0,
+  g.voice1,
+  g.voice2,
+  g.voice3,
+  g.voice4,
+  g.voice5,
+  g.voice6,
+  g.voice7 {
     mix-blend-mode: color-burn;
     isolation: isolate;
   }
