@@ -35,7 +35,6 @@ export class RevealMusicArranger {
         }
       });
       verses.forEach(v => {
-        console.log(v);
         arrangement.push(v);
         Object.keys(nonverses).forEach(nv => {
           arrangement.push([nv]);
