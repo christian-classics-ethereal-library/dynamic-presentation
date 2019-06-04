@@ -67,12 +67,12 @@ test('dottedOrDashedExist returns true', () => {
 test('hideOtherLyrics works fine', () => {
   let mxt = new MusicXMLTransformer();
   mxt.loadData(xml61g);
-  mxt.hideOtherLyrics('Verse');
+  mxt.hideOtherLyrics(['[name="Verse"]']);
   let xml61gX = mxt.getData();
   expect(xml61gX).toMatchSnapshot();
 
   mxt.loadData(xml61g);
-  mxt.hideOtherLyrics('Chorus');
+  mxt.hideOtherLyrics(['[name="Chorus"]']);
   let xml61gX2 = mxt.getData();
   expect(xml61gX2).toMatchSnapshot();
 });
@@ -83,24 +83,6 @@ test('hideOtherMeasures removes instrumental section', () => {
   mxt.hideOtherMeasures();
   let xml42aX = mxt.getData();
   expect(xml42aX).toMatchSnapshot();
-});
-
-test('hideOtherVerses works fine', () => {
-  let mxt = new MusicXMLTransformer();
-  mxt.loadData(xml61b);
-  mxt.hideOtherVerses(1);
-  let xml61bX = mxt.getData();
-  expect(xml61bX).toMatchSnapshot();
-
-  mxt.loadData(xml61b);
-  mxt.hideOtherVerses(2);
-  let xml61bX2 = mxt.getData();
-  expect(xml61bX2).toMatchSnapshot();
-
-  mxt.loadData(xml61b);
-  mxt.hideOtherVerses(3);
-  let xml61bX3 = mxt.getData();
-  expect(xml61bX3).toMatchSnapshot();
 });
 
 test('hidePartsExceptMelody removes other parts', () => {
@@ -116,14 +98,6 @@ test('hidePartsExceptMelody removes other voices', () => {
   mxt.hidePartsExceptMelody();
   let xml42aX = mxt.getData();
   expect(xml42aX).toMatchSnapshot();
-});
-
-test('makeAllWordsVerse1 works fine', () => {
-  let mxt = new MusicXMLTransformer();
-  mxt.loadData(xml61b);
-  mxt.makeAllWordsVerse1();
-  let xml61bX = mxt.getData();
-  expect(xml61bX).toMatchSnapshot();
 });
 
 test('phrasesPerLine where n = 2', () => {
