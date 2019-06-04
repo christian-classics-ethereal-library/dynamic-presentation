@@ -83,12 +83,12 @@ export class RevealMusicArranger {
 
     section.innerHTML = '';
 
-    arrangement.forEach(sectionName => {
+    arrangement.forEach(sectionNames => {
       let newSection = document.createElement('section');
       section.appendChild(newSection);
 
       let sectionInfo = {
-        sectionName: sectionName,
+        sectionNames: sectionNames,
         options: info.options
       };
       newSection.setAttribute(

@@ -16,10 +16,10 @@ export class MusicXMLTransformer {
   /* transform is called by the Reveal Plugin */
   transform (data, transformationJson) {
     const trans = JSON.parse(transformationJson);
-    if (trans.sectionName || trans.options) {
+    if (trans.sectionNames || trans.options) {
       this.loadData(data);
-      if (trans.sectionName && trans.sectionName.length) {
-        this.showSections(trans.sectionName);
+      if (trans.sectionNames && trans.sectionNames.length) {
+        this.showSections(trans.sectionNames);
       }
       if (this.dottedOrDashedExist()) {
         this.removeSystemAndPageBreaks();
@@ -38,9 +38,9 @@ export class MusicXMLTransformer {
     }
   }
 
-  showSections (sections) {
+  showSections (sectionNames) {
     let selectors = [];
-    sections.forEach(sectionName => {
+    sectionNames.forEach(sectionName => {
       if (this.doc.querySelector(`lyric[name='${sectionName}']`)) {
         selectors.push(`[name='${sectionName}']`);
       } else if (sectionName.slice(0, 5) === 'verse') {
@@ -51,7 +51,7 @@ export class MusicXMLTransformer {
     this.hideOtherLyrics(selectors);
     // So there isn't an odd gap between top and bottom.
     this.flattenVerses(selectors);
-    if (sections[0].slice(0, 12) !== 'instrumental') {
+    if (sectionNames[0].slice(0, 12) !== 'instrumental') {
       this.hideOtherMeasures();
     }
     this.renumberMeasures();
