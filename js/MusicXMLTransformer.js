@@ -18,8 +18,8 @@ export class MusicXMLTransformer {
     const trans = JSON.parse(transformationJson);
     if (trans.sectionName || trans.options) {
       this.loadData(data);
-      if (trans.sectionName) {
-        this.showSection(trans.sectionName);
+      if (trans.sectionName && trans.sectionName.length) {
+        this.showSections(trans.sectionName);
       }
       if (this.dottedOrDashedExist()) {
         this.removeSystemAndPageBreaks();
@@ -38,16 +38,20 @@ export class MusicXMLTransformer {
     }
   }
 
-  showSection (sectionName) {
-    if (this.doc.querySelector(`lyric[name='${sectionName}']`)) {
-      this.hideOtherLyrics(sectionName);
-    } else if (sectionName.slice(0, 5) === 'verse') {
-      const verseNumber = parseInt(sectionName.slice(5));
-      this.hideOtherVerses(verseNumber);
-    }
+  showSections (sections) {
+    let selectors = [];
+    sections.forEach(sectionName => {
+      if (this.doc.querySelector(`lyric[name='${sectionName}']`)) {
+        selectors.push(`[name='${sectionName}']`);
+      } else if (sectionName.slice(0, 5) === 'verse') {
+        const verseNumber = parseInt(sectionName.slice(5));
+        selectors.push(`[number='${verseNumber}']`);
+      }
+    });
+    this.hideOtherLyrics(selectors);
     // So there isn't an odd gap between top and bottom.
-    this.makeAllWordsVerse1();
-    if (sectionName.slice(0, 12) !== 'instrumental') {
+    this.flattenVerses(selectors);
+    if (sections[0].slice(0, 12) !== 'instrumental') {
       this.hideOtherMeasures();
     }
     this.renumberMeasures();
@@ -66,19 +70,22 @@ export class MusicXMLTransformer {
     );
   }
 
-  hideOtherLyrics (sectionName) {
-    this.doc
-      .querySelectorAll(`lyric:not([name='${sectionName}'])`)
-      .forEach(function (e) {
-        e.parentNode.removeChild(e);
+  flattenVerses (selectors) {
+    selectors.forEach((selector, i) => {
+      this.doc.querySelectorAll(`lyric${selector}`).forEach(lyric => {
+        lyric.setAttribute('number', i + 1);
       });
+    });
   }
-  hideOtherVerses (verseNumber) {
-    this.doc
-      .querySelectorAll(`lyric:not([number='${verseNumber}'])`)
-      .forEach(function (e) {
-        e.parentNode.removeChild(e);
-      });
+
+  hideOtherLyrics (selectors) {
+    let selector = '';
+    if (selectors.length) {
+      selector = ':not(' + selectors.join('):not(') + ')';
+    }
+    this.doc.querySelectorAll(`lyric${selector}`).forEach(function (e) {
+      e.parentNode.removeChild(e);
+    });
   }
 
   /**
@@ -144,12 +151,6 @@ export class MusicXMLTransformer {
         }
       });
     }
-  }
-
-  makeAllWordsVerse1 () {
-    this.doc.querySelectorAll('lyric').forEach(lyric => {
-      lyric.setAttribute('number', '1');
-    });
   }
 
   /**

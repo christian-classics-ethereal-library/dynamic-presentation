@@ -27,21 +27,23 @@ export class RevealMusicArranger {
         if (i.substring(0, 5) === 'verse') {
           // TODO: Support more than 9 verses with translations.
           let num = i.substring(5, 6);
-          verses[num].push(i);
+          if (verses[num].indexOf(i) === -1) {
+            verses[num].push(i);
+          }
         } else {
           nonverses[i] = i;
         }
       });
       verses.forEach(v => {
-        // TODO: Show alternate translations all at once.
-        arrangement.push(v[0]);
+        console.log(v);
+        arrangement.push(v);
         Object.keys(nonverses).forEach(nv => {
-          arrangement.push(nv);
+          arrangement.push([nv]);
         });
       });
     }
     if (!arrangement.length) {
-      arrangement = ['instrumental'];
+      arrangement = [['instrumental']];
     }
     return arrangement;
   }
