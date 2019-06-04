@@ -5,8 +5,8 @@ export class RevealMusicArranger {
   }
 
   /**
-   * @brief Determine the arrangement from the arrangementString, or automatically.
-   * @param arrangementString is a string like `verse1,chorus,verse2,chorus`, or the empty string.
+   * @brief Return a valid arrangement if the passed one does not exist.
+   * @param arrangement either an array (like ['verse1','chorus','verse2','chorus']`, or an empty array.
    * @return list.
    */
   _getArrangement (data, arrangement) {
@@ -17,17 +17,24 @@ export class RevealMusicArranger {
       let doc = parser.parseFromString(data, 'text/xml');
       // TODO: Automatically arrange it by traversing through measures.
       let nonverses = {};
-      doc.querySelectorAll('lyric[name]').forEach(lyric => {
-        let i = lyric.getAttribute('name');
-        nonverses[i] = i;
-      });
       let verses = [];
       doc.querySelectorAll('lyric:not([name])').forEach(lyric => {
         let i = lyric.getAttribute('number');
-        verses[i] = i;
+        verses[i] = [`verse${i}`];
+      });
+      doc.querySelectorAll('lyric[name]').forEach(lyric => {
+        let i = lyric.getAttribute('name');
+        if (i.substring(0, 5) === 'verse') {
+          // TODO: Support more than 9 verses with translations.
+          let num = i.substring(5, 6);
+          verses[num].push(i);
+        } else {
+          nonverses[i] = i;
+        }
       });
       verses.forEach(v => {
-        arrangement.push(`verse${v}`);
+        // TODO: Show alternate translations all at once.
+        arrangement.push(v[0]);
         Object.keys(nonverses).forEach(nv => {
           arrangement.push(nv);
         });
