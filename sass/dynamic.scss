@@ -1,3 +1,4 @@
+/** Changes for Verovio presentation. **/
 .reveal section[data-musicxml] svg path,
 .reveal section[data-musicxml] svg g.note,
 .reveal section[data-musicxml] svg {
@@ -7,13 +8,11 @@
 
 /* reveal.js overrides for dynamic presentation */
 .reveal section[data-musicxml] {
-  margin: 0;
-  border: none;
   /* Prevent this div from adding any height. */
   font-size: 0;
-  transition: opacity 0.2s ease;
 }
 
+/** Changes for PianoRoll Presentation. **/
 /* Pick tetradic colors based from the linkColor,
    Then four more tetradic colors starting from an analogous color.*/
 $voiceColors: (
@@ -34,6 +33,22 @@ $voiceColors: (
   }
 }
 
+/* Allow different verses to be distinguished. */
+.reveal
+  section[data-musicxml]
+  svg
+  g[class^='voice']
+  text:not([data-verse-num='1']) {
+  font-style: italic;
+}
+
+/** Changes for Text Presentation. **/
+/* Allow different verses to be distinguished. */
+.reveal section[data-musicxml] p:not([data-verse-num='1']) {
+  font-style: italic;
+}
+
+/** General changes. **/
 .reveal.reveal .slides > section,
 .reveal.reveal .slides > section > section {
   padding: 0px;

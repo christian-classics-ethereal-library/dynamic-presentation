@@ -55,7 +55,12 @@ export class PianoRollToolkit {
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML
           : 0;
-        const lyric = this._getLyric(notes[i].querySelector('lyric'));
+        // Lyric numbers are 1 indexed.
+        let lyrics = [undefined];
+        notes[i].querySelectorAll('lyric').forEach(lyric => {
+          let j = lyric.getAttribute('number');
+          lyrics[j] = this._getLyric(lyric);
+        });
         // Another way in musicXML to do chords is to just add a chord element inside a note
         // (in which case, the offset doesn't advance, and the note starts with the previous one).
         const isInternalChord = notes[i].querySelector('chord');
@@ -69,7 +74,7 @@ export class PianoRollToolkit {
           }
           this.data.measures[measureNumber].notes.push({
             duration: duration,
-            lyric: lyric,
+            lyrics: lyrics,
             offset: isInternalChord
               ? offset[voice] - previousDuration
               : offset[voice] || 0,
@@ -237,7 +242,9 @@ export class PianoRollToolkit {
     return msd;
   }
   _getMeasureHeight () {
-    return this.noteRange * this.yScale + 2 * this.fontSize;
+    // TODO: Automatically determine how many verses are being shown.
+    let numVerses = 4;
+    return this.noteRange * this.yScale + 2 * (this.fontSize * numVerses);
   }
   _getMeasureWidth (measure) {
     return measure.duration * this.xScale;
@@ -281,14 +288,15 @@ export class PianoRollToolkit {
       let w = note.duration;
       let y = this.highNote - note.pitch;
       let h = 1;
-      let lyric = note.lyric;
+      let lyrics = note.lyrics;
       measureElement.appendChild(
-        this._rectangle(x, y, w, h, lyric, note.voice)
+        this._rectangle(x, y, w, h, lyrics, note.voice)
       );
     }
     return measureElement;
   }
-  _rectangle (x, y, w, h, lyric, voice) {
+
+  _rectangle (x, y, w, h, lyrics, voice) {
     let g = new Document().createElement('g');
     g.setAttribute('class', `voice${this.data.voices[voice]}`);
     let sx = this.xScale * x;
@@ -306,17 +314,26 @@ export class PianoRollToolkit {
     rect.setAttribute('stroke-width', diameter);
     rect.setAttribute('stroke-linejoin', 'round');
     g.appendChild(rect);
-    let text = new Document().createElement('text');
-    text.setAttribute('x', sx);
-    text.setAttribute('data-textlength', sw);
-    text.setAttribute('lengthAdjust', 'spacingAndGlyphs');
-    text.setAttribute('dx', 1);
-    text.setAttribute('y', this.noteRange * this.yScale);
-    text.setAttribute('dy', this.fontSize);
-    text.innerHTML = lyric;
-    this._squishText(text);
+    lyrics.forEach((lyric, i) => {
+      if (lyric) {
+        let text = new Document().createElement('text');
+        text.setAttribute('x', sx);
+        text.setAttribute('data-textlength', sw);
+        text.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+        text.setAttribute('dx', 1);
+        text.setAttribute(
+          'y',
+          this.noteRange * this.yScale + (i - 1) * this.fontSize
+        );
+        text.setAttribute('dy', this.fontSize);
+        text.setAttribute('data-verse-num', i);
+        text.innerHTML = lyric;
+        this._squishText(text);
 
-    g.appendChild(text);
+        g.appendChild(text);
+      }
+    });
+
     return g;
   }
   /**

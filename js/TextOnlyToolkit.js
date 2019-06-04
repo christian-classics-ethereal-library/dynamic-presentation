@@ -22,9 +22,14 @@ export class TextOnlyToolkit extends PianoRollToolkit {
           i++;
         }
         measure.notes.forEach(note => {
-          if (note.lyric) {
-            this.textLines[i].push(note.lyric);
-          }
+          note.lyrics.forEach((lyric, j) => {
+            if (lyric) {
+              if (!this.textLines[i][j]) {
+                this.textLines[i][j] = [];
+              }
+              this.textLines[i][j].push(lyric);
+            }
+          });
         });
       });
     }
@@ -38,7 +43,13 @@ export class TextOnlyToolkit extends PianoRollToolkit {
 
     this.textLines.forEach((line, i) => {
       let j = Math.floor(i / linesPerPage) + 1;
-      this.pages[j].push(line.join('') + '<br/>');
+      line.forEach((tline, k) => {
+        if (tline) {
+          this.pages[j].push(
+            `<p data-verse-num='${k}'>` + tline.join('') + '</p>'
+          );
+        }
+      });
     });
   }
 
