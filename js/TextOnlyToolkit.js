@@ -33,8 +33,13 @@ export class TextOnlyToolkit extends PianoRollToolkit {
         });
       });
     }
-    // TODO: Determine linesPerPage from the screen height.
-    let linesPerPage = 4;
+    // Number of "translation lines".
+    let tLines = this.textLines[0].length - 1;
+    // 50 height with a margin of 20 (that is shared).
+    // Adding 10 so that a few lines wrapping won't mess everything up.
+    let tLineHeight = 80 + 10;
+    // linesPerPage doesn't count translation lines.
+    let linesPerPage = Math.floor(this.height / tLineHeight / tLines);
 
     let numPages = Math.ceil(this.textLines.length / linesPerPage);
     this.pages = [];
