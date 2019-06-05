@@ -2,13 +2,14 @@
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 
 export class TextOnlyToolkit extends PianoRollToolkit {
+  getPageCount () {
+    return this.pages.length;
+  }
   renderToSVG (page, options) {
     let output = '';
     output +=
       '<style>.reveal section[data-musicxml]{font-size:inherit};</style>';
-    this.pages[page].forEach(line => {
-      output += line;
-    });
+    output += this.pages[page - 1].join('');
     return output;
   }
 
@@ -42,12 +43,17 @@ export class TextOnlyToolkit extends PianoRollToolkit {
     let linesPerPage = Math.floor(this.height / tLineHeight / tLines);
 
     let numPages = Math.ceil(this.textLines.length / linesPerPage);
+    // Make sure that we don't put more lines on a page than we need to.
+    linesPerPage = Math.ceil(this.textLines.length / numPages);
+    // TODO: evenly distribute the lines to the pages.
+    // number of pages that have one less than the maximum number of linesPerPage.
+    // let sadPages = numPages * linesPerPage - this.textLines.length;
+
     this.pages = [];
-    // Page 0 is going to be empty
-    for (let i = 0; i <= numPages; i++) this.pages.push([]);
+    for (let i = 0; i < numPages; i++) this.pages.push([]);
 
     this.textLines.forEach((line, i) => {
-      let j = Math.floor(i / linesPerPage) + 1;
+      let j = Math.floor(i / linesPerPage);
       line.forEach((tline, k) => {
         if (tline) {
           this.pages[j].push(
