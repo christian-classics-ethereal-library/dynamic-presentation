@@ -53,3 +53,18 @@ $voiceColors: (
 .reveal.reveal .slides > section > section {
   padding: 0px;
 }
+
+/** Changes for MIDI player **/
+@import '../midi-player/midiplayer.css';
+#midiPlayer_div {
+  position: absolute;
+  z-index: 1;
+  background: transparent;
+  color: $mainColor;
+}
+#midiPlayer_progress {
+  background: $linkColor !important;
+}
+#midiPlayer_bar#midiPlayer_bar {
+  background: $mainColor;
+}

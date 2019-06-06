@@ -9,6 +9,10 @@ export class VerovioLineWrapper {
     this.vPageCount = Infinity;
   }
 
+  getElementsAtTime (time) {
+    return this.toolkit.getElementsAtTime(time);
+  }
+
   getPageCount () {
     // Find out how many vPages can fit on a screen
     let svg = this.toolkit.renderToSVG(1, this.vOptions);
@@ -46,6 +50,10 @@ export class VerovioLineWrapper {
     // TODO: Check if there is a better way to do this.
     let data = new XMLSerializer().serializeToString(this.doc);
     this.toolkit.loadData(data);
+  }
+
+  renderToMIDI () {
+    return this.toolkit.renderToMIDI();
   }
 
   renderToSVG (page, options) {

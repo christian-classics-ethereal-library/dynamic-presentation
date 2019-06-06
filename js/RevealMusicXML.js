@@ -1,4 +1,4 @@
-/* globals fetch, Reveal */
+/* globals fetch, jQuery, Reveal */
 export class RevealMusicXML {
   constructor (ToolkitType, transformer) {
     this.ToolkitType = ToolkitType;
@@ -38,6 +38,21 @@ export class RevealMusicXML {
       });
   }
 
+  _playMIDI (toolkit) {
+    if (!jQuery('#player')[0]) {
+      jQuery('body').prepend(jQuery('<div id="player">'));
+      jQuery('#player').midiPlayer({
+        // onUpdate: midiUpdate,
+        // onStop: midiStop,
+        width: 250
+      });
+    }
+    let base64midi = toolkit.renderToMIDI();
+    let song = 'data:audio/midi;base64,' + base64midi;
+    jQuery('#player').show();
+    jQuery('#player').midiPlayer.play(song);
+  }
+
   _processSlides () {
     let promises = [];
     document.querySelectorAll('[data-musicxml]').forEach(section => {
@@ -58,7 +73,9 @@ export class RevealMusicXML {
 
   _render (section, toolkit) {
     let max = toolkit.getPageCount();
-    section.innerHTML = '';
+    section.querySelectorAll('section').forEach(oldChildSection => {
+      section.removeChild(oldChildSection);
+    });
     for (let i = 1; i <= max; i++) {
       let cSection = section.appendChild(document.createElement('section'));
       cSection.innerHTML = toolkit.renderToSVG(i, {});
@@ -79,9 +96,8 @@ export class RevealMusicXML {
     let zoom = 50;
     // TODO: Use API to get width and height when that gets implemented
     // (https://github.com/hakimel/reveal.js/issues/2409).
-    // eslint-disable-next-line no-undef
+    // TODO: or ensure that this will work with future versions of jQuery.
     let pixelHeight = parseFloat(jQuery('.slides').css('height'));
-    // eslint-disable-next-line no-undef
     let pixelWidth = parseFloat(jQuery('.slides').css('width'));
     toolkit.setOptions({
       pageHeight: pixelHeight * (100 / zoom),
