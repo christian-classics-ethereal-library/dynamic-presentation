@@ -5,6 +5,12 @@
   stroke: $mainColor;
   fill: $mainColor;
 }
+.reveal section[data-musicxml] svg path .highlightedNote,
+.reveal section[data-musicxml] svg g.note .highlightedNote,
+.reveal section[data-musicxml] svg .highlightedNote {
+  stroke: $linkColor !important;
+  fill: $linkColor !important;
+}
 
 /* reveal.js overrides for dynamic presentation */
 .reveal section[data-musicxml] {

@@ -43,6 +43,11 @@ export class RevealMusicXML {
   }
 
   _playerStop () {
+    if (typeof this.highlightedIDs !== 'undefined') {
+      this.highlightedIDs.forEach(noteid => {
+        jQuery('#' + noteid).removeClass('highlightedNote');
+      });
+    }
     if (this.playerToolkitNum < this.toolkits.length) {
       this.playerToolkitNum++;
       this._playMIDI(this.toolkits[this.playerToolkitNum]);
@@ -53,13 +58,26 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     let vrvTime = Math.max(0, time - 400);
-    let elementsattime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
+    let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
-    if (elementsattime.page > 0) {
-      if (elementsattime.page !== this.playerPage) {
-        this.playerPage = elementsattime.page;
+    if (elementsAtTime.page > 0) {
+      if (elementsAtTime.page !== this.playerPage) {
+        this.playerPage = elementsAtTime.page;
         Reveal.slide(this.playerToolkitNum, this.playerPage - 1);
+      }
+      let ids = this.highlightedIDs || [];
+      if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
+        ids.forEach(function (noteid) {
+          if (jQuery.inArray(noteid, elementsAtTime.notes) === -1) {
+            jQuery('#' + noteid).removeClass('highlightedNote');
+          }
+        });
+        ids = elementsAtTime.notes;
+        ids.forEach(noteid => {
+          jQuery('#' + noteid).addClass('highlightedNote');
+        });
+        this.highlightedIDs = ids;
       }
     }
   }

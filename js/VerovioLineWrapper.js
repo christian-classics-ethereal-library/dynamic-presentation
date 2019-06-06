@@ -10,7 +10,9 @@ export class VerovioLineWrapper {
   }
 
   getElementsAtTime (time) {
-    return this.toolkit.getElementsAtTime(time);
+    let elementsAtTime = this.toolkit.getElementsAtTime(time);
+    elementsAtTime.page = Math.ceil(elementsAtTime.page / this.systemsPerPage);
+    return elementsAtTime;
   }
 
   getPageCount () {
