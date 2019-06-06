@@ -22,6 +22,10 @@ export class RevealMusicXML {
       // Create a dummy transformer that does no transformation.
       this.transformer = { transform: (data, transformation) => data };
     }
+    Reveal.addKeyBinding(
+      { keyCode: 77, key: 'M', description: 'Play/Stop audio' },
+      this._playStop.bind(this)
+    );
     return this._processSlides().then(() => Promise.resolve());
   }
 
@@ -38,12 +42,24 @@ export class RevealMusicXML {
       });
   }
 
+  _playerStop () {
+    this.playing = false;
+  }
+  _playerUpdate () {}
+  _playStop () {
+    if (!this.playing) {
+      this._playMIDI(this.toolkits[0]);
+    } else {
+      jQuery('#player').midiPlayer.stop();
+      this.playing = false;
+    }
+  }
   _playMIDI (toolkit) {
     if (!jQuery('#player')[0]) {
       jQuery('body').prepend(jQuery('<div id="player">'));
       jQuery('#player').midiPlayer({
-        // onUpdate: midiUpdate,
-        // onStop: midiStop,
+        onUpdate: this._playerUpdate.bind(this),
+        onStop: this._playerStop.bind(this),
         width: 250
       });
     }
@@ -51,6 +67,7 @@ export class RevealMusicXML {
     let song = 'data:audio/midi;base64,' + base64midi;
     jQuery('#player').show();
     jQuery('#player').midiPlayer.play(song);
+    this.playing = true;
   }
 
   _processSlides () {

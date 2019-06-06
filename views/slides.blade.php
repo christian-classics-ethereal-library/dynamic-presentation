@@ -32,11 +32,6 @@
 </head>
 <body>
     <div class="reveal">
-                    @if (isset($audio))
-                        <audio id='audio'>
-                            <source src="{{$audio}}" type="audio/mpeg">
-                        </audio>
-                    @endif
         <div class="slides">
             @foreach ($slides as $key => $slide)
                 @if (isset($slide['name']))
