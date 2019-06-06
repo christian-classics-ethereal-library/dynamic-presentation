@@ -43,11 +43,29 @@ export class RevealMusicXML {
   }
 
   _playerStop () {
-    this.playing = false;
+    if (this.playerToolkitNum < this.toolkits.length) {
+      this.playerToolkitNum++;
+      this._playMIDI(this.toolkits[this.playerToolkitNum]);
+      Reveal.slide(this.playerToolkitNum, 0);
+    } else {
+      this.playing = false;
+    }
   }
-  _playerUpdate () {}
+  _playerUpdate (time) {
+    let vrvTime = Math.max(0, time - 400);
+    let elementsattime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
+      vrvTime
+    );
+    if (elementsattime.page > 0) {
+      if (elementsattime.page !== this.playerPage) {
+        this.playerPage = elementsattime.page;
+        Reveal.slide(this.playerToolkitNum, this.playerPage - 1);
+      }
+    }
+  }
   _playStop () {
     if (!this.playing) {
+      this.playerToolkitNum = 0;
       this._playMIDI(this.toolkits[0]);
     } else {
       jQuery('#player').midiPlayer.stop();
@@ -67,6 +85,7 @@ export class RevealMusicXML {
     let song = 'data:audio/midi;base64,' + base64midi;
     jQuery('#player').show();
     jQuery('#player').midiPlayer.play(song);
+    this.playerPage = 1;
     this.playing = true;
   }
 
