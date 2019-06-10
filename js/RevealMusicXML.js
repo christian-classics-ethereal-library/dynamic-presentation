@@ -103,8 +103,10 @@ export class RevealMusicXML {
   _playPause () {
     if (!this.playing) {
       if (!jQuery('#player')[0]) {
-        this.playerToolkitNum = 0;
-        this._playMIDI(this.toolkits[0]);
+        this.playerToolkitNum = this.reveal.getState().indexh;
+        this._playMIDI(this.toolkits[this.playerToolkitNum]);
+      } else if (this.playerToolkitNum !== this.reveal.getState().indexh) {
+        this._playSkip(this.reveal.getState().indexh);
       } else {
         // TODO: fix midiPlayer.play to work when the data is already loaded.
         // https://github.com/rism-ch/midi-player/issues/11
