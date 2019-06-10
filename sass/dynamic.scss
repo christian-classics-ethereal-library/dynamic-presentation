@@ -74,6 +74,7 @@ $voiceColors: (
 #midiPlayer_bar#midiPlayer_bar {
   background: $mainColor;
 }
+/* Don't use MIDI Player's play/pause/stop buttons so we can track the status. */
 #midiPlayer_div .icon {
   display: none !important;
 }

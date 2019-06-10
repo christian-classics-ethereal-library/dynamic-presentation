@@ -26,7 +26,7 @@ export class RevealMusicXML {
       this.transformer = { transform: (data, transformation) => data };
     }
     this.reveal.addKeyBinding(
-      { keyCode: 77, key: 'M', description: 'Play/Stop audio' },
+      { keyCode: 77, key: 'M', description: 'Play/Pause audio' },
       this._playPause.bind(this)
     );
     return this._processSlides().then(() => Promise.resolve());
