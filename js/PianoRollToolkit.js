@@ -30,25 +30,16 @@ export class PianoRollToolkit {
    */
   getPageWithElement (id) {
     // Search through the measures to find the current note.
-    for (let i = 0; i < this.data.measures.length; i++) {
-      let measure = this.data.measures[i];
-      if (measure) {
-        for (let note of measure.notes) {
-          // Identify the note we are looking for
-          if (note.id === id) {
-            // Now that we've found the note, find the page that includes its measure.
-            for (let k = 0; k < this.pages.length; k++) {
-              let page = this.pages[k];
-              for (let m of page) {
-                if (m.i === i) {
-                  return k;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    let measure = this.data.measures.find(m => {
+      return m && m.notes.find(note => note.id === id);
+    });
+    let measureNumber = this.data.measures.indexOf(measure);
+
+    // Find the page that contains that measure.
+    let page = this.pages.find(page => {
+      return page.find(m => m.i === measureNumber);
+    });
+    return this.pages.indexOf(page);
   }
 
   getTimeForElement (id) {}
