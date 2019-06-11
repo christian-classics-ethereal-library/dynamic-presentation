@@ -37,6 +37,10 @@ $voiceColors: (
     stroke: $color;
     fill: $color;
   }
+  .reveal section[data-musicxml] svg g.#{$name}.highlightedNote {
+    stroke: $mainColor !important;
+    fill: $mainColor !important;
+  }
 }
 
 /* Allow different verses to be distinguished. */

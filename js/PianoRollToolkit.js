@@ -1,4 +1,4 @@
-/* globals Document, DOMParser, XMLSerializer */
+/* globals Document, DOMParser, verovio, XMLSerializer */
 export class PianoRollToolkit {
   constructor () {
     this.scale = 100;
@@ -6,13 +6,55 @@ export class PianoRollToolkit {
     this.height = 150;
     this.adjustPageHeight = false;
     this._configValues();
+    // eslint-disable-next-line new-cap
+    this.verovio = new verovio.toolkit();
   }
+
+  getElementsAtTime (time) {
+    let eat = this.verovio.getElementsAtTime(time);
+    let page = this.getPageWithElement(eat.notes[0]);
+    console.log(page);
+    return {
+      notes: eat.notes,
+      page: page
+    };
+  }
+
   getPageCount () {
     // this.pages has an empty item in it.
     return this.pages.length - 1;
   }
+
+  /**
+   * @brief Find the page that a specific note is on.
+   */
+  getPageWithElement (id) {
+    // Search through the measures to find the current note.
+    for (let i = 0; i < this.data.measures.length; i++) {
+      let measure = this.data.measures[i];
+      if (measure) {
+        for (let note of measure.notes) {
+          // Identify the note we are looking for
+          if (note.id === id) {
+            // Now that we've found the note, find the page that includes its measure.
+            for (let k = 0; k < this.pages.length; k++) {
+              let page = this.pages[k];
+              for (let m of page) {
+                if (m.i === i) {
+                  return k;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   getTimeForElement (id) {}
   loadData (data) {
+    this.verovio.loadData(data);
+    data = this.verovio.getMEI();
     let parser = new DOMParser();
     let doc = parser.parseFromString(data, 'text/xml');
     return this.loadDataFromDoc(doc);
@@ -25,7 +67,8 @@ export class PianoRollToolkit {
     this.data.measures = [];
     this.data.voices = {};
     this.doc.querySelectorAll('measure').forEach(measure => {
-      const measureNumber = measure.getAttribute('number');
+      const measureNumber =
+        measure.getAttribute('number') || measure.getAttribute('n');
       this.data.measures[measureNumber] = {
         notes: [],
         chordSymbols: [],
@@ -35,36 +78,60 @@ export class PianoRollToolkit {
       };
     });
     this.doc.querySelectorAll('measure').forEach(measure => {
-      const measureNumber = measure.getAttribute('number');
-      const partID = measure.closest('part').getAttribute('id');
+      const measureNumber =
+        measure.getAttribute('number') || measure.getAttribute('n');
+      let part = measure.closest('part');
+      const partID = part ? part.getAttribute('id') : 0;
 
-      if (measure.querySelector('print[new-system="yes"]')) {
+      if (
+        measure.querySelector('print[new-system="yes"]') ||
+        (measure.previousElementSibling &&
+          measure.previousElementSibling.localName === 'sb')
+      ) {
         this.data.measures[measureNumber].sectionBreak = true;
       }
-      if (measure.querySelector('print[new-page="yes"]')) {
+      if (
+        measure.querySelector('print[new-page="yes"]') ||
+        (measure.previousElementSibling &&
+          measure.previousElementSibling.localName === 'pb')
+      ) {
         this.data.measures[measureNumber].sectionBreak = true;
         this.data.measures[measureNumber].pageBreak = true;
       }
 
       // Go through the notes and rests sequentially so we can get their offsets straight.
-      let notes = measure.querySelectorAll('note');
+      let notes = measure.querySelectorAll('note,rest');
       let offset = {};
       let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
-        const duration = parseInt(notes[i].querySelector('duration').innerHTML);
+        let duration =
+          notes[i].getAttribute('dur.ppq') ||
+          notes[i].querySelector('duration').innerHTML;
+        duration = parseInt(duration);
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML
-          : 0;
+          : notes[i].closest('layer').getAttribute('n');
         // Lyric numbers are 1 indexed.
         let lyrics = [undefined];
-        notes[i].querySelectorAll('lyric').forEach(lyric => {
-          let j = lyric.getAttribute('number');
+        let lyricElements = notes[i].querySelectorAll('lyric');
+        lyricElements = lyricElements.length
+          ? lyricElements
+          : notes[i].querySelectorAll('verse');
+        lyricElements.forEach(lyric => {
+          let j = lyric.getAttribute('number') || lyric.getAttribute('n');
           lyrics[j] = this._getLyric(lyric);
         });
         // Another way in musicXML to do chords is to just add a chord element inside a note
         // (in which case, the offset doesn't advance, and the note starts with the previous one).
         const isInternalChord = notes[i].querySelector('chord');
-        notes[i].querySelectorAll('pitch').forEach(pitch => {
+        let id = notes[i].getAttribute('xml:id') || `note-${Math.random()}`;
+        let pitches = notes[i].querySelectorAll('pitch');
+        pitches = pitches.length
+          ? pitches
+          : notes[i].getAttribute('oct')
+            ? [notes[i]]
+            : [];
+        pitches.forEach(pitch => {
           const pitchVal = this._getPitch(pitch);
           if (pitchVal > this.highNote) {
             this.highNote = pitchVal;
@@ -74,6 +141,7 @@ export class PianoRollToolkit {
           }
           this.data.measures[measureNumber].notes.push({
             duration: duration,
+            id: id,
             lyrics: lyrics,
             offset: isInternalChord
               ? offset[voice] - previousDuration
@@ -117,6 +185,11 @@ export class PianoRollToolkit {
   redoLayout () {
     this._assignMeasuresToPages();
   }
+
+  renderToMIDI () {
+    return this.verovio.renderToMIDI();
+  }
+
   renderToSVG (page, options) {
     let svg = new Document().createElement('svg');
     svg.setAttribute('font-family', 'Monospace');
@@ -196,7 +269,7 @@ export class PianoRollToolkit {
         let mWidth = this._getMeasureWidth(measure);
         if (
           xOffset + mWidth > this.width ||
-          (this.useSectionBreaks && measure.sectionBreak)
+          (this.useSectionBreaks && measure.sectionBreak && i !== 1)
         ) {
           xOffset = 0;
           if (row + 1 < rowsPerSlide) {
@@ -243,38 +316,57 @@ export class PianoRollToolkit {
   }
   _getMeasureHeight () {
     // TODO: Automatically determine how many verses are being shown.
-    let numVerses = 4;
+    let numVerses = 2;
     return this.noteRange * this.yScale + 2 * (this.fontSize * numVerses);
   }
   _getMeasureWidth (measure) {
     return measure.duration * this.xScale;
   }
+
   _getLyric (lyric) {
     if (!lyric) return '';
-    let text = lyric.querySelector('text').innerHTML;
-    let syllabic = lyric.querySelector('syllabic').innerHTML;
-    if (syllabic === 'begin') return text + '-';
-    else if (syllabic === 'end') return text + '\xa0';
-    else if (syllabic === 'middle') return text + '-';
+    let text = lyric.querySelector('text') || lyric.querySelector('syl');
+    text = text.innerHTML;
+    let syllabic = lyric.querySelector('syllabic');
+    syllabic = syllabic
+      ? syllabic.innerHTML
+      : lyric.querySelector('syl').getAttribute('wordpos');
+    if (syllabic === 'begin' || syllabic === 'i') return text + '-';
+    else if (syllabic === 'end' || syllabic === 't') return text + '\xa0';
+    else if (syllabic === 'middle' || syllabic === 'm') return text + '-';
     else return text + '\xa0';
   }
+
   _getPitch (pitch) {
-    let step = pitch.querySelector('step').innerHTML;
+    let step =
+      pitch.getAttribute('pname') || pitch.querySelector('step').innerHTML;
     let alter = pitch.querySelector('alter');
     if (alter) {
       alter = alter.innerHTML;
+    } else if (pitch.getAttribute('accid.ges') === 'f') {
+      alter = -1;
+    } else if (pitch.getAttribute('accid.ges') === 's') {
+      alter = 1;
     } else {
       alter = 0;
     }
-    let octave = pitch.querySelector('octave').innerHTML;
+    let octave =
+      pitch.getAttribute('oct') || pitch.querySelector('octave').innerHTML;
     const stepMap = {
       C: 0,
+      c: 0,
       D: 2,
+      d: 2,
       E: 4,
+      e: 4,
       F: 5,
+      f: 5,
       G: 7,
+      g: 7,
       A: 9,
-      B: 11
+      a: 9,
+      B: 11,
+      b: 11
     };
     // TODO: make sure that C flat gets placed in the correct octave.
     return stepMap[step] + parseInt(alter) + parseInt(octave) * 12;
@@ -290,13 +382,13 @@ export class PianoRollToolkit {
       let h = 1;
       let lyrics = note.lyrics;
       measureElement.appendChild(
-        this._rectangle(x, y, w, h, lyrics, note.voice)
+        this._rectangle(x, y, w, h, lyrics, note.voice, note.id)
       );
     }
     return measureElement;
   }
 
-  _rectangle (x, y, w, h, lyrics, voice) {
+  _rectangle (x, y, w, h, lyrics, voice, id) {
     let g = new Document().createElement('g');
     g.setAttribute('class', `voice${this.data.voices[voice]}`);
     let sx = this.xScale * x;
@@ -333,7 +425,7 @@ export class PianoRollToolkit {
         g.appendChild(text);
       }
     });
-
+    g.setAttribute('id', id);
     return g;
   }
   /**
