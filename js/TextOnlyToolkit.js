@@ -5,6 +5,14 @@ export class TextOnlyToolkit extends PianoRollToolkit {
   getPageCount () {
     return this.pages.length;
   }
+
+  getPageWithElement (id) {
+    let page = this.pages.find(page => {
+      return page.find(pageText => pageText.indexOf(id) !== -1);
+    });
+    return this.pages.indexOf(page) + 1;
+  }
+
   renderToSVG (page, options) {
     let output = '';
     output +=
@@ -28,7 +36,8 @@ export class TextOnlyToolkit extends PianoRollToolkit {
               if (!this.textLines[i][j]) {
                 this.textLines[i][j] = [];
               }
-              this.textLines[i][j].push(lyric);
+              // TODO: Don't use the same id for different translation lyrics.
+              this.textLines[i][j].push([note.id, lyric]);
             }
           });
         });
@@ -61,7 +70,9 @@ export class TextOnlyToolkit extends PianoRollToolkit {
       line.forEach((tline, k) => {
         if (tline) {
           this.pages[j].push(
-            `<p data-verse-num='${k}'>` + tline.join('') + '</p>'
+            `<p data-verse-num='${k}'>` +
+              tline.map(this._makeSyl).join('') +
+              '</p>'
           );
         }
       });
@@ -75,5 +86,9 @@ export class TextOnlyToolkit extends PianoRollToolkit {
   _getLyric (lyric) {
     let text = super._getLyric(lyric);
     return text.replace('\xa0', ' ').replace('-', '');
+  }
+
+  _makeSyl (word) {
+    return `<span id="${word[0]}">${word[1]}</span>`;
   }
 }

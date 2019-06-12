@@ -13,7 +13,6 @@ export class PianoRollToolkit {
   getElementsAtTime (time) {
     let eat = this.verovio.getElementsAtTime(time);
     let page = this.getPageWithElement(eat.notes[0]);
-    console.log(page);
     return {
       notes: eat.notes,
       page: page
@@ -97,7 +96,9 @@ export class PianoRollToolkit {
       for (let i = 0; i < notes.length; i++) {
         let duration =
           notes[i].getAttribute('dur.ppq') ||
-          notes[i].querySelector('duration').innerHTML;
+          (notes[i].querySelector('duration')
+            ? notes[i].querySelector('duration').innerHTML
+            : 0);
         duration = parseInt(duration);
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML

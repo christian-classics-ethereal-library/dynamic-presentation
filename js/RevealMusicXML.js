@@ -34,6 +34,10 @@ export class RevealMusicXML {
 
   // Private methods
 
+  _debug (message) {
+    console.log(`RevealMusicXML: ${message}`);
+  }
+
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicxml');
     const transformation = section.getAttribute('data-musicxml-transform');

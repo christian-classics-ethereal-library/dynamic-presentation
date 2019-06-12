@@ -57,6 +57,14 @@ $voiceColors: (
 .reveal section[data-musicxml] p:not([data-verse-num='1']) {
   font-style: italic;
 }
+p[data-verse-num] span {
+  transition: border-bottom 0.1s;
+  border-bottom: 0 solid $linkColor;
+}
+p span.highlightedNote {
+  color: $linkColor;
+  border-bottom: 10px solid $linkColor;
+}
 
 /** General changes. **/
 .reveal.reveal .slides > section,
