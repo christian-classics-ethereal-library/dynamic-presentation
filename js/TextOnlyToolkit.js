@@ -17,8 +17,8 @@ export class TextOnlyToolkit extends PianoRollToolkit {
     if (!this.textLines) {
       this.textLines = [[]];
       let i = 0;
-      this.data.measures.forEach(measure => {
-        if (measure.sectionBreak || measure.pageBreak) {
+      this.data.measures.forEach((measure, measureNum) => {
+        if ((measure.sectionBreak || measure.pageBreak) && measureNum > 1) {
           this.textLines.push([]);
           i++;
         }
@@ -35,7 +35,11 @@ export class TextOnlyToolkit extends PianoRollToolkit {
       });
     }
     // Number of "translation lines".
-    let tLines = this.textLines[0].length - 1;
+    let tLines = Math.max(
+      1,
+      this.textLines[0].length - 1,
+      this.textLines[1].length - 1
+    );
     // 50 height with a margin of 20 (that is shared).
     // Adding 10 so that a few lines wrapping won't mess everything up.
     let tLineHeight = 80 + 10;
@@ -69,12 +73,7 @@ export class TextOnlyToolkit extends PianoRollToolkit {
   }
 
   _getLyric (lyric) {
-    if (!lyric) return '';
-    let text = lyric.querySelector('text').innerHTML;
-    let syllabic = lyric.querySelector('syllabic').innerHTML;
-    if (syllabic === 'begin') return text;
-    else if (syllabic === 'end') return text + ' ';
-    else if (syllabic === 'middle') return text;
-    else return text + ' ';
+    let text = super._getLyric(lyric);
+    return text.replace('\xa0', ' ').replace('-', '');
   }
 }
