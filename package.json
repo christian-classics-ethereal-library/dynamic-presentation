@@ -1,0 +1,15 @@
+{
+  "name": "dynamic-presentation",
+  "version": "1.0.0",
+  "description": "Javascript for Dynamic Presentation",
+  "main": "js/LoadRevealMusicXMLPlugin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.ccel.org:hymnary/dynamic-presentation.git"
+  },
+  "author": "Zach DeCook <zdecook@ccel.org>",
+  "license": "ISC"
+}
