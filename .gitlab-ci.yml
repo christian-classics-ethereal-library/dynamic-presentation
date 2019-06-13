@@ -3,7 +3,7 @@ tests:
   tags:
     - node-js
   variables:
-    GIT_SUBMODULE_STRATEGY: "normal"
+    GIT_SUBMODULE_STRATEGY: 'normal'
   script:
     - npm install
     - npm run style:check
@@ -25,6 +25,6 @@ docs:
     - tests
   script:
     - rm -rf /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
-    - mv coverage/ /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
+    - mv coverage/lcov-report /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
   only:
     - master
