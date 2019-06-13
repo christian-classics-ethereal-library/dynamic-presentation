@@ -1,0 +1,3 @@
+[submodule "musicxmlTestSuite"]
+	path = musicxmlTestSuite
+	url = https://github.com/cuthbertLab/musicxmlTestSuite.git

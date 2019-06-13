@@ -1,0 +1,29 @@
+tests:
+  stage: test
+  tags:
+    - node-js
+  variables:
+    GIT_SUBMODULE_STRATEGY: "normal"
+  script:
+    - npm install
+    - npm run test -- --collectCoverage
+  artifacts:
+    paths:
+      - coverage/
+    expire_in: 1 day
+  cache:
+    key: node
+    paths:
+      - node_modules
+
+docs:
+  stage: deploy
+  tags:
+    - static-server
+  dependencies:
+    - tests
+  script:
+    - rm -rf /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
+    - mv coverage/ /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
+  only:
+    - master
