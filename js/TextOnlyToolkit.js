@@ -44,11 +44,7 @@ export class TextOnlyToolkit extends PianoRollToolkit {
       });
     }
     // Number of "translation lines".
-    let tLines = Math.max(
-      1,
-      this.textLines[0].length - 1,
-      this.textLines[1].length - 1
-    );
+    let tLines = Math.max(1, this.textLines[0].length - 1);
     // 50 height with a margin of 20 (that is shared).
     // Adding 10 so that a few lines wrapping won't mess everything up.
     let tLineHeight = 80 + 10;

@@ -1,0 +1,6 @@
+[submodule "musicxmlTestSuite"]
+	path = musicxmlTestSuite
+	url = https://github.com/cuthbertLab/musicxmlTestSuite.git
+[submodule "midi-player"]
+	path = midi-player
+	url = https://github.com/rism-ch/midi-player.git

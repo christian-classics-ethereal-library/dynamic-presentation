@@ -3,7 +3,7 @@ import { MusicXMLTransformer } from './MusicXMLTransformer';
 import fs from 'fs';
 import path from 'path';
 
-const xmlFiles = '../../../examplemedia/musicxmlTestSuite/xmlFiles/';
+const xmlFiles = '../musicxmlTestSuite/xmlFiles/';
 
 const xml41a = fs.readFileSync(
   path.resolve(__dirname, xmlFiles + '41a-MultiParts-Partorder.xml'),
