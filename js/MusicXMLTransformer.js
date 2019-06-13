@@ -16,6 +16,9 @@ export class MusicXMLTransformer {
   /* transform is called by the Reveal Plugin */
   transform (data, transformationJson) {
     const trans = JSON.parse(transformationJson);
+    if (!trans) {
+      return data;
+    }
     if (trans.sectionNames || trans.options) {
       this.loadData(data);
       if (trans.sectionNames && trans.sectionNames.length) {
@@ -25,10 +28,10 @@ export class MusicXMLTransformer {
         this.removeSystemAndPageBreaks();
         this.useDottedDashedAsSystemBreaks();
       }
-      if (trans.options.phrases) {
+      if (trans.options && trans.options.phrases) {
         this.phrasesPerLine(trans.options.phrases);
       }
-      if (trans.options.melodyOnly) {
+      if (trans.options && trans.options.melodyOnly) {
         this.hidePartsExceptMelody();
       }
 

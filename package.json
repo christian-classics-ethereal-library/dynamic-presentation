@@ -32,5 +32,7 @@
   "prettier": {
     "singleQuote": true
   },
-  "dependencies": {}
+  "dependencies": {
+    "reveal.js": "github:earboxer/reveal.js"
+  }
 }

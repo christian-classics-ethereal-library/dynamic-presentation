@@ -1,5 +1,5 @@
+/* globals Reveal */
 import { urlParam } from '../js/urlParam.js';
-var Reveal = require('reveal.js');
 
 let width = urlParam('width') || 960;
 Reveal.initialize({
@@ -10,4 +10,3 @@ Reveal.initialize({
   transition: 'fade',
   transitionSpeed: 'fast'
 });
-window.Reveal = Reveal;
