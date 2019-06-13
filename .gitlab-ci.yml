@@ -6,6 +6,7 @@ tests:
     GIT_SUBMODULE_STRATEGY: "normal"
   script:
     - npm install
+    - npm run style:check
     - npm run test -- --collectCoverage
   artifacts:
     paths:

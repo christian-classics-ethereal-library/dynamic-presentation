@@ -4,6 +4,9 @@
   "description": "Javascript for Dynamic Presentation",
   "main": "js/LoadRevealMusicXMLPlugin.js",
   "scripts": {
+    "semistandard": "npx semistandard js/*.js",
+    "style:check": "npx prettier --check **/*.{json,md,scss} && npm run semistandard",
+    "style:fix": "npx prettier --write **/*.{js,json,md,scss}; npm run semistandard -- --fix",
     "test": "jest"
   },
   "repository": {
@@ -15,7 +18,9 @@
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "jest": "^24.8.0",
-    "jest-environment-jsdom-fourteen": "^0.1.0"
+    "jest-environment-jsdom-fourteen": "^0.1.0",
+    "prettier": "^1.18.2",
+    "semistandard": "^13.0.1"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -23,6 +28,9 @@
     ],
     "coverageDirectory": "coverage",
     "testEnvironment": "jest-environment-jsdom-fourteen"
+  },
+  "prettier": {
+    "singleQuote": true
   },
   "dependencies": {}
 }
