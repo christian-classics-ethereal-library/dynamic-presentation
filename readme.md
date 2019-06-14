@@ -49,10 +49,10 @@ reveal.js and everything that depends on it should be loaded with the `defer` at
 Make sure you have the dependencies with
 
 ```sh
-git submodule update --init --recursive`
+git submodule update --init --recursive
 npm install
 ```
 
 `npm run run` starts serving the directory.
 
-SCSS styles can be recompiled with `npm run compile:scss`.
+Assets (SCSS styles) can be recompiled with `npm run compile`.
