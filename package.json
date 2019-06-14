@@ -4,7 +4,8 @@
   "description": "Javascript for Dynamic Presentation",
   "main": "js/LoadRevealMusicXMLPlugin.js",
   "scripts": {
-    "run": "npx http-server",
+    "compile:scss": "echo Blood Night Serif Simple | xargs -n 1 -I '{}' npx node-sass 'sass/slides{}.scss' 'css/slides{}.css' --include-path node_modules/",
+    "run": "npm run compile:scss && npx http-server",
     "semistandard": "npx semistandard js/*.js",
     "style:check": "npx prettier --check **/*.{json,md,scss,yml} && npm run semistandard",
     "style:fix": "npx prettier --write **/*.{js,json,md,scss,yml}; npm run semistandard -- --fix",
@@ -21,6 +22,7 @@
     "http-server": "^0.11.1",
     "jest": "^24.8.0",
     "jest-environment-jsdom-fourteen": "^0.1.0",
+    "node-sass": "^4.12.0",
     "prettier": "^1.18.2",
     "semistandard": "^13.0.1"
   },
