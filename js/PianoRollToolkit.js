@@ -6,8 +6,10 @@ export class PianoRollToolkit {
     this.height = 150;
     this.adjustPageHeight = false;
     this._configValues();
-    // eslint-disable-next-line new-cap
-    this.verovio = new verovio.toolkit();
+    if (typeof verovio !== 'undefined') {
+      // eslint-disable-next-line new-cap
+      this.verovio = new verovio.toolkit();
+    }
   }
 
   getElementsAtTime (time) {
@@ -43,8 +45,10 @@ export class PianoRollToolkit {
 
   getTimeForElement (id) {}
   loadData (data) {
-    this.verovio.loadData(data);
-    data = this.verovio.getMEI();
+    if (this.verovio) {
+      this.verovio.loadData(data);
+      data = this.verovio.getMEI();
+    }
     let parser = new DOMParser();
     let doc = parser.parseFromString(data, 'text/xml');
     return this.loadDataFromDoc(doc);
@@ -105,7 +109,9 @@ export class PianoRollToolkit {
         duration = parseInt(duration);
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML
-          : notes[i].closest('layer').getAttribute('n');
+          : notes[i].closest('layer')
+            ? notes[i].closest('layer').getAttribute('n')
+            : '0';
         // Lyric numbers are 1 indexed.
         let lyrics = [undefined];
         let lyricElements = notes[i].querySelectorAll('lyric');
