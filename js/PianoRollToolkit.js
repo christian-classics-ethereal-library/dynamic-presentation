@@ -70,8 +70,6 @@ export class PianoRollToolkit {
     this.doc.querySelectorAll('measure').forEach(measure => {
       const measureNumber =
         measure.getAttribute('number') || measure.getAttribute('n');
-      let part = measure.closest('part');
-      const partID = part ? part.getAttribute('id') : 0;
 
       if (
         measure.querySelector('print[new-system="yes"]') ||
@@ -94,6 +92,11 @@ export class PianoRollToolkit {
       let offset = {};
       let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
+        let part = measure.closest('part');
+        const partID = part
+          ? part.getAttribute('id')
+          : notes[i].closest('staff').getAttribute('n');
+
         let duration =
           notes[i].getAttribute('dur.ppq') ||
           (notes[i].querySelector('duration')
@@ -136,18 +139,20 @@ export class PianoRollToolkit {
             id: id,
             lyrics: lyrics,
             offset: isInternalChord
-              ? offset[voice] - previousDuration
-              : offset[voice] || 0,
+              ? offset[partID + voice] - previousDuration
+              : offset[partID + voice] || 0,
             pitch: pitchVal,
             voice: partID + voice
           });
           this.data.voices[partID + voice] = partID + voice;
         });
         if (!isInternalChord) {
-          offset[voice] = (offset[voice] || 0) + duration;
+          offset[partID + voice] = (offset[partID + voice] || 0) + duration;
         }
-        if (offset[voice] > this.data.measures[measureNumber].duration) {
-          this.data.measures[measureNumber].duration = offset[voice];
+        if (
+          offset[partID + voice] > this.data.measures[measureNumber].duration
+        ) {
+          this.data.measures[measureNumber].duration = offset[partID + voice];
         }
         previousDuration = duration;
       }
