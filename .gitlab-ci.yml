@@ -8,6 +8,7 @@ tests:
     - npm install
     - npm run style:check
     - npm run test -- --collectCoverage
+    - npm run compile
   artifacts:
     paths:
       - coverage/
