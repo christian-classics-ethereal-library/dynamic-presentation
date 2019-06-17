@@ -184,6 +184,7 @@ export class PianoRollToolkit {
 
   renderToSVG (page, options) {
     let svg = new Document().createElement('svg');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svg.setAttribute('font-family', 'Monospace');
     svg.setAttribute('font-size', this.fontSize);
     svg.setAttribute('width', this.width);
@@ -281,8 +282,8 @@ export class PianoRollToolkit {
   }
   _configValues () {
     this.xScale = this.scale;
-    this.yScale = this.scale / 5;
-    this.fontSize = this.scale / 2.5;
+    this.yScale = this.scale / 6;
+    this.fontSize = this.scale / 3;
   }
 
   _debug (message) {

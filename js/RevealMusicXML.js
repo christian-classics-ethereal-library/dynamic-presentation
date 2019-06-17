@@ -199,7 +199,7 @@ export class RevealMusicXML {
   }
 
   _setOptions (toolkit) {
-    let zoom = 50;
+    let zoom = 60;
     // TODO: Use API to get width and height when that gets implemented
     // (https://github.com/hakimel/reveal.js/issues/2409).
     // TODO: or ensure that this will work with future versions of jQuery.
