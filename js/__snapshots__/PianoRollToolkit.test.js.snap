@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PianoRoll parses parts from musicXML properly 1`] = `
+Array [
+  Object {
+    "duration": 960,
+    "lyrics": Array [
+      undefined,
+    ],
+    "offset": 0,
+    "pitch": 48,
+    "voice": "P01",
+  },
+  Object {
+    "duration": 960,
+    "lyrics": Array [
+      undefined,
+    ],
+    "offset": 0,
+    "pitch": 52,
+    "voice": "P11",
+  },
+  Object {
+    "duration": 960,
+    "lyrics": Array [
+      undefined,
+    ],
+    "offset": 0,
+    "pitch": 55,
+    "voice": "P21",
+  },
+  Object {
+    "duration": 960,
+    "lyrics": Array [
+      undefined,
+    ],
+    "offset": 0,
+    "pitch": 59,
+    "voice": "P31",
+  },
+]
+`;

@@ -6,8 +6,10 @@ export class PianoRollToolkit {
     this.height = 150;
     this.adjustPageHeight = false;
     this._configValues();
-    // eslint-disable-next-line new-cap
-    this.verovio = new verovio.toolkit();
+    if (typeof verovio !== 'undefined') {
+      // eslint-disable-next-line new-cap
+      this.verovio = new verovio.toolkit();
+    }
   }
 
   getElementsAtTime (time) {
@@ -43,8 +45,10 @@ export class PianoRollToolkit {
 
   getTimeForElement (id) {}
   loadData (data) {
-    this.verovio.loadData(data);
-    data = this.verovio.getMEI();
+    if (this.verovio) {
+      this.verovio.loadData(data);
+      data = this.verovio.getMEI();
+    }
     let parser = new DOMParser();
     let doc = parser.parseFromString(data, 'text/xml');
     return this.loadDataFromDoc(doc);
@@ -70,8 +74,6 @@ export class PianoRollToolkit {
     this.doc.querySelectorAll('measure').forEach(measure => {
       const measureNumber =
         measure.getAttribute('number') || measure.getAttribute('n');
-      let part = measure.closest('part');
-      const partID = part ? part.getAttribute('id') : 0;
 
       if (
         measure.querySelector('print[new-system="yes"]') ||
@@ -94,6 +96,11 @@ export class PianoRollToolkit {
       let offset = {};
       let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
+        let part = measure.closest('part');
+        const partID = part
+          ? part.getAttribute('id')
+          : notes[i].closest('staff').getAttribute('n');
+
         let duration =
           notes[i].getAttribute('dur.ppq') ||
           (notes[i].querySelector('duration')
@@ -102,7 +109,9 @@ export class PianoRollToolkit {
         duration = parseInt(duration);
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML
-          : notes[i].closest('layer').getAttribute('n');
+          : notes[i].closest('layer')
+            ? notes[i].closest('layer').getAttribute('n')
+            : '0';
         // Lyric numbers are 1 indexed.
         let lyrics = [undefined];
         let lyricElements = notes[i].querySelectorAll('lyric');
@@ -136,18 +145,20 @@ export class PianoRollToolkit {
             id: id,
             lyrics: lyrics,
             offset: isInternalChord
-              ? offset[voice] - previousDuration
-              : offset[voice] || 0,
+              ? offset[partID + voice] - previousDuration
+              : offset[partID + voice] || 0,
             pitch: pitchVal,
             voice: partID + voice
           });
           this.data.voices[partID + voice] = partID + voice;
         });
         if (!isInternalChord) {
-          offset[voice] = (offset[voice] || 0) + duration;
+          offset[partID + voice] = (offset[partID + voice] || 0) + duration;
         }
-        if (offset[voice] > this.data.measures[measureNumber].duration) {
-          this.data.measures[measureNumber].duration = offset[voice];
+        if (
+          offset[partID + voice] > this.data.measures[measureNumber].duration
+        ) {
+          this.data.measures[measureNumber].duration = offset[partID + voice];
         }
         previousDuration = duration;
       }
@@ -184,6 +195,7 @@ export class PianoRollToolkit {
 
   renderToSVG (page, options) {
     let svg = new Document().createElement('svg');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     svg.setAttribute('font-family', 'Monospace');
     svg.setAttribute('font-size', this.fontSize);
     svg.setAttribute('width', this.width);
@@ -281,8 +293,8 @@ export class PianoRollToolkit {
   }
   _configValues () {
     this.xScale = this.scale;
-    this.yScale = this.scale / 5;
-    this.fontSize = this.scale / 2.5;
+    this.yScale = this.scale / 6;
+    this.fontSize = this.scale / 3;
   }
 
   _debug (message) {
