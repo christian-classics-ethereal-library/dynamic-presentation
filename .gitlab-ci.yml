@@ -1,9 +1,7 @@
-image: node
-
-tests:
+.test_template: &test_definition
   stage: test
   tags:
-    - node-js
+    - docker
   variables:
     GIT_SUBMODULE_STRATEGY: 'normal'
   script:
@@ -11,12 +9,24 @@ tests:
     - npm run style:check
     - npm run test -- --collectCoverage
     - npm run compile
+
+testnode10:
+  image: node:10
+  <<: *test_definition
+  cache:
+    key: node10
+    paths:
+      - node_modules
+
+testnode12:
+  image: node:12
+  <<: *test_definition
   artifacts:
     paths:
       - coverage/
     expire_in: 1 day
   cache:
-    key: node
+    key: node12
     paths:
       - node_modules
 
@@ -25,7 +35,7 @@ docs:
   tags:
     - static-server
   dependencies:
-    - tests
+    - testnode12
   script:
     - rm -rf /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
     - mv coverage/lcov-report /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
