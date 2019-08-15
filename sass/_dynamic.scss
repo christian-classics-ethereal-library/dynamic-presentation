@@ -12,6 +12,11 @@
   fill: $linkColor !important;
 }
 
+/* Get rid of the pageheads that aren't the first page. */
+g[class^='pgHead']:not(.pgHead) {
+  display: none;
+}
+
 /* reveal.js overrides for dynamic presentation */
 .reveal section[data-musicxml] {
   /* Prevent this div from adding any height. */
