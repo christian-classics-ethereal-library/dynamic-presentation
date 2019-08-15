@@ -58,8 +58,10 @@ export class TextOnlyToolkit extends PianoRollToolkit {
     // lines across different slides.
     let tLineHeight = 80 + 10;
     // linesPerPage doesn't count translation lines.
-    let headerHeight = this.noHeader ? 0 : 100
-    let linesPerPage = Math.floor((this.height - headerHeight) / tLineHeight / tLines);
+    let headerHeight = this.noHeader ? 0 : 100;
+    let linesPerPage = Math.floor(
+      (this.height - headerHeight) / tLineHeight / tLines
+    );
     // There needs to be at least 1 line per page so we aren't dividing by zero later.
     linesPerPage = linesPerPage > 0 ? linesPerPage : 1;
 

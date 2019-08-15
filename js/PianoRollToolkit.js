@@ -213,6 +213,10 @@ export class PianoRollToolkit {
     svg.setAttribute('width', this.width);
     svg.setAttribute('height', this.height);
     let maxYOffset = -Infinity;
+    if (page === 1 && !this.noHeader) {
+      let title = this._getTitleBlock();
+      svg.appendChild(title);
+    }
     this.pages[page].forEach(measurePlacement => {
       let measure = this.data.measures[measurePlacement.i];
       if (measure) {
@@ -280,7 +284,12 @@ export class PianoRollToolkit {
     let rowHeight = this._getMeasureHeight();
     // TODO: Account for the title, allow different number of rows
     // on different slides.
-    let rowsPerSlide = Math.floor(this.height / rowHeight);
+    let yOffset = 0;
+    if (!this.noHeader) {
+      yOffset = 20;
+    }
+    let rowsPerSlide = Math.floor((this.height - yOffset) / rowHeight);
+    rowsPerSlide = rowsPerSlide > 0 ? rowsPerSlide : 1;
     this.pages = [[], []];
     let j = 1;
     let row = 0;
@@ -300,10 +309,11 @@ export class PianoRollToolkit {
             j++;
             this.pages[j] = [];
             row = 0;
+            yOffset = 0;
           }
         }
         let xTransform = xOffset;
-        let yTransform = row * rowHeight;
+        let yTransform = yOffset + row * rowHeight;
         xOffset += mWidth;
         this.pages[j].push({ x: xTransform, y: yTransform, i: i });
       }
@@ -392,6 +402,36 @@ export class PianoRollToolkit {
     };
     // TODO: make sure that C flat gets placed in the correct octave.
     return stepMap[step] + parseInt(alter) + parseInt(octave) * 12;
+  }
+
+  _getTitleBlock () {
+    let titleBlock = new Document().createElement('g');
+    let title = new Document().createElement('text');
+    title.innerHTML = this.data.title;
+    title.setAttribute('dy', this.fontSize);
+    title.setAttribute(
+      'x',
+      this.data.title.length * (-0.7 * this.fontSize) * 0.5
+    );
+    title.setAttribute('dx', '50%');
+    titleBlock.appendChild(title);
+
+    let lyricist = new Document().createElement('text');
+    lyricist.innerHTML = this.data.lyricist;
+    lyricist.setAttribute('dy', this.fontSize);
+    titleBlock.appendChild(lyricist);
+
+    let composer = new Document().createElement('text');
+    composer.innerHTML = this.data.composer;
+    composer.setAttribute('dy', this.fontSize);
+    composer.setAttribute(
+      'x',
+      this.data.composer.length * (-0.7 * this.fontSize)
+    );
+    composer.setAttribute('dx', '100%');
+    titleBlock.appendChild(composer);
+
+    return titleBlock;
   }
   _measure (measure) {
     let measureElement = new Document().createElement('g');
