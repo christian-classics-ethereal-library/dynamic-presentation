@@ -54,9 +54,14 @@ export class TextOnlyToolkit extends PianoRollToolkit {
     let tLines = Math.max(1, this.textLines[0].length - 1);
     // 50 height with a margin of 20 (that is shared).
     // Adding 10 so that a few lines wrapping won't mess everything up.
+    // TODO: detect lines that wrap and account for them when distributing
+    // lines across different slides.
     let tLineHeight = 80 + 10;
     // linesPerPage doesn't count translation lines.
-    let linesPerPage = Math.floor(this.height / tLineHeight / tLines);
+    let headerHeight = this.noHeader ? 0 : 100
+    let linesPerPage = Math.floor((this.height - headerHeight) / tLineHeight / tLines);
+    // There needs to be at least 1 line per page so we aren't dividing by zero later.
+    linesPerPage = linesPerPage > 0 ? linesPerPage : 1;
 
     let numPages = Math.ceil(this.textLines.length / linesPerPage);
     // Make sure that we don't put more lines on a page than we need to.

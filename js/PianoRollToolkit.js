@@ -236,6 +236,7 @@ export class PianoRollToolkit {
     }
     return new XMLSerializer().serializeToString(svg);
   }
+
   setOptions (options) {
     if (options.scale) {
       this.scale = options.scale;
@@ -277,6 +278,8 @@ export class PianoRollToolkit {
       this.xScale = this.scale / Math.ceil(this.averageDuration / 2);
     }
     let rowHeight = this._getMeasureHeight();
+    // TODO: Account for the title, allow different number of rows
+    // on different slides.
     let rowsPerSlide = Math.floor(this.height / rowHeight);
     this.pages = [[], []];
     let j = 1;
