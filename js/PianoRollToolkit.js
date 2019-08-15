@@ -58,6 +58,18 @@ export class PianoRollToolkit {
     this.lowNote = Infinity;
     this.highNote = -Infinity;
     this.data = {};
+    let title = this.doc.querySelector(
+      'work work-title, movement-title, titleStmt title'
+    );
+    this.data.title = title ? title.innerHTML : '';
+    let composer = this.doc.querySelector(
+      'identification creator[type=composer], titleStmt respStmt persName[role=composer]'
+    );
+    this.data.composer = composer ? composer.innerHTML : '';
+    let lyricist = this.doc.querySelector(
+      'identification creator[type=lyricist], titleStmt respStmt persName[role=lyricist]'
+    );
+    this.data.lyricist = lyricist ? lyricist.innerHTML : '';
     this.data.measures = [];
     this.data.voices = {};
     this.doc.querySelectorAll('measure').forEach(measure => {
@@ -243,6 +255,9 @@ export class PianoRollToolkit {
         // Using section breaks will automatically change the xScale.
         this.useSectionBreaks = true;
       }
+    }
+    if (options.noHeader) {
+      this.noHeader = true;
     }
     this._configValues();
   }

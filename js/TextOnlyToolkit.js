@@ -17,6 +17,13 @@ export class TextOnlyToolkit extends PianoRollToolkit {
     let output = '';
     output +=
       '<style>.reveal section[data-musicxml]{font-size:inherit};</style>';
+    if (page === 1 && !this.noHeader) {
+      output += "<div class='header'>";
+      output += "<span class='title'>" + this.data.title + '</span>';
+      output += "<span class='lyricist'>" + this.data.lyricist + '</span>';
+      output += "<span class='composer'>" + this.data.composer + '</span>';
+      output += '</div>';
+    }
     output += this.pages[page - 1].join('');
     return output;
   }
