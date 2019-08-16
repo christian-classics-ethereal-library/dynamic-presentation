@@ -38,6 +38,41 @@ export class RevealMusicXML {
     console.log(`RevealMusicXML: ${message}`);
   }
 
+  _getCurrentToolkitNum () {
+    let $stack = jQuery('section.stack.present');
+    if ($stack.length) {
+      let match = $stack.attr('id').match(/RevealMusicXML(\d*)/);
+      if (match) {
+        return parseInt(match[1]);
+      }
+    }
+    return null;
+  }
+  _getNextToolkitNum () {
+    let $present = jQuery('section.present');
+    if ($present.length) {
+      let $next = $present.next('section.stack[data-musicxml]');
+      if ($next.length) {
+        let match = $next.attr('id').match(/RevealMusicXML(\d*)/);
+        if (match) {
+          return parseInt(match[1]);
+        }
+      }
+    }
+    return null;
+  }
+  _getIndexHForToolkit (toolkitNum) {
+    let $stack = jQuery(`#RevealMusicXML${toolkitNum}`);
+    if ($stack.length) {
+      return $stack
+        .parent()
+        .children()
+        .toArray()
+        .indexOf($stack[0]);
+    }
+    return null;
+  }
+
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicxml');
     const transformation = section.getAttribute('data-musicxml-transform');
@@ -56,7 +91,7 @@ export class RevealMusicXML {
         jQuery('#' + noteid).removeClass('highlightedNote');
       });
     }
-    this.playerToolkitNum++;
+    this.playerToolkitNum = this._getNextToolkitNum();
     this.playing = this._playNext(this.desiredSkip);
   }
   _playerUpdate (time) {
@@ -67,9 +102,13 @@ export class RevealMusicXML {
     if (elementsAtTime.page > 0) {
       if (
         elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
-        this.reveal.getState().indexh !== this.playerToolkitNum
+        this.reveal.getState().indexh !==
+          this._getIndexHForToolkit(this.playerToolkitNum)
       ) {
-        this.reveal.slide(this.playerToolkitNum, elementsAtTime.page - 1);
+        this.reveal.slide(
+          this._getIndexHForToolkit(this.playerToolkitNum),
+          elementsAtTime.page - 1
+        );
       }
       let ids = this.highlightedIDs || [];
       if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
@@ -107,9 +146,13 @@ export class RevealMusicXML {
   _playPause () {
     if (!this.playing) {
       if (!jQuery('#player')[0]) {
-        this.playerToolkitNum = this.reveal.getState().indexh;
+        this.playerToolkitNum =
+          this._getCurrentToolkitNum() || this._getNextToolkitNum();
         this._playMIDI(this.toolkits[this.playerToolkitNum]);
-      } else if (this.playerToolkitNum !== this.reveal.getState().indexh) {
+      } else if (
+        this._getIndexHForToolkit(this.playerToolkitNum) !==
+        this.reveal.getState().indexh
+      ) {
         this._playSkip(this.reveal.getState().indexh);
       } else {
         // TODO: fix midiPlayer.play to work when the data is already loaded.
