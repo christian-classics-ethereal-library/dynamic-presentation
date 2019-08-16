@@ -1,0 +1,11 @@
+version: '2.2'
+
+services:
+  web:
+    image: node:10
+    ports:
+      - ${WEB_PORT}:8080
+    volumes:
+      - ..:/var/www/
+    command: 'npm run install'
+    working_dir: /var/www

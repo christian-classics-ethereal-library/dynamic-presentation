@@ -83,7 +83,6 @@ export class VerovioLineWrapper {
       this.doLineWrapping = true;
       this.vOptions.breaks = 'encoded';
       this.vOptions.adjustPageHeight = true;
-      this.vOptions.noHeader = true;
       this.vOptions.noFooter = true;
     }
     this.toolkit.setOptions(this.vOptions);

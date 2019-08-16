@@ -12,6 +12,11 @@
   fill: $linkColor !important;
 }
 
+/* Get rid of the pageheads that aren't the first page. */
+g[class^='pgHead']:not(.pgHead) {
+  display: none;
+}
+
 /* reveal.js overrides for dynamic presentation */
 .reveal section[data-musicxml] {
   /* Prevent this div from adding any height. */
@@ -53,8 +58,23 @@ $voiceColors: (
 }
 
 /** Changes for Text Presentation. **/
+div.header {
+  overflow: auto;
+}
+div.header span.title {
+  font-size: 120%;
+  display: block;
+}
+div.header span.lyricist {
+  float: left;
+  font-size: 80%;
+}
+div.header span.composer {
+  float: right;
+  font-size: 80%;
+}
 /* Allow different verses to be distinguished. */
-.reveal section[data-musicxml] p:not([data-verse-num='1']) {
+.reveal section[data-musicxml] p[data-verse-num]:not([data-verse-num='1']) {
   font-style: italic;
 }
 p[data-verse-num] span {

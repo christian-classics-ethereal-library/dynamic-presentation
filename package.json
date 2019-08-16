@@ -6,6 +6,7 @@
   "scripts": {
     "compile": "npm run compile:scss",
     "compile:scss": "npx node-sass sass -o css --include-path node_modules",
+    "install": "git submodule update --init --recursive && npm install && npm run run",
     "run": "npm run compile && npx http-server",
     "semistandard": "npx semistandard js/*.js",
     "style:check": "npx prettier --check {**/,}*.{json,md,scss,yml} && npm run semistandard",
