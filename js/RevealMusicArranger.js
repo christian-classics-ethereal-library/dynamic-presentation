@@ -81,8 +81,10 @@ export class RevealMusicArranger {
         section.getAttribute('data-musicarranger-info') || '{}'
       );
     } catch (error) {
-      console.error("RevealMusicArranger: could not parse data-musicarranger-info JSON:"
-        + section.getAttribute('data-musicarranger-info'));
+      console.error(
+        'RevealMusicArranger: could not parse data-musicarranger-info JSON:' +
+          section.getAttribute('data-musicarranger-info')
+      );
       console.error(error);
     }
     let arrangement = this._getArrangement(data, info.arrangement || []);

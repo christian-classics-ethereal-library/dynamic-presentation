@@ -88,14 +88,14 @@ export class RevealMusicXML {
   /* Hooks for jQuery.midiplayer. */
   _playerStop () {
     if (this.shouldAutoSkip) {
-        if (typeof this.highlightedIDs !== 'undefined') {
-          this.highlightedIDs.forEach(noteid => {
-            jQuery('#' + noteid).removeClass('highlightedNote');
-          });
-        }
-        this.playerToolkitNum = this._getNextToolkitNum();
-        this.playing = this._playNext();
-        this.shouldAutoSkip = false;
+      if (typeof this.highlightedIDs !== 'undefined') {
+        this.highlightedIDs.forEach(noteid => {
+          jQuery('#' + noteid).removeClass('highlightedNote');
+        });
+      }
+      this.playerToolkitNum = this._getNextToolkitNum();
+      this.playing = this._playNext();
+      this.shouldAutoSkip = false;
     }
   }
   _playerUpdate (time) {
@@ -151,13 +151,13 @@ export class RevealMusicXML {
   _playPause () {
     if (!this.playing) {
       if (!jQuery('#player')[0]) {
-        this.playerToolkitNum = this._getCurrentToolkitNum()
+        this.playerToolkitNum = this._getCurrentToolkitNum();
         this.playing = this._playNext();
       } else if (
         this._getIndexHForToolkit(this.playerToolkitNum) !==
         this.reveal.getState().indexh
       ) {
-        this.playerToolkitNum = this._getCurrentToolkitNum()
+        this.playerToolkitNum = this._getCurrentToolkitNum();
         this.playing = this._playNext();
       } else {
         // TODO: fix midiPlayer.play to work when the data is already loaded.
