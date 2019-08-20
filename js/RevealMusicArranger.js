@@ -75,9 +75,16 @@ export class RevealMusicArranger {
    * @brief Create the slide content based on the musicXML data, and some info.
    */
   _slidify (section, data) {
-    let info = JSON.parse(
-      section.getAttribute('data-musicarranger-info') || '{}'
-    );
+    let info = {};
+    try {
+      info = JSON.parse(
+        section.getAttribute('data-musicarranger-info') || '{}'
+      );
+    } catch (error) {
+      console.error("RevealMusicArranger: could not parse data-musicarranger-info JSON:"
+        + section.getAttribute('data-musicarranger-info'));
+      console.error(error);
+    }
     let arrangement = this._getArrangement(data, info.arrangement || []);
 
     section.innerHTML = '';
