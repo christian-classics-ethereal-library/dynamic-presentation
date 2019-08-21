@@ -9,6 +9,7 @@ export class RevealMusicXML {
     // eslint-disable-next-line no-undef
     this.reveal = Reveal;
     this.resizeTimeout = undefined;
+    this.shouldAutoSkip = false;
   }
 
   /**
@@ -38,6 +39,41 @@ export class RevealMusicXML {
     console.log(`RevealMusicXML: ${message}`);
   }
 
+  _getCurrentToolkitNum () {
+    let $stack = jQuery('section.stack.present');
+    if ($stack.length) {
+      let match = $stack.attr('id').match(/RevealMusicXML(\d*)/);
+      if (match) {
+        return parseInt(match[1]);
+      }
+    }
+    return null;
+  }
+  _getNextToolkitNum () {
+    let $present = jQuery('section.present');
+    if ($present.length) {
+      let $next = $present.next('section.stack[data-musicxml]');
+      if ($next.length) {
+        let match = $next.attr('id').match(/RevealMusicXML(\d*)/);
+        if (match) {
+          return parseInt(match[1]);
+        }
+      }
+    }
+    return null;
+  }
+  _getIndexHForToolkit (toolkitNum) {
+    let $stack = jQuery(`#RevealMusicXML${toolkitNum}`);
+    if ($stack.length) {
+      return $stack
+        .parent()
+        .children()
+        .toArray()
+        .indexOf($stack[0]);
+    }
+    return null;
+  }
+
   _loadExternalMusicXML (section) {
     const url = section.getAttribute('data-musicxml');
     const transformation = section.getAttribute('data-musicxml-transform');
@@ -51,15 +87,19 @@ export class RevealMusicXML {
 
   /* Hooks for jQuery.midiplayer. */
   _playerStop () {
-    if (typeof this.highlightedIDs !== 'undefined') {
-      this.highlightedIDs.forEach(noteid => {
-        jQuery('#' + noteid).removeClass('highlightedNote');
-      });
+    if (this.shouldAutoSkip) {
+      if (typeof this.highlightedIDs !== 'undefined') {
+        this.highlightedIDs.forEach(noteid => {
+          jQuery('#' + noteid).removeClass('highlightedNote');
+        });
+      }
+      this.playerToolkitNum = this._getNextToolkitNum();
+      this.playing = this._playNext();
+      this.shouldAutoSkip = false;
     }
-    this.playerToolkitNum++;
-    this.playing = this._playNext(this.desiredSkip);
   }
   _playerUpdate (time) {
+    this.shouldAutoSkip = true;
     let vrvTime = Math.max(0, time - 380);
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
@@ -67,9 +107,13 @@ export class RevealMusicXML {
     if (elementsAtTime.page > 0) {
       if (
         elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
-        this.reveal.getState().indexh !== this.playerToolkitNum
+        this.reveal.getState().indexh !==
+          this._getIndexHForToolkit(this.playerToolkitNum)
       ) {
-        this.reveal.slide(this.playerToolkitNum, elementsAtTime.page - 1);
+        this.reveal.slide(
+          this._getIndexHForToolkit(this.playerToolkitNum),
+          elementsAtTime.page - 1
+        );
       }
       let ids = this.highlightedIDs || [];
       if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
@@ -107,10 +151,14 @@ export class RevealMusicXML {
   _playPause () {
     if (!this.playing) {
       if (!jQuery('#player')[0]) {
-        this.playerToolkitNum = this.reveal.getState().indexh;
-        this._playMIDI(this.toolkits[this.playerToolkitNum]);
-      } else if (this.playerToolkitNum !== this.reveal.getState().indexh) {
-        this._playSkip(this.reveal.getState().indexh);
+        this.playerToolkitNum = this._getCurrentToolkitNum();
+        this.playing = this._playNext();
+      } else if (
+        this._getIndexHForToolkit(this.playerToolkitNum) !==
+        this.reveal.getState().indexh
+      ) {
+        this.playerToolkitNum = this._getCurrentToolkitNum();
+        this.playing = this._playNext();
       } else {
         // TODO: fix midiPlayer.play to work when the data is already loaded.
         // https://github.com/rism-ch/midi-player/issues/11
@@ -126,15 +174,9 @@ export class RevealMusicXML {
       // eslint-disable-next-line no-undef
       pause();
       this.playing = false;
+      this.shouldAutoSkip = false;
     }
     this._playChangeControls();
-  }
-
-  _playSkip (n) {
-    // Note: _playerStop increments the toolkit number,
-    // and gets called twice if the audio was already playing.
-    this.playerToolkitNum = n - 1 - this.playing;
-    jQuery('#player').midiPlayer.stop();
   }
 
   /**
