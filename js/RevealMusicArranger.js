@@ -109,9 +109,9 @@ export class RevealMusicArranger {
         options: {
           // Since this was created from the same XML file,
           // showing credits on the second page is redundant
-          noHeader: ! isFirstPage,
+          noHeader: !isFirstPage
         }
-      }
+      };
       newSection.setAttribute(
         'data-musicxml-toolkit',
         JSON.stringify(toolkitSettings)
@@ -119,7 +119,7 @@ export class RevealMusicArranger {
       newSection.setAttribute('data-musicxml', '');
       newSection.innerHTML =
         "<script type='text/template'>" + data + '</script>';
-      isFirstPage = false
+      isFirstPage = false;
     });
 
     // Remove this outer <section> element.

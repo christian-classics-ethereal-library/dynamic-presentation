@@ -261,14 +261,23 @@ export class RevealMusicXML {
         'Leipzig'
     };
     let i = this.toolkits.indexOf(toolkit);
-    let options = document.getElementById(`RevealMusicXML${i}`).getAttribute('data-musicxml-toolkit');
+    let options = document
+      .getElementById(`RevealMusicXML${i}`)
+      .getAttribute('data-musicxml-toolkit');
     options = JSON.parse(options || '{}').options || {};
-    toolkit.setOptions({...defaultOptions, ...options});
+    toolkit.setOptions({ ...defaultOptions, ...options });
   }
 
   _slidify (section, data) {
     let i = this.toolkits.length;
-    this.toolkits[i] = new this.ToolkitType();
+    let toolkitName =
+      JSON.parse(section.getAttribute('data-musicxml-toolkit') || '{}')
+        .toolkit || null;
+    let ToolkitType = this.ToolkitType;
+    if (toolkitName && window[toolkitName]) {
+      ToolkitType = window[toolkitName];
+    }
+    this.toolkits[i] = new ToolkitType();
     let toolkit = this.toolkits[i];
     section.setAttribute('id', `RevealMusicXML${i}`);
     this._setOptions(toolkit);
