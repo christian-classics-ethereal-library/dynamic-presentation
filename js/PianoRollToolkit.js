@@ -286,7 +286,7 @@ export class PianoRollToolkit {
     // on different slides.
     let yOffset = 0;
     if (!this.noHeader) {
-      yOffset = 20;
+      yOffset = this.fontSize * 1.5;
     }
     let rowsPerSlide = Math.floor((this.height - yOffset) / rowHeight);
     rowsPerSlide = rowsPerSlide > 0 ? rowsPerSlide : 1;
