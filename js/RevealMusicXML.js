@@ -247,7 +247,7 @@ export class RevealMusicXML {
     // TODO: or ensure that this will work with future versions of jQuery.
     let pixelHeight = parseFloat(jQuery('.slides').css('height'));
     let pixelWidth = parseFloat(jQuery('.slides').css('width'));
-    toolkit.setOptions({
+    let defaultOptions = {
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),
       scale: zoom,
@@ -259,12 +259,25 @@ export class RevealMusicXML {
       font:
         window.getComputedStyle(document.documentElement)['font-family'] ||
         'Leipzig'
-    });
+    };
+    let i = this.toolkits.indexOf(toolkit);
+    let options = document
+      .getElementById(`RevealMusicXML${i}`)
+      .getAttribute('data-musicxml-toolkit');
+    options = JSON.parse(options || '{}').options || {};
+    toolkit.setOptions({ ...defaultOptions, ...options });
   }
 
   _slidify (section, data) {
     let i = this.toolkits.length;
-    this.toolkits[i] = new this.ToolkitType();
+    let toolkitName =
+      JSON.parse(section.getAttribute('data-musicxml-toolkit') || '{}')
+        .toolkit || null;
+    let ToolkitType = this.ToolkitType;
+    if (toolkitName && window[toolkitName]) {
+      ToolkitType = window[toolkitName];
+    }
+    this.toolkits[i] = new ToolkitType();
     let toolkit = this.toolkits[i];
     section.setAttribute('id', `RevealMusicXML${i}`);
     this._setOptions(toolkit);

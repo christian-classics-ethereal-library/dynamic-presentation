@@ -91,6 +91,7 @@ export class RevealMusicArranger {
 
     section.innerHTML = '';
 
+    let isFirstPage = true;
     arrangement.forEach(sectionNames => {
       let newSection = document.createElement('section');
       section.appendChild(newSection);
@@ -103,9 +104,22 @@ export class RevealMusicArranger {
         'data-musicxml-transform',
         JSON.stringify(sectionInfo)
       );
+      let toolkitSettings = {
+        toolkit: null,
+        options: {
+          // Since this was created from the same XML file,
+          // showing credits on the second page is redundant
+          noHeader: !isFirstPage
+        }
+      };
+      newSection.setAttribute(
+        'data-musicxml-toolkit',
+        JSON.stringify(toolkitSettings)
+      );
       newSection.setAttribute('data-musicxml', '');
       newSection.innerHTML =
         "<script type='text/template'>" + data + '</script>';
+      isFirstPage = false;
     });
 
     // Remove this outer <section> element.

@@ -11,6 +11,11 @@ let rma = new RevealMusicArranger();
 
 let mxt = new MusicXMLTransformer();
 let tk;
+
+window.PianoRollToolkit = PianoRollToolkit;
+window.TextOnlyToolkit = TextOnlyToolkit;
+window.VerovioLineWrapper = VerovioLineWrapper;
+
 if (urlParam('toolkit') === 'verovio') {
   tk = verovio.toolkit;
 } else if (urlParam('toolkit') === 'veroviostatic') {
