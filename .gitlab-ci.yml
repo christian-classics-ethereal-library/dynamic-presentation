@@ -5,6 +5,7 @@
   variables:
     GIT_SUBMODULE_STRATEGY: 'normal'
   script:
+    - node --version
     - npm install
     - npm run style:check
     - npm run test -- --collectCoverage
