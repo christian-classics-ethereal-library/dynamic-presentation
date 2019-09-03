@@ -58,3 +58,12 @@ npm install
 You can also start this as a dart project.
 
 Assets (SCSS styles) can be recompiled with `npm run compile`.
+
+## [Core Understanding Test (CUT)](//gitlab.ccel.org/drupal/shared-modules/wikis/Core-Understanding-Test)
+
+- How do `RevealMusicArranger` and `RevealMusicXML` interact with reveal.js?
+- What is the role of a toolkit in Dynamic Presentation?
+- How is audio generated and played by the toolkits?
+- Why does the `VerovioLineWrapper` exist?
+- Why doesn't Dynamic Presentation depend on the official repository for reveal.js?
+- How can Dynamic Presentation access enhancements to Verovio?
