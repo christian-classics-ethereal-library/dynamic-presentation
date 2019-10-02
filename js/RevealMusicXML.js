@@ -269,6 +269,9 @@ export class RevealMusicXML {
   }
 
   _slidify (section, data) {
+    if(! data){
+      return;
+    }
     let i = this.toolkits.length;
     let toolkitName =
       JSON.parse(section.getAttribute('data-musicxml-toolkit') || '{}')
