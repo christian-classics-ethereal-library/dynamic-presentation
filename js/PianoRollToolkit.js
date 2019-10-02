@@ -234,7 +234,7 @@ export class PianoRollToolkit {
         svg.appendChild(measureElement);
       }
     });
-    if (this.adjustPageHeight) {
+    if (this.adjustPageHeight && maxYOffset > 0) {
       let adjustedHeight = this._getMeasureHeight() + maxYOffset;
       svg.setAttribute('height', adjustedHeight);
     }
@@ -272,7 +272,10 @@ export class PianoRollToolkit {
   _assignMeasuresToPages () {
     if (this.useSectionBreaks) {
       if (this.data.measures.some(m => m.sectionBreak)) {
-        this.xScale = this.width / this._getMaxSectionDuration();
+        let scale = this.width / this._getMaxSectionDuration();
+        if (scale) {
+          this.xScale = scale;
+        }
       } else {
         this._debug(
           'useSectionBreaks is set, but no section breaks were found in this piece.'

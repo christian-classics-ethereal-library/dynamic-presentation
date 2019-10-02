@@ -269,7 +269,7 @@ export class RevealMusicXML {
   }
 
   _slidify (section, data) {
-    if(! data){
+    if (!data) {
       return;
     }
     let i = this.toolkits.length;
