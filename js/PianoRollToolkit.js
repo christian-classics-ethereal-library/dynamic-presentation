@@ -234,7 +234,7 @@ export class PianoRollToolkit {
         svg.appendChild(measureElement);
       }
     });
-    if (this.adjustPageHeight && maxYOffset > 0) {
+    if (this.adjustPageHeight && maxYOffset >= 0) {
       let adjustedHeight = this._getMeasureHeight() + maxYOffset;
       svg.setAttribute('height', adjustedHeight);
     }
