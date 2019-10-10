@@ -183,6 +183,7 @@ export class PianoRollToolkit {
         let ppq = staffDef.getAttribute('ppq');
         this.data.measures[measureNumber].chordSymbols.push({
           text: harm.innerHTML,
+          id: harm.getAttribute('xml:id'),
           offset: ((tstamp - 1) * ppq),
         });
       });
@@ -462,7 +463,7 @@ export class PianoRollToolkit {
     }
     measure.chordSymbols.forEach( cs => {
       measureElement.appendChild(
-        this._renderChordSymbol(cs.offset, cs.text)
+        this._renderChordSymbol(cs)
       );
     });
     return measureElement;
@@ -508,13 +509,14 @@ export class PianoRollToolkit {
     g.setAttribute('id', id);
     return g;
   }
-  _renderChordSymbol(x, string) {
+  _renderChordSymbol(cs) {
     let text = new Document().createElement('text');
-    let sx = this.xScale * x;
+    let sx = this.xScale * cs.offset;
     text.setAttribute('x', sx);
     text.setAttribute('y', 0);
     text.setAttribute('dy', this.fontSize);
-    text.innerHTML = string;
+    text.setAttribute('id', cs.id);
+    text.innerHTML = cs.text;
     return text;
   }
   /**
