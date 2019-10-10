@@ -174,8 +174,13 @@ export class PianoRollToolkit {
         }
         previousDuration = duration;
       }
-      // TODO: Show chord symbols in dynamic presentation?
-      // measure.querySelectorAll('harmony')
+      // Parse chord symbols from MEI
+      measure.querySelectorAll('harm').forEach( harm => {
+        this.data.measures[measureNumber].chordSymbols.push({
+          text: harm.innerHTML,
+          offset: harm.getAttribute('tstamp'),
+        });
+      });
     });
 
     // Compute some things about the song.
