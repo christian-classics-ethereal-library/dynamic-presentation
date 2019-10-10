@@ -175,10 +175,13 @@ export class PianoRollToolkit {
         previousDuration = duration;
       }
       // Parse chord symbols from MEI
+      let staffDef = this.doc.querySelector('staffDef');
       measure.querySelectorAll('harm').forEach( harm => {
+        let tstamp = parseFloat(harm.getAttribute('tstamp'));
+        let ppq = staffDef.getAttribute('ppq');
         this.data.measures[measureNumber].chordSymbols.push({
           text: harm.innerHTML,
-          offset: harm.getAttribute('tstamp'),
+          offset: ((tstamp - 1) * ppq),
         });
       });
     });
@@ -455,6 +458,11 @@ export class PianoRollToolkit {
         this._rectangle(x, y, w, h, lyrics, note.voice, note.id)
       );
     }
+    measure.chordSymbols.forEach( cs => {
+      measureElement.appendChild(
+        this._renderChordSymbol(cs.offset, cs.text)
+      );
+    });
     return measureElement;
   }
 
@@ -497,6 +505,14 @@ export class PianoRollToolkit {
     });
     g.setAttribute('id', id);
     return g;
+  }
+  _renderChordSymbol(x, string) {
+    let text = new Document().createElement('text');
+    let sx = this.xScale * x;
+    text.setAttribute('x', sx);
+    text.setAttribute('y', 0);
+    text.innerHTML = string;
+    return text;
   }
   /**
    * @brief Squish text so it doesn't go beyond the boundaries of its box.
