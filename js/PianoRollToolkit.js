@@ -176,17 +176,20 @@ export class PianoRollToolkit {
         previousDuration = duration;
       }
       // Parse chord symbols from MEI
-      let staffDef = measure.closest('mdiv').querySelector('staffDef');
-      measure.querySelectorAll('harm').forEach(harm => {
-        this.chordSymbols = true;
-        let tstamp = parseFloat(harm.getAttribute('tstamp'));
-        let ppq = staffDef.getAttribute('ppq');
-        this.data.measures[measureNumber].chordSymbols.push({
-          text: harm.innerHTML,
-          id: harm.getAttribute('xml:id'),
-          offset: (tstamp - 1) * ppq
+      let mdiv = measure.closest('mdiv');
+      if (mdiv) {
+        let staffDef = mdiv.querySelector('staffDef');
+        measure.querySelectorAll('harm').forEach(harm => {
+          this.chordSymbols = true;
+          let tstamp = parseFloat(harm.getAttribute('tstamp'));
+          let ppq = staffDef.getAttribute('ppq');
+          this.data.measures[measureNumber].chordSymbols.push({
+            text: harm.innerHTML,
+            id: harm.getAttribute('xml:id'),
+            offset: (tstamp - 1) * ppq
+          });
         });
-      });
+      }
     });
 
     // Compute some things about the song.
