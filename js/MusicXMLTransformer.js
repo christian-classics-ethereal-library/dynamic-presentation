@@ -34,6 +34,9 @@ export class MusicXMLTransformer {
       if (trans.options && trans.options.melodyOnly) {
         this.hidePartsExceptMelody();
       }
+      if (trans.options && trans.options.hideMeasureNumbers) {
+        this.hideMeasureNumbers();
+      }
 
       return this.getData();
     } else {
@@ -78,6 +81,12 @@ export class MusicXMLTransformer {
       this.doc.querySelectorAll(`lyric${selector}`).forEach(lyric => {
         lyric.setAttribute('number', i + 1);
       });
+    });
+  }
+
+  hideMeasureNumbers () {
+    this.doc.querySelectorAll('measure').forEach(measure => {
+      measure.setAttribute('implicit', 'yes');
     });
   }
 
