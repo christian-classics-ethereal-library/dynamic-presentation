@@ -58,6 +58,7 @@ export class PianoRollToolkit {
     this.lowNote = Infinity;
     this.highNote = -Infinity;
     this.data = {};
+    this.chordSymbols = false;
     let title = this.doc.querySelector(
       'work work-title, movement-title, titleStmt title'
     );
@@ -175,8 +176,9 @@ export class PianoRollToolkit {
         previousDuration = duration;
       }
       // Parse chord symbols from MEI
-      let staffDef = this.doc.querySelector('staffDef');
+      let staffDef = measure.closest('mdiv').querySelector('staffDef');
       measure.querySelectorAll('harm').forEach( harm => {
+        this.chordSymbols = true;
         let tstamp = parseFloat(harm.getAttribute('tstamp'));
         let ppq = staffDef.getAttribute('ppq');
         this.data.measures[measureNumber].chordSymbols.push({
@@ -360,7 +362,7 @@ export class PianoRollToolkit {
   _getMeasureHeight () {
     // TODO: Automatically determine how many verses are being shown.
     let numVerses = 2;
-    return this.noteRange * this.yScale + 2 * (this.fontSize * numVerses);
+    return this.noteRange * this.yScale + 2 * (this.fontSize * (numVerses + this.chordSymbols));
   }
   _getMeasureWidth (measure) {
     return measure.duration * this.xScale;
@@ -471,7 +473,7 @@ export class PianoRollToolkit {
     g.setAttribute('class', `voice${this.data.voices[voice]}`);
     let sx = this.xScale * x;
     let sw = this.xScale * w;
-    let sy = this.yScale * y;
+    let sy = this.yScale * y + (this.chordSymbols * this.fontSize);
     let sh = this.yScale * h;
     let rect = new Document().createElement('rect');
     // Make the rectangles rounded.
@@ -493,7 +495,7 @@ export class PianoRollToolkit {
         text.setAttribute('dx', 1);
         text.setAttribute(
           'y',
-          this.noteRange * this.yScale + (i - 1) * this.fontSize
+          this.noteRange * this.yScale + (i - 1 + this.chordSymbols) * this.fontSize
         );
         text.setAttribute('dy', this.fontSize);
         text.setAttribute('data-verse-num', i);
@@ -511,6 +513,7 @@ export class PianoRollToolkit {
     let sx = this.xScale * x;
     text.setAttribute('x', sx);
     text.setAttribute('y', 0);
+    text.setAttribute('dy', this.fontSize);
     text.innerHTML = string;
     return text;
   }
