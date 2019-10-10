@@ -177,14 +177,14 @@ export class PianoRollToolkit {
       }
       // Parse chord symbols from MEI
       let staffDef = measure.closest('mdiv').querySelector('staffDef');
-      measure.querySelectorAll('harm').forEach( harm => {
+      measure.querySelectorAll('harm').forEach(harm => {
         this.chordSymbols = true;
         let tstamp = parseFloat(harm.getAttribute('tstamp'));
         let ppq = staffDef.getAttribute('ppq');
         this.data.measures[measureNumber].chordSymbols.push({
           text: harm.innerHTML,
           id: harm.getAttribute('xml:id'),
-          offset: ((tstamp - 1) * ppq),
+          offset: (tstamp - 1) * ppq
         });
       });
     });
@@ -363,7 +363,10 @@ export class PianoRollToolkit {
   _getMeasureHeight () {
     // TODO: Automatically determine how many verses are being shown.
     let numVerses = 2;
-    return this.noteRange * this.yScale + 2 * (this.fontSize * (numVerses + this.chordSymbols));
+    return (
+      this.noteRange * this.yScale +
+      2 * (this.fontSize * (numVerses + this.chordSymbols))
+    );
   }
   _getMeasureWidth (measure) {
     return measure.duration * this.xScale;
@@ -461,10 +464,8 @@ export class PianoRollToolkit {
         this._rectangle(x, y, w, h, lyrics, note.voice, note.id)
       );
     }
-    measure.chordSymbols.forEach( cs => {
-      measureElement.appendChild(
-        this._renderChordSymbol(cs)
-      );
+    measure.chordSymbols.forEach(cs => {
+      measureElement.appendChild(this._renderChordSymbol(cs));
     });
     return measureElement;
   }
@@ -474,7 +475,7 @@ export class PianoRollToolkit {
     g.setAttribute('class', `voice${this.data.voices[voice]}`);
     let sx = this.xScale * x;
     let sw = this.xScale * w;
-    let sy = this.yScale * y + (this.chordSymbols * this.fontSize);
+    let sy = this.yScale * y + this.chordSymbols * this.fontSize;
     let sh = this.yScale * h;
     let rect = new Document().createElement('rect');
     // Make the rectangles rounded.
@@ -496,7 +497,8 @@ export class PianoRollToolkit {
         text.setAttribute('dx', 1);
         text.setAttribute(
           'y',
-          this.noteRange * this.yScale + (i - 1 + this.chordSymbols) * this.fontSize
+          this.noteRange * this.yScale +
+            (i - 1 + this.chordSymbols) * this.fontSize
         );
         text.setAttribute('dy', this.fontSize);
         text.setAttribute('data-verse-num', i);
@@ -509,7 +511,7 @@ export class PianoRollToolkit {
     g.setAttribute('id', id);
     return g;
   }
-  _renderChordSymbol(cs) {
+  _renderChordSymbol (cs) {
     let text = new Document().createElement('text');
     let sx = this.xScale * cs.offset;
     text.setAttribute('x', sx);
