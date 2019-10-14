@@ -58,6 +58,7 @@ export class PianoRollToolkit {
     this.lowNote = Infinity;
     this.highNote = -Infinity;
     this.data = {};
+    this.chordSymbols = false;
     let title = this.doc.querySelector(
       'work work-title, movement-title, titleStmt title'
     );
@@ -174,8 +175,21 @@ export class PianoRollToolkit {
         }
         previousDuration = duration;
       }
-      // TODO: Show chord symbols in dynamic presentation?
-      // measure.querySelectorAll('harmony')
+      // Parse chord symbols from MEI
+      let mdiv = measure.closest('mdiv');
+      if (mdiv) {
+        let staffDef = mdiv.querySelector('staffDef');
+        measure.querySelectorAll('harm').forEach(harm => {
+          this.chordSymbols = true;
+          let tstamp = parseFloat(harm.getAttribute('tstamp'));
+          let ppq = staffDef.getAttribute('ppq');
+          this.data.measures[measureNumber].chordSymbols.push({
+            text: harm.innerHTML,
+            id: harm.getAttribute('xml:id'),
+            offset: (tstamp - 1) * ppq
+          });
+        });
+      }
     });
 
     // Compute some things about the song.
@@ -352,7 +366,10 @@ export class PianoRollToolkit {
   _getMeasureHeight () {
     // TODO: Automatically determine how many verses are being shown.
     let numVerses = 2;
-    return this.noteRange * this.yScale + 2 * (this.fontSize * numVerses);
+    return (
+      this.noteRange * this.yScale +
+      2 * (this.fontSize * (numVerses + this.chordSymbols))
+    );
   }
   _getMeasureWidth (measure) {
     return measure.duration * this.xScale;
@@ -450,6 +467,9 @@ export class PianoRollToolkit {
         this._rectangle(x, y, w, h, lyrics, note.voice, note.id)
       );
     }
+    measure.chordSymbols.forEach(cs => {
+      measureElement.appendChild(this._renderChordSymbol(cs));
+    });
     return measureElement;
   }
 
@@ -458,7 +478,7 @@ export class PianoRollToolkit {
     g.setAttribute('class', `voice${this.data.voices[voice]}`);
     let sx = this.xScale * x;
     let sw = this.xScale * w;
-    let sy = this.yScale * y;
+    let sy = this.yScale * y + this.chordSymbols * this.fontSize;
     let sh = this.yScale * h;
     let rect = new Document().createElement('rect');
     // Make the rectangles rounded.
@@ -480,7 +500,8 @@ export class PianoRollToolkit {
         text.setAttribute('dx', 1);
         text.setAttribute(
           'y',
-          this.noteRange * this.yScale + (i - 1) * this.fontSize
+          this.noteRange * this.yScale +
+            (i - 1 + this.chordSymbols) * this.fontSize
         );
         text.setAttribute('dy', this.fontSize);
         text.setAttribute('data-verse-num', i);
@@ -492,6 +513,16 @@ export class PianoRollToolkit {
     });
     g.setAttribute('id', id);
     return g;
+  }
+  _renderChordSymbol (cs) {
+    let text = new Document().createElement('text');
+    let sx = this.xScale * cs.offset;
+    text.setAttribute('x', sx);
+    text.setAttribute('y', 0);
+    text.setAttribute('dy', this.fontSize);
+    text.setAttribute('id', cs.id);
+    text.innerHTML = cs.text;
+    return text;
   }
   /**
    * @brief Squish text so it doesn't go beyond the boundaries of its box.
