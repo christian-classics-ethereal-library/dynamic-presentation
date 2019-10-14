@@ -303,7 +303,7 @@ export class PianoRollToolkit {
     // on different slides.
     let yOffset = 0;
     if (!this.noHeader) {
-      yOffset = this.fontSize * 2.5;
+      yOffset = this.fontSize * 3.0;
     }
     let rowsPerSlide = Math.floor((this.height - yOffset) / rowHeight);
     rowsPerSlide = rowsPerSlide > 0 ? rowsPerSlide : 1;
@@ -442,9 +442,14 @@ export class PianoRollToolkit {
     lyricist.setAttribute('dy', this.fontSize);
     titleBlock.appendChild(lyricist);
 
+    let composerNewLine =
+      (this.data.lyricist.length + this.data.composer.length) *
+        (0.7 * this.fontSize) >
+      this.width;
+
     let composer = new Document().createElement('text');
     composer.innerHTML = this.data.composer;
-    composer.setAttribute('y', this.fontSize);
+    composer.setAttribute('y', this.fontSize * (1 + composerNewLine));
     composer.setAttribute('dy', this.fontSize);
     composer.setAttribute(
       'x',
