@@ -440,20 +440,22 @@ export class PianoRollToolkit {
     lyricist.innerHTML = this.data.lyricist;
     lyricist.setAttribute('y', this.fontSize);
     lyricist.setAttribute('dy', this.fontSize);
+    lyricist.setAttribute('style', 'font-size: 70%');
     titleBlock.appendChild(lyricist);
 
     let composerNewLine =
       (this.data.lyricist.length + this.data.composer.length) *
-        (0.7 * this.fontSize) >
+        (0.7 * this.fontSize * .7) >
       this.width;
 
     let composer = new Document().createElement('text');
     composer.innerHTML = this.data.composer;
     composer.setAttribute('y', this.fontSize * (1 + composerNewLine));
     composer.setAttribute('dy', this.fontSize);
+    composer.setAttribute('style', 'font-size: 70%');
     composer.setAttribute(
       'x',
-      this.data.composer.length * (-0.65 * this.fontSize)
+      this.data.composer.length * (-0.65 * this.fontSize * .7)
     );
     composer.setAttribute('dx', '100%');
     titleBlock.appendChild(composer);
