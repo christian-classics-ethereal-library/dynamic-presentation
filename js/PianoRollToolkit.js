@@ -183,10 +183,11 @@ export class PianoRollToolkit {
           this.chordSymbols = true;
           let tstamp = parseFloat(harm.getAttribute('tstamp'));
           let ppq = staffDef.getAttribute('ppq');
+          let meterunit = staffDef.getAttribute('meter.unit');
           this.data.measures[measureNumber].chordSymbols.push({
             text: harm.innerHTML,
             id: harm.getAttribute('xml:id'),
-            offset: (tstamp - 1) * ppq
+            offset: (tstamp - 1) * ppq * (4 / meterunit)
           });
         });
       }
