@@ -1,4 +1,4 @@
-/* globals */
+/* globals CSS */
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 
 export class TextOnlyToolkit extends PianoRollToolkit {
@@ -44,7 +44,11 @@ export class TextOnlyToolkit extends PianoRollToolkit {
                 this.textLines[i][j] = [];
               }
               // TODO: Don't use the same id for different translation lyrics.
-              this.textLines[i][j].push([note.id, lyric]);
+              this.textLines[i][j].push({
+                id: note.id,
+                lyric: lyric,
+                pitch: note.pitch
+              });
             }
           });
         });
@@ -81,7 +85,7 @@ export class TextOnlyToolkit extends PianoRollToolkit {
         if (tline) {
           this.pages[j].push(
             `<p data-verse-num='${k}'>` +
-              tline.map(this._makeSyl).join('') +
+              tline.map(e => this._makeSyl(e)).join('') +
               '</p>'
           );
         }
@@ -99,6 +103,36 @@ export class TextOnlyToolkit extends PianoRollToolkit {
   }
 
   _makeSyl (word) {
-    return `<span id="${word[0]}">${word[1]}</span>`;
+    let pitch = word.pitch;
+    let style = '';
+    if (CSS.supports('-webkit-background-clip: text')) {
+      let baseline = 80;
+      let xHeight = 40;
+      let gradHeight = 8;
+      let topGrad = this._pitchMap(
+        pitch,
+        baseline - gradHeight,
+        baseline - xHeight
+      );
+      let bottomGrad =
+        this._pitchMap(pitch, baseline - gradHeight, baseline - xHeight) +
+        gradHeight;
+      style = `
+            background: -webkit-linear-gradient(
+                var(--link-color) ${topGrad}%,
+                var(--main-color) ${bottomGrad}%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        `;
+    }
+    return `<span id="${word.id}" style="${style}">${word.lyric}</span>`;
+  }
+  _pitchMap (pitch, outMin, outMax) {
+    return this._valueMap(pitch, this.lowNote, this.highNote, outMin, outMax);
+  }
+  _valueMap (x, inMin, inMax, outMin, outMax) {
+    if (inMin === inMax) return 0.5;
+    return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
 }

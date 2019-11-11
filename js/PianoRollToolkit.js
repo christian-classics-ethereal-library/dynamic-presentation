@@ -446,7 +446,7 @@ export class PianoRollToolkit {
 
     let composerNewLine =
       (this.data.lyricist.length + this.data.composer.length) *
-        (0.7 * this.fontSize * .7) >
+        (0.7 * this.fontSize * 0.7) >
       this.width;
 
     let composer = new Document().createElement('text');
@@ -456,7 +456,7 @@ export class PianoRollToolkit {
     composer.setAttribute('style', 'font-size: 70%');
     composer.setAttribute(
       'x',
-      this.data.composer.length * (-0.65 * this.fontSize * .7)
+      this.data.composer.length * (-0.65 * this.fontSize * 0.7)
     );
     composer.setAttribute('dx', '100%');
     titleBlock.appendChild(composer);

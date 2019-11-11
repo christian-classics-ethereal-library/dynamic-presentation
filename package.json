@@ -39,6 +39,6 @@
     "singleQuote": true
   },
   "dependencies": {
-    "reveal.js": "github:christian-classics-ethereal-library/reveal.js"
+    "reveal.js": "github:christian-classics-ethereal-library/reveal.js#merged-dev_cssCustomProperties"
   }
 }
