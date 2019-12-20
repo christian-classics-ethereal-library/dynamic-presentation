@@ -9,3 +9,4 @@ services:
       - ..:/var/www/
     command: 'npm run setupAndServe'
     working_dir: /var/www
+    restart: always
