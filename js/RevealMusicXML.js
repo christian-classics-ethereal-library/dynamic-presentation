@@ -242,11 +242,9 @@ export class RevealMusicXML {
 
   _setOptions (toolkit) {
     let zoom = 60;
-    // TODO: Use API to get width and height when that gets implemented
-    // (https://github.com/hakimel/reveal.js/issues/2409).
-    // TODO: or ensure that this will work with future versions of jQuery.
-    let pixelHeight = parseFloat(jQuery('.slides').css('height'));
-    let pixelWidth = parseFloat(jQuery('.slides').css('width'));
+    let size = Reveal.getComputedSlideSize();
+    let pixelHeight = size.height;
+    let pixelWidth = size.width;
     let defaultOptions = {
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),
