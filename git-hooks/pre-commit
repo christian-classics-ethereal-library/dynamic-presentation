@@ -1,0 +1,43 @@
+#!/usr/bin/env fish
+#
+# Symlink this hook to .git/hooks/pre-commit for it to work as a pre-commit hook.
+
+set FILES (git diff-index --cached HEAD | cut -f2 )
+set JSFILES (printf '%s\n' $FILES | grep '\.js$')
+set PRETTIERFILES (printf '%s\n' $FILES | grep '\.\(css\|js\|json\|less\|md\|scss\|yaml\|yml\)$')
+set TESTJSFILES (printf '%s\n' $FILES | grep '\.test\.js$')
+echo $PRETTIERFILES
+
+set npx (which npx)
+if dart2 w
+    set npx dart2 x - npx
+end
+
+set exit 0
+
+if test "$PRETTIERFILES"
+    if not $npx prettierx --check $PRETTIERFILES > /dev/null
+        $npx prettierx    --write $PRETTIERFILES
+        $npx prettierx    --check $PRETTIERFILES
+        # Make sure a message goes out about needing to stage changes.
+        and echo "Please stage changes made by prettier."
+        set exit 1
+    end
+end
+
+if test "$JSFILES"
+    if not $npx semistandard $JSFILES > /dev/null
+        $npx semistandard --fix $JSFILES
+        $npx semistandard -v $JSFILES
+        # Print a message if this one didn't print anything.
+        and echo "Please stage changes made by semistandard."
+        set exit 1
+    end
+end
+
+if test "$TESTJSFILES"
+    $npx jest $TESTJSFILES
+    or set exit 1
+end
+
+exit $exit

@@ -1,0 +1,7 @@
+generatorStarSpacing: true
+spaceBeforeFunctionParen: true
+singleQuote: true
+jsxSingleQuote: true
+semi: true
+yieldStarSpacing: true
+alignTernaryLines: false

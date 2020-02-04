@@ -1,16 +1,15 @@
 {
   "name": "dynamic-presentation",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Javascript for Dynamic Presentation",
   "main": "js/LoadRevealMusicXMLPlugin.js",
   "scripts": {
     "compile": "npm run compile:scss",
     "compile:scss": "npx node-sass sass -o css --include-path node_modules",
     "run": "npm run compile && npx http-server",
-    "semistandard": "npx semistandard js/*.js",
     "setupAndServe": "git submodule update --init --recursive && npm install && npm run run",
-    "style:check": "npx prettier --check {**/,}*.{html,json,md,scss,yml} && npm run semistandard",
-    "style:fix": "npx prettier --write {**/,}*.{html,js,json,md,scss,yml}; npm run semistandard -- --fix",
+    "style:check": "npx prettierx --check {**/,}*.{html,js,json,md,scss,yml} && npx semistandard js/*.js",
+    "style:fix": "npx prettierx --write {**/,}*.{html,js,json,md,scss,yml}; npx semistandard js/*.js --fix",
     "test": "jest"
   },
   "repository": {
@@ -25,7 +24,7 @@
     "jest": "^24.9.0",
     "jest-environment-jsdom-fourteen": "^0.1.0",
     "node-sass": "^4.13.1",
-    "prettier": "^1.19.1",
+    "prettierx": "^0.11.0",
     "semistandard": "^13.0.1"
   },
   "jest": {
@@ -34,9 +33,6 @@
     ],
     "coverageDirectory": "coverage",
     "testEnvironment": "jest-environment-jsdom-fourteen"
-  },
-  "prettier": {
-    "singleQuote": true
   },
   "dependencies": {
     "reveal.js": "github:christian-classics-ethereal-library/reveal.js#test-release"
