@@ -1,0 +1,2 @@
+#!/bin/bash
+$DART_ADD_TIP "You may have to wait a minute before the site will load."

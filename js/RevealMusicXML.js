@@ -78,7 +78,14 @@ export class RevealMusicXML {
     const url = section.getAttribute('data-musicxml');
     const transformation = section.getAttribute('data-musicxml-transform');
     return fetch(url)
-      .then(res => res.text())
+      .then(res => {
+        if (res.ok) {
+          return res.text();
+        } else {
+          section.innerHTML = 'Failed to load.';
+          throw new Error('Failed to load ' + url);
+        }
+      })
       .then(text => this.transformer.transform(text, transformation))
       .then(text => {
         this._slidify(section, text);
@@ -242,11 +249,9 @@ export class RevealMusicXML {
 
   _setOptions (toolkit) {
     let zoom = 60;
-    // TODO: Use API to get width and height when that gets implemented
-    // (https://github.com/hakimel/reveal.js/issues/2409).
-    // TODO: or ensure that this will work with future versions of jQuery.
-    let pixelHeight = parseFloat(jQuery('.slides').css('height'));
-    let pixelWidth = parseFloat(jQuery('.slides').css('width'));
+    let size = this.reveal.getComputedSlideSize();
+    let pixelHeight = size.height;
+    let pixelWidth = size.width;
     let defaultOptions = {
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),

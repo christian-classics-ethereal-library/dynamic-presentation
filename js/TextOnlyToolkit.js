@@ -15,8 +15,6 @@ export class TextOnlyToolkit extends PianoRollToolkit {
 
   renderToSVG (page, options) {
     let output = '';
-    output +=
-      '<style>.reveal section[data-musicxml]{font-size:inherit};</style>';
     if (page === 1 && !this.noHeader) {
       output += "<div class='header'>";
       output += "<span class='title'>" + this.data.title + '</span>';

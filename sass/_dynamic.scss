@@ -17,10 +17,9 @@ g[class^='pgHead']:not(.pgHead) {
   display: none;
 }
 
-/* reveal.js overrides for dynamic presentation */
-.reveal section[data-musicxml] {
-  /* Prevent this div from adding any height. */
-  font-size: 0;
+/* Fix space between images for VerovioLineWrapper. */
+.reveal section[data-musicxml] svg {
+  display: block;
 }
 
 /** Changes for PianoRoll Presentation. **/
