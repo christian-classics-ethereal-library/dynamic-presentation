@@ -1,15 +1,13 @@
 {
   "name": "dynamic-presentation",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Javascript for Dynamic Presentation",
   "main": "js/LoadRevealMusicXMLPlugin.js",
   "scripts": {
-    "compile": "npm run compile:scss",
-    "compile:scss": "npx node-sass sass -o css --include-path node_modules",
-    "run": "npm run compile && npx http-server",
+    "run": "npx http-server",
     "setupAndServe": "git submodule update --init --recursive && npm install && npm run run",
-    "style:check": "npx prettierx --check {**/,}*.{html,js,json,md,scss,yml} && npx semistandard js/*.js",
-    "style:fix": "npx prettierx --write {**/,}*.{html,js,json,md,scss,yml}; npx semistandard js/*.js --fix",
+    "style:check": "npx prettierx --check {**/,}*.{css,html,js,json,md,scss,yml} && npx semistandard js/*.js",
+    "style:fix": "npx prettierx --write {**/,}*.{css,html,js,json,md,scss,yml}; npx semistandard js/*.js --fix",
     "test": "jest"
   },
   "repository": {
@@ -23,7 +21,6 @@
     "http-server": "^0.11.1",
     "jest": "^24.9.0",
     "jest-environment-jsdom-fourteen": "^0.1.0",
-    "node-sass": "^4.13.1",
     "prettierx": "^0.11.0",
     "semistandard": "^13.0.1"
   },
@@ -35,6 +32,6 @@
     "testEnvironment": "jest-environment-jsdom-fourteen"
   },
   "dependencies": {
-    "reveal.js": "github:christian-classics-ethereal-library/reveal.js#test-release"
+    "impress.js": "^1.0.0"
   }
 }

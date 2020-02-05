@@ -1,0 +1,323 @@
+/* Load the theme (with the scss variables) */
+/**
+ * A simple theme for reveal.js presentations, similar
+ * to the default theme. The accent color is darkblue.
+ *
+ * This theme is Copyright (C) 2012 Owen Versteeg, https://github.com/StereotypicalApps. It is MIT licensed.
+ * reveal.js is Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+@import url(https://fonts.googleapis.com/css?family=News+Cycle:400, 700);
+@import url(
+  https://fonts.googleapis.com/css?family=Lato:400,
+  700,
+  400italic,
+  700italic
+);
+@import url(../midi-player/midiplayer.css);
+@import url(https://fonts.googleapis.com/css?family=Cousine);
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+section.has-dark-background,
+section.has-dark-background h1,
+section.has-dark-background h2,
+section.has-dark-background h3,
+section.has-dark-background h4,
+section.has-dark-background h5,
+section.has-dark-background h6 {
+  color: #fff;
+}
+
+/*********************************************
+ * GLOBAL STYLES
+ *********************************************/
+body {
+  background: #fff;
+  background-color: #fff;
+}
+
+#impress {
+  font-family: 'Lato', sans-serif;
+  font-size: 40px;
+  font-weight: normal;
+  color: #000;
+}
+
+::selection {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.99);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.99);
+  text-shadow: none;
+}
+
+#impress .slides section,
+#impress .slides section > section {
+  line-height: 1.3;
+  font-weight: inherit;
+}
+
+/*********************************************
+ * HEADERS
+ *********************************************/
+#impress h1,
+#impress h2,
+#impress h3,
+#impress h4,
+#impress h5,
+#impress h6 {
+  margin: 0 0 20px 0;
+  color: #000;
+  font-family: 'News Cycle', Impact, sans-serif;
+  font-weight: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
+  text-shadow: none;
+  word-wrap: break-word;
+}
+
+#impress h1 {
+  font-size: 3.77em;
+}
+
+#impress h2 {
+  font-size: 2.11em;
+}
+
+#impress h3 {
+  font-size: 1.55em;
+}
+
+#impress h4 {
+  font-size: 1em;
+}
+
+#impress h1 {
+  text-shadow: none;
+}
+
+/** Impress stuff **/
+
+section.step {
+  /* Debugging: Help see the problems */
+  border: 1px solid black;
+}
+section.step.past {
+  opacity: 50%;
+}
+
+body:not(.impress-enabled) .section.step svg {
+  max-width: 100%;
+}
+
+/** Presentation related changes. **/
+
+/** Changes for Verovio presentation. **/
+#impress section[data-musicxml] svg path,
+#impress section[data-musicxml] svg g.note,
+#impress section[data-musicxml] svg {
+  stroke: #000;
+  fill: #000;
+}
+
+#impress section[data-musicxml] svg .highlightedNote path,
+#impress section[data-musicxml] svg g.note.highlightedNote,
+#impress section[data-musicxml] svg .highlightedNote {
+  stroke: #00008b !important;
+  fill: #00008b !important;
+}
+
+/* Get rid of the pageheads that aren't the first page. */
+g[class^='pgHead']:not(.pgHead) {
+  display: none;
+}
+
+/* Fix space between images for VerovioLineWrapper. */
+#impress section[data-musicxml] svg {
+  display: block;
+}
+
+/** Changes for PianoRoll Presentation. **/
+/* Pick tetradic colors based from the linkColor,
+   Then four more tetradic colors starting from an analogous color.*/
+#impress section[data-musicxml] svg g.voice0 {
+  stroke: #00008b;
+  fill: #00008b;
+}
+
+#impress section[data-musicxml] svg g.voice0.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice1 {
+  stroke: darkred;
+  fill: darkred;
+}
+
+#impress section[data-musicxml] svg g.voice1.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice2 {
+  stroke: #8b8b00;
+  fill: #8b8b00;
+}
+
+#impress section[data-musicxml] svg g.voice2.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice3 {
+  stroke: darkcyan;
+  fill: darkcyan;
+}
+
+#impress section[data-musicxml] svg g.voice3.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice4 {
+  stroke: #46008b;
+  fill: #46008b;
+}
+
+#impress section[data-musicxml] svg g.voice4.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice5 {
+  stroke: #8b4600;
+  fill: #8b4600;
+}
+
+#impress section[data-musicxml] svg g.voice5.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice6 {
+  stroke: #468b00;
+  fill: #468b00;
+}
+
+#impress section[data-musicxml] svg g.voice6.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+#impress section[data-musicxml] svg g.voice7 {
+  stroke: #00468b;
+  fill: #00468b;
+}
+
+#impress section[data-musicxml] svg g.voice7.highlightedNote {
+  stroke: #000 !important;
+  fill: #000 !important;
+}
+
+/* Allow different verses to be distinguished. */
+#impress
+  section[data-musicxml]
+  svg
+  g[class^='voice']
+  text:not([data-verse-num='1']) {
+  font-style: italic;
+}
+
+/** Changes for Text Presentation. **/
+div.header {
+  overflow: auto;
+}
+
+div.header span.title {
+  font-size: 120%;
+  display: block;
+}
+
+div.header span.lyricist {
+  float: left;
+  font-size: 80%;
+}
+
+div.header span.composer {
+  float: right;
+  font-size: 80%;
+}
+
+/* Allow different verses to be distinguished. */
+.reveal section[data-musicxml] p[data-verse-num]:not([data-verse-num='1']) {
+  font-style: italic;
+}
+
+p[data-verse-num] span {
+  transition: border-bottom 0.1s;
+  border-bottom: 0 solid #00008b;
+}
+
+p span.highlightedNote {
+  color: #00008b;
+  border-bottom: 10px solid #00008b;
+}
+
+/** General changes. **/
+#impress#impress > section,
+#impress#impress > section > section {
+  padding: 0px;
+}
+
+/** Changes for MIDI player **/
+#midiPlayer_div {
+  position: absolute;
+  z-index: 1;
+  background: transparent;
+  color: #000;
+}
+
+#midiPlayer_progress {
+  background: #00008b !important;
+}
+
+#midiPlayer_bar#midiPlayer_bar {
+  background: #000;
+}
+
+/* Don't use MIDI Player's play/pause/stop buttons so we can track the status. */
+#midiPlayer_div .icon {
+  display: none !important;
+}
+
+/* Monospace Font: Cousine */
+#impress section[data-musicxml] svg {
+  font-family: 'Cousine', monospace;
+}
+
+/* Verovio Text Font: Tinos */
+#impress#impress section[data-musicxml] svg g.page-margin {
+  font-family: 'Tinos', 'Times New Roman', 'Times', 'Liberation Serif', serif;
+}
+
+/* Verovio SMuFL Font: Bravura */
+html {
+  font-family: Bravura;
+}
+
+/* Mix voice colors for light background */
+#impress section[data-musicxml] svg g.voice0,
+#impress section[data-musicxml] svg g.voice1,
+#impress section[data-musicxml] svg g.voice2,
+#impress section[data-musicxml] svg g.voice3,
+#impress section[data-musicxml] svg g.voice4,
+#impress section[data-musicxml] svg g.voice5,
+#impress section[data-musicxml] svg g.voice6,
+#impress section[data-musicxml] svg g.voice7 {
+  mix-blend-mode: darken;
+  isolation: isolate;
+}

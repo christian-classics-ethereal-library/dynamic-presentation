@@ -1,48 +1,46 @@
 /* globals fetch, jQuery */
-export class RevealMusicXML {
+export class ImpressMusicXML {
   constructor (ToolkitType, transformer) {
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.transformer = transformer;
-    // TODO: Use Reveal object passed to plugin when that is available.
-    // https://github.com/hakimel/reveal.js/issues/2405
     // eslint-disable-next-line no-undef
-    this.reveal = Reveal;
+    this.impress = impress();
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
   }
 
   /**
-   * @brief The init function will be called by Reveal when this is loaded.
+   * @brief Initialize this plugin: Transform elements into Impress steps.
    * @return A promise.
    */
   init () {
     if (typeof this.ToolkitType === 'undefined') {
       throw new Error(
-        'RevealMusicXML needs to be constructed with a rendering toolkit.'
+        'ImpressMusicXML needs to be constructed with a rendering toolkit.'
       );
     }
     if (typeof this.transformer === 'undefined') {
       // Create a dummy transformer that does no transformation.
       this.transformer = { transform: (data, transformation) => data };
     }
-    this.reveal.addKeyBinding(
+    /* this.reveal.addKeyBinding(
       { keyCode: 77, key: 'M', description: 'Play/Pause audio' },
       this._playPause.bind(this)
-    );
+    ); */
     return this._processSlides().then(() => Promise.resolve());
   }
 
   // Private methods
 
   _debug (message) {
-    console.log(`RevealMusicXML: ${message}`);
+    console.log(`ImpressMusicXML: ${message}`);
   }
 
   _getCurrentToolkitNum () {
     let $stack = jQuery('section.stack.present');
     if ($stack.length) {
-      let match = $stack.attr('id').match(/RevealMusicXML(\d*)/);
+      let match = $stack.attr('id').match(/ImpressMusicXML(\d*)/);
       if (match) {
         return parseInt(match[1]);
       }
@@ -54,7 +52,7 @@ export class RevealMusicXML {
     if ($present.length) {
       let $next = $present.next('section.stack[data-musicxml]');
       if ($next.length) {
-        let match = $next.attr('id').match(/RevealMusicXML(\d*)/);
+        let match = $next.attr('id').match(/ImpressMusicXML(\d*)/);
         if (match) {
           return parseInt(match[1]);
         }
@@ -63,7 +61,7 @@ export class RevealMusicXML {
     return null;
   }
   _getIndexHForToolkit (toolkitNum) {
-    let $stack = jQuery(`#RevealMusicXML${toolkitNum}`);
+    let $stack = jQuery(`#ImpressMusicXML${toolkitNum}`);
     if ($stack.length) {
       return $stack
         .parent()
@@ -83,7 +81,7 @@ export class RevealMusicXML {
           return res.text();
         } else {
           section.innerHTML = 'Failed to load.';
-          throw new Error('Failed to load ' + url);
+          // throw new Error('Failed to load ' + url);
         }
       })
       .then(text => this.transformer.transform(text, transformation))
@@ -112,7 +110,7 @@ export class RevealMusicXML {
       vrvTime
     );
     if (elementsAtTime.page > 0) {
-      if (
+      /* if (
         elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
         this.reveal.getState().indexh !==
           this._getIndexHForToolkit(this.playerToolkitNum)
@@ -121,7 +119,7 @@ export class RevealMusicXML {
           this._getIndexHForToolkit(this.playerToolkitNum),
           elementsAtTime.page - 1
         );
-      }
+      } */
       let ids = this.highlightedIDs || [];
       if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
         ids.forEach(function (noteid) {
@@ -139,9 +137,9 @@ export class RevealMusicXML {
   }
 
   _playChangeControls () {
-    this.reveal.configure({
+    /* this.reveal.configure({
       controls: !this.playing
-    });
+    }); */
   }
 
   /**
@@ -162,7 +160,7 @@ export class RevealMusicXML {
         this.playing = this._playNext();
       } else if (
         this._getIndexHForToolkit(this.playerToolkitNum) !==
-        this.reveal.getState().indexh
+        1 /* this.reveal.getState().indexh */
       ) {
         this.playerToolkitNum = this._getCurrentToolkitNum();
         this.playing = this._playNext();
@@ -231,27 +229,39 @@ export class RevealMusicXML {
     section.querySelectorAll('section').forEach(oldChildSection => {
       section.removeChild(oldChildSection);
     });
+    let yPos = 0;
     for (let i = 1; i <= max; i++) {
       let cSection = section.appendChild(document.createElement('section'));
       cSection.innerHTML = toolkit.renderToSVG(i, {});
+      cSection.setAttribute('class', 'step');
+      cSection.setAttribute('id', section.id + '-' + i);
+      let x = parseInt(section.id.substring('ImpressMusicXML'.length));
+      cSection.setAttribute('data-x', x * (700 + 200));
+      let elementHeight = 700;
+      if (cSection.innerHTML && cSection.childNodes) {
+        elementHeight = parseInt(cSection.childNodes[0].getAttribute('height'));
+      }
+      // Impress's data-x and data-y are the position of the **center** of the element.
+      yPos += elementHeight / 2;
+      cSection.setAttribute('data-y', yPos);
+      yPos += elementHeight / 2;
     }
   }
   _reslidify () {
-    this.toolkits.forEach((toolkit, i) => {
+    /* this.toolkits.forEach((toolkit, i) => {
       this._setOptions(toolkit);
       toolkit.redoLayout();
-      let section = document.getElementById(`RevealMusicXML${i}`);
+      let section = document.getElementById(`ImpressMusicXML${i}`);
       this._render(section, toolkit);
     });
     let indices = this.reveal.getIndices();
-    this.reveal.slide(indices.h, indices.v, indices.f);
+    this.reveal.slide(indices.h, indices.v, indices.f); */
   }
 
   _setOptions (toolkit) {
     let zoom = 60;
-    let size = this.reveal.getComputedSlideSize();
-    let pixelHeight = size.height;
-    let pixelWidth = size.width;
+    let pixelHeight = 300;
+    let pixelWidth = 700;
     let defaultOptions = {
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),
@@ -267,7 +277,7 @@ export class RevealMusicXML {
     };
     let i = this.toolkits.indexOf(toolkit);
     let options = document
-      .getElementById(`RevealMusicXML${i}`)
+      .getElementById(`ImpressMusicXML${i}`)
       .getAttribute('data-musicxml-toolkit');
     options = JSON.parse(options || '{}').options || {};
     toolkit.setOptions({ ...defaultOptions, ...options });
@@ -287,17 +297,9 @@ export class RevealMusicXML {
     }
     this.toolkits[i] = new ToolkitType();
     let toolkit = this.toolkits[i];
-    section.setAttribute('id', `RevealMusicXML${i}`);
+    section.setAttribute('id', `ImpressMusicXML${i}`);
     this._setOptions(toolkit);
     toolkit.loadData(data);
     this._render(section, toolkit);
-    // TODO: Possibly use Reveal's 'resize' event when it works with percentage sizes
-    // (https://github.com/hakimel/reveal.js/issues/2411).
-    window.addEventListener('resize', () => {
-      clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = setTimeout(() => {
-        this._reslidify();
-      }, 100);
-    });
   }
 }

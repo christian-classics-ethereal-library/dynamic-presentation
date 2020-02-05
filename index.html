@@ -7,8 +7,7 @@
 
     <title>Dynamic Presentation</title>
 
-    <script src="/node_modules/reveal.js/js/reveal.js" defer></script>
-    <script src="/js/slides.js" type="module" defer></script>
+    <script src="/node_modules/impress.js/js/impress.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script
       src="https://www.verovio.org/javascript/develop/verovio-toolkit.js"
@@ -18,17 +17,15 @@
     <!-- There is an alias to wildwebmidi.data in the path of index.html. -->
     <script src="/midi-player/wildwebmidi.js" type="text/javascript"></script>
     <script src="/midi-player/midiplayer.js" type="text/javascript"></script>
-    <script src="/js/LoadRevealMusicXMLPlugin.js" type="module" defer></script>
-    <link href="/node_modules/reveal.js/css/reveal.css" rel="stylesheet" />
+    <script src="/js/LoadDynamicPresentation.js" type="module" defer></script>
+    <!--<link href="/node_modules/reveal.js/css/reveal.css" rel="stylesheet" />-->
     <link href="/css/slidesSimple.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="reveal">
-      <div class="slides">
-        <!-- Allow the musicarranger to split the xml file into several. -->
-        <section
-          data-musicarranger="musicxmlTestSuite/xmlFiles/61b-MultipleLyrics.xml"
-        ></section>
+    <div id="impress">
+        <section data-musicxml="olight.musicxml"></section>
+        <section data-musicxml="zach.musicxml"></section>
+        <section data-musicxml="musicxmlTestSuite/xmlFiles/61b-MultipleLyrics.xml"></section>
         <section data-musicxml="nonexistentfile.musicxml"></section>
         <!-- Load a musicXML file and provide your own transformations -->
         <section
@@ -40,7 +37,6 @@
         <section
           data-musicxml="musicxmlTestSuite/xmlFiles/01a-Pitches-Pitches.xml"
         ></section>
-      </div>
     </div>
   </body>
 </html>
