@@ -261,7 +261,8 @@ export class ImpressMusicXML {
   _setOptions (toolkit) {
     let zoom = 60;
     let pixelHeight = 300;
-    let pixelWidth = 700;
+    /* Width is defined in the CSS. */
+    let pixelWidth = parseInt(jQuery('.step').css('width'));
     let defaultOptions = {
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),

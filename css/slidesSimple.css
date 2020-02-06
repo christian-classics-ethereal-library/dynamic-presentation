@@ -104,8 +104,11 @@ body {
 section.step {
   /* Debugging: Help see the problems */
   border: 1px solid black;
+  /* To fill the screen's width, slide width needs to be the same as virtual screen width
+  (defaulting to 1024 in impress.js) */
+  width: 960px;
 }
-section.step.past {
+section.step:not(.active) {
   opacity: 50%;
 }
 
