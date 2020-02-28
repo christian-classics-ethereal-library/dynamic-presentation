@@ -34,7 +34,7 @@
     "coverageDirectory": "coverage",
     "testEnvironment": "jest-environment-jsdom-fourteen"
   },
-  "dependencies": {
-    "reveal.js": "github:christian-classics-ethereal-library/reveal.js#test-release"
+  "peerDependencies": {
+    "reveal.js": "github:christian-classics-ethereal-library/reveal.js"
   }
 }
