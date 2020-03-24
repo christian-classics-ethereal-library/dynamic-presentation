@@ -76,9 +76,11 @@ export class PianoRollToolkit {
       'score-partwise credit credit-words[default-y="0"], pgFoot'
     );
     // Otherwise, fallback on semantic elements usually placed at the bottom.
-    footer =
-      footer ||
-      this.doc.querySelector('identification rights, pubStmt availability');
+    footer = (footer
+      ? footer.innerHTML
+      : false)
+      ? footer
+      : this.doc.querySelector('identification rights, pubStmt availability');
     this.data.footer = footer ? footer.innerHTML : '';
     this.data.measures = [];
     this.data.voices = {};
