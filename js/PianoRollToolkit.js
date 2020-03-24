@@ -80,7 +80,9 @@ export class PianoRollToolkit {
       ? footer.innerHTML
       : false)
       ? footer
-      : this.doc.querySelector('identification rights, pubStmt availability');
+      : this.doc.querySelector(
+        'identification rights, pubStmt availability distributor'
+      );
     this.data.footer = footer ? footer.innerHTML : '';
     this.data.measures = [];
     this.data.voices = {};
