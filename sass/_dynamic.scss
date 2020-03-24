@@ -72,6 +72,10 @@ div.header span.composer {
   float: right;
   font-size: 80%;
 }
+span.footer {
+  float: left;
+  font-size: 80%;
+}
 /* Allow different verses to be distinguished. */
 .reveal section[data-musicxml] p[data-verse-num]:not([data-verse-num='1']) {
   font-style: italic;
