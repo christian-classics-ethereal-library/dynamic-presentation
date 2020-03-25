@@ -71,6 +71,19 @@ export class PianoRollToolkit {
       'identification creator[type=lyricist], titleStmt respStmt persName[role=lyricist]'
     );
     this.data.lyricist = lyricist ? lyricist.innerHTML : '';
+    // Try to find explicit footer credits,
+    let footer = this.doc.querySelector(
+      'score-partwise credit credit-words[default-y="0"], pgFoot'
+    );
+    // Otherwise, fallback on semantic elements usually placed at the bottom.
+    footer = (footer
+      ? footer.innerHTML
+      : false)
+      ? footer
+      : this.doc.querySelector(
+        'identification rights, pubStmt availability distributor'
+      );
+    this.data.footer = footer ? footer.innerHTML : '';
     this.data.measures = [];
     this.data.voices = {};
     this.doc.querySelectorAll('measure').forEach(measure => {
@@ -249,8 +262,13 @@ export class PianoRollToolkit {
         svg.appendChild(measureElement);
       }
     });
+    let footerHeight = 0;
+    if (page === 1 && this.data.footer) {
+      svg.appendChild(this._getFooterBlock());
+      footerHeight = this.fontSize;
+    }
     if (this.adjustPageHeight && maxYOffset >= 0) {
-      let adjustedHeight = this._getMeasureHeight() + maxYOffset;
+      let adjustedHeight = this._getMeasureHeight() + maxYOffset + footerHeight;
       svg.setAttribute('height', adjustedHeight);
     }
     return new XMLSerializer().serializeToString(svg);
@@ -276,7 +294,8 @@ export class PianoRollToolkit {
         this.useSectionBreaks = true;
       }
     }
-    if (options.noHeader) {
+    // options.noHeader is deprecated in verovio.
+    if (options.noHeader || options.header === 'none') {
       this.noHeader = true;
     }
     this._configValues();
@@ -462,6 +481,17 @@ export class PianoRollToolkit {
     titleBlock.appendChild(composer);
 
     return titleBlock;
+  }
+  _getFooterBlock () {
+    let footerBlock = new Document().createElement('g');
+    let footer = new Document().createElement('text');
+    footer.innerHTML = this.data.footer;
+    footer.setAttribute('dy', -this.fontSize * 0.7);
+    footer.setAttribute('style', 'font-size: 70%;');
+    footer.setAttribute('y', '100%');
+    footer.setAttribute('x', 0);
+    footerBlock.appendChild(footer);
+    return footerBlock;
   }
   _measure (measure) {
     let measureElement = new Document().createElement('g');

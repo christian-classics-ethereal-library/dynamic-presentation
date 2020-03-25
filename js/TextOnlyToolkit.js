@@ -23,6 +23,9 @@ export class TextOnlyToolkit extends PianoRollToolkit {
       output += '</div>';
     }
     output += this.pages[page - 1].join('');
+    if (page === 1 && this.data.footer) {
+      output += "<span class='footer'>" + this.data.footer + '</span>';
+    }
     return output;
   }
 

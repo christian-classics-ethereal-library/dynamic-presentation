@@ -7,6 +7,6 @@ services:
       - ${WEB_PORT}:8080
     volumes:
       - ..:/var/www/
-    command: 'npm run setupAndServe'
+    command: 'npm --allow-root --unsafe-perm=true run setupAndServe'
     working_dir: /var/www
     restart: always
