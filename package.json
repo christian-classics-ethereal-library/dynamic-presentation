@@ -7,7 +7,7 @@
     "compile": "npm run compile:scss",
     "compile:scss": "npx node-sass sass -o css --include-path node_modules",
     "run": "npm run compile && npx http-server",
-    "setupAndServe": "git submodule update --init --recursive && npm install && npm run run",
+    "setupAndServe": "git submodule update --init --recursive && npm --unsafe-perm=true --allow-root install && npm run run",
     "style:check": "npx prettierx --check {**/,}*.{html,js,json,md,scss,yml} && npx semistandard js/*.js",
     "style:fix": "npx prettierx --write {**/,}*.{html,js,json,md,scss,yml}; npx semistandard js/*.js --fix",
     "test": "jest"
