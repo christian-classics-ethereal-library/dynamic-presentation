@@ -1,0 +1,81 @@
+/* Load the theme (with the scss variables) */
+/* abrink @import 'reveal.js/css/theme/source/serif.scss';*/
+//abrink start fires.scss
+/**
+ * Dark serif theme for reveal.js. This is the opposite of the 'serif' theme.
+ *
+ * abrink remove This theme is Copyright (C) 2012-2013 Owen Versteeg, http://owenversteeg.com - it is MIT licensed.
+ */
+
+
+// Default mixins and settings -----------------
+@import "../node_modules/reveal.js/css/theme/template/mixins";
+@import "../node_modules/reveal.js/css/theme/template/settings";
+/*abrink
+@import "../template/mixins";
+@import "../template/settings";
+*/
+// ---------------------------------------------
+
+
+
+// Override theme settings (see ../template/settings.scss)
+$mainFont: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+// abrink mainColor for pianoroll header; text all; verovio all
+$mainColor: #c49d5f;//abrink I like this but slightly different yellow hue#e0deb7;//abrink try to lighten from here#eae7b0;
+$headingFont: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+// abrink heading color for none
+$headingColor: #aec45f;//abrink changing for a light green #D3DEDE;
+$headingTextShadow: none;
+$headingTextTransform: none;
+$backgroundColor: #111;//abrink don't like partial black#182210;//abrink#F0F1EB;//abrink
+// abrink link color for pianoroll text ctrls; text ctrls; verovio ctrls
+$linkColor: #c4b65f;//abrink#d3cb58;
+$linkColorHover: lighten( $linkColor, 20% );//abrink darken??
+// abrink background color for 
+$selectionBackgroundColor: #385328;
+
+.reveal a {
+  line-height: 1.3em;
+}
+
+
+// Theme template ------------------------------
+@import "../node_modules/reveal.js/css/theme/template/theme";
+/*abrink@import "../template/theme";*/
+// ---------------------------------------------
+//abrink end fires.scss
+
+@import 'dynamic';
+
+/* Monospace Font: Cutive Mono */
+@import url(https://fonts.googleapis.com/css?family=Cutive+Mono);
+.reveal section[data-musicxml] svg {
+  font-family: 'Cutive Mono', monospace;
+}
+
+/* Verovio Text Font: Times New Roman */
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+.reveal.reveal section[data-musicxml] svg g.page-margin {
+  font-family: 'Times New Roman', 'Times', 'Liberation Serif', 'Tinos', serif;
+}
+
+/* Verovio SMuFL Font: Leipzig */
+html {
+  font-family: Leipzig;
+}
+
+/* Mix voice colors for dark background */
+.reveal section[data-musicxml] svg {
+  g.voice0,
+  g.voice1,
+  g.voice2,
+  g.voice3,
+  g.voice4,
+  g.voice5,
+  g.voice6,
+  g.voice7 {
+    mix-blend-mode: screen;
+    isolation: isolate;
+  }
+}
