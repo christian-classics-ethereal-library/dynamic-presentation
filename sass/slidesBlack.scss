@@ -1,0 +1,42 @@
+/* Load the theme (with the scss variables) */
+@import 'reveal.js/css/theme/source/black.scss';
+@import 'dynamic';
+
+/* Monospace Font: Cutive Mono */
+@import url(https://fonts.googleapis.com/css?family=Cutive+Mono);
+.reveal section[data-musicxml] svg {
+  font-family: 'Cousine', monospace;
+}
+
+/* Verovio Text Font: Sanos */
+/* Font must be compatible with Times New Roman */
+@font-face {
+  font-family: 'Sanos';
+  font-style: normal;
+  src: url(../fonts/Sanos.woff2) format('woff2');
+}
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+.reveal.reveal section[data-musicxml] svg g.page-margin {
+  font-family: 'Sanos', 'Tinos', 'Times New Roman', 'Times', 'Liberation Serif',
+    serif;
+}
+
+/* Verovio SMuFL Font: Bravura */
+html {
+  font-family: Bravura;
+}
+
+/* Mix voice colors for dark background */
+.reveal section[data-musicxml] svg {
+  g.voice0,
+  g.voice1,
+  g.voice2,
+  g.voice3,
+  g.voice4,
+  g.voice5,
+  g.voice6,
+  g.voice7 {
+    mix-blend-mode: screen;
+    isolation: isolate;
+  }
+}
