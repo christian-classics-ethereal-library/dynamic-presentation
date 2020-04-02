@@ -190,6 +190,8 @@ export class PianoRollToolkit {
             voice: partID + voice
           });
           this.data.voices[partID + voice] = partID + voice;
+          // Don't duplicate lyrics for subsequent notes.
+          lyrics = [undefined];
         });
         if (!isInternalChord) {
           offset[partID + voice] = (offset[partID + voice] || 0) + duration;
