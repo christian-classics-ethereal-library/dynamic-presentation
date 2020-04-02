@@ -164,7 +164,6 @@ export class PianoRollToolkit {
         // Another way in musicXML to do chords is to just add a chord element inside a note
         // (in which case, the offset doesn't advance, and the note starts with the previous one).
         const isInternalChord = notes[i].querySelector('chord');
-        let id = notes[i].getAttribute('xml:id') || `note-${Math.random()}`;
         let pitches = notes[i].querySelectorAll('pitch, note');
         pitches = pitches.length
           ? pitches
@@ -179,6 +178,7 @@ export class PianoRollToolkit {
           if (pitchVal < this.lowNote) {
             this.lowNote = pitchVal;
           }
+          let id = pitch.getAttribute('xml:id') || `note-${Math.random()}`;
           this.data.measures[measureNumber].notes.push({
             duration: duration,
             id: id,
