@@ -59,6 +59,8 @@ export class PianoRollToolkit {
     this.highNote = -Infinity;
     this.data = {};
     this.chordSymbols = false;
+    this.xmlType =
+      this.doc.firstElementChild.tagName === 'mei' ? 'mei' : 'musicxml';
     let title = this.doc.querySelector(
       'work work-title, movement-title, titleStmt title'
     );
@@ -118,7 +120,14 @@ export class PianoRollToolkit {
       }
 
       // Go through the notes and rests sequentially so we can get their offsets straight.
-      let notes = measure.querySelectorAll('note,rest');
+      let notes;
+      if (this.xmlType === 'mei') {
+        notes = measure.querySelectorAll(
+          'layer>chord,layer>note,layer>rest,layer>*:not(chord)>note'
+        );
+      } else {
+        notes = measure.querySelectorAll('note');
+      }
       let offset = {};
       let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
@@ -127,11 +136,15 @@ export class PianoRollToolkit {
           ? part.getAttribute('id')
           : notes[i].closest('staff').getAttribute('n');
 
-        let duration =
-          notes[i].getAttribute('dur.ppq') ||
-          (notes[i].querySelector('duration')
+        let duration;
+        if (this.xmlType === 'mei') {
+          // TODO: Also select from note if this is a chord.
+          duration = notes[i].getAttribute('dur.ppq');
+        } else {
+          duration = notes[i].querySelector('duration')
             ? notes[i].querySelector('duration').innerHTML
-            : 0);
+            : 0;
+        }
         duration = parseInt(duration);
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML
@@ -152,7 +165,7 @@ export class PianoRollToolkit {
         // (in which case, the offset doesn't advance, and the note starts with the previous one).
         const isInternalChord = notes[i].querySelector('chord');
         let id = notes[i].getAttribute('xml:id') || `note-${Math.random()}`;
-        let pitches = notes[i].querySelectorAll('pitch');
+        let pitches = notes[i].querySelectorAll('pitch, note');
         pitches = pitches.length
           ? pitches
           : notes[i].getAttribute('oct')
