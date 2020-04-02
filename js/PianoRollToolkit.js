@@ -123,9 +123,14 @@ export class PianoRollToolkit {
       let notes;
       if (this.xmlType === 'mei') {
         notes = measure.querySelectorAll(
-          'layer>chord,layer>note,layer>rest,layer>*:not(chord)>note'
+          // Take chords, rests, spaces, and notes-not-contained-by-chords.
+          'layer chord, layer rest, layer space, ' +
+            // MEI notes can be nested inside many elements.
+            // We just want the ones where you can't note.closest('chord').
+            'layer>note, layer>*:not(chord)>note, layer>*:not(chord)>*:not(chord)>note'
         );
       } else {
+        // TODO: Support parsing <backup><duration> in MusicXML.
         notes = measure.querySelectorAll('note');
       }
       let offset = {};
