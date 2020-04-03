@@ -138,7 +138,7 @@ export class PianoRollToolkit {
         );
       } else {
         // TODO: Support parsing <backup><duration> in MusicXML.
-        notes = measure.querySelectorAll('note');
+        notes = measure.querySelectorAll('note, rest');
       }
       let offset = {};
       let previousDuration = 0;
