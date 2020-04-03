@@ -59,6 +59,8 @@ export class PianoRollToolkit {
     this.highNote = -Infinity;
     this.data = {};
     this.chordSymbols = false;
+    this.xmlType =
+      this.doc.firstElementChild.tagName === 'mei' ? 'mei' : 'musicxml';
     let title = this.doc.querySelector(
       'work work-title, movement-title, titleStmt title'
     );
@@ -101,24 +103,43 @@ export class PianoRollToolkit {
       const measureNumber =
         measure.getAttribute('number') || measure.getAttribute('n');
 
+      let previousBreak = measure.previousElementSibling;
+      if (this.xmlType === 'mei') {
+        while (
+          previousBreak &&
+          ['sb', 'pb', 'measure'].indexOf(previousBreak.localName) === -1
+        ) {
+          previousBreak = previousBreak.previousElementSibling;
+        }
+      }
       if (
         measure.querySelector('print[new-system="yes"]') ||
-        (measure.previousElementSibling &&
-          measure.previousElementSibling.localName === 'sb')
+        (previousBreak && previousBreak.localName === 'sb')
       ) {
         this.data.measures[measureNumber].sectionBreak = true;
       }
       if (
         measure.querySelector('print[new-page="yes"]') ||
-        (measure.previousElementSibling &&
-          measure.previousElementSibling.localName === 'pb')
+        (previousBreak && previousBreak.localName === 'pb')
       ) {
         this.data.measures[measureNumber].sectionBreak = true;
         this.data.measures[measureNumber].pageBreak = true;
       }
 
       // Go through the notes and rests sequentially so we can get their offsets straight.
-      let notes = measure.querySelectorAll('note,rest');
+      let notes;
+      if (this.xmlType === 'mei') {
+        notes = measure.querySelectorAll(
+          // Take chords, rests, spaces, and notes-not-contained-by-chords.
+          'layer chord, layer rest, layer space, ' +
+            // MEI notes can be nested inside many elements.
+            // We just want the ones where you can't note.closest('chord').
+            'layer>note, layer>*:not(chord)>note, layer>*:not(chord)>*:not(chord)>note'
+        );
+      } else {
+        // TODO: Support parsing <backup><duration> in MusicXML.
+        notes = measure.querySelectorAll('note, rest');
+      }
       let offset = {};
       let previousDuration = 0;
       for (let i = 0; i < notes.length; i++) {
@@ -127,11 +148,15 @@ export class PianoRollToolkit {
           ? part.getAttribute('id')
           : notes[i].closest('staff').getAttribute('n');
 
-        let duration =
-          notes[i].getAttribute('dur.ppq') ||
-          (notes[i].querySelector('duration')
+        let duration;
+        if (this.xmlType === 'mei') {
+          // TODO: Also select from note if this is a chord.
+          duration = notes[i].getAttribute('dur.ppq');
+        } else {
+          duration = notes[i].querySelector('duration')
             ? notes[i].querySelector('duration').innerHTML
-            : 0);
+            : 0;
+        }
         duration = parseInt(duration);
         const voice = notes[i].querySelector('voice')
           ? notes[i].querySelector('voice').innerHTML
@@ -151,8 +176,7 @@ export class PianoRollToolkit {
         // Another way in musicXML to do chords is to just add a chord element inside a note
         // (in which case, the offset doesn't advance, and the note starts with the previous one).
         const isInternalChord = notes[i].querySelector('chord');
-        let id = notes[i].getAttribute('xml:id') || `note-${Math.random()}`;
-        let pitches = notes[i].querySelectorAll('pitch');
+        let pitches = notes[i].querySelectorAll('pitch, note');
         pitches = pitches.length
           ? pitches
           : notes[i].getAttribute('oct')
@@ -166,6 +190,7 @@ export class PianoRollToolkit {
           if (pitchVal < this.lowNote) {
             this.lowNote = pitchVal;
           }
+          let id = pitch.getAttribute('xml:id') || `note-${Math.random()}`;
           this.data.measures[measureNumber].notes.push({
             duration: duration,
             id: id,
@@ -177,6 +202,8 @@ export class PianoRollToolkit {
             voice: partID + voice
           });
           this.data.voices[partID + voice] = partID + voice;
+          // Don't duplicate lyrics for subsequent notes.
+          lyrics = [undefined];
         });
         if (!isInternalChord) {
           offset[partID + voice] = (offset[partID + voice] || 0) + duration;
