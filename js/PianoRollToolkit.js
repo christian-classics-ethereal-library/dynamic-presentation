@@ -103,17 +103,24 @@ export class PianoRollToolkit {
       const measureNumber =
         measure.getAttribute('number') || measure.getAttribute('n');
 
+      let previousBreak = measure.previousElementSibling;
+      if (this.xmlType === 'mei') {
+        while (
+          previousBreak &&
+          ['sb', 'pb', 'measure'].indexOf(previousBreak.localName) === -1
+        ) {
+          previousBreak = previousBreak.previousElementSibling;
+        }
+      }
       if (
         measure.querySelector('print[new-system="yes"]') ||
-        (measure.previousElementSibling &&
-          measure.previousElementSibling.localName === 'sb')
+        (previousBreak && previousBreak.localName === 'sb')
       ) {
         this.data.measures[measureNumber].sectionBreak = true;
       }
       if (
         measure.querySelector('print[new-page="yes"]') ||
-        (measure.previousElementSibling &&
-          measure.previousElementSibling.localName === 'pb')
+        (previousBreak && previousBreak.localName === 'pb')
       ) {
         this.data.measures[measureNumber].sectionBreak = true;
         this.data.measures[measureNumber].pageBreak = true;
