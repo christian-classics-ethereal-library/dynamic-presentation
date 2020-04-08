@@ -17,11 +17,6 @@ g[class^='pgHead']:not(.pgHead) {
   display: none;
 }
 
-/* Fix space between images for VerovioLineWrapper. */
-.reveal section[data-musicxml] svg {
-  display: block;
-}
-
 /** Changes for PianoRoll Presentation. **/
 /* Pick tetradic colors based from the linkColor,
    Then four more tetradic colors starting from an analogous color.*/

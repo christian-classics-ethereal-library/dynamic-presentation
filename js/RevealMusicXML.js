@@ -256,8 +256,6 @@ export class RevealMusicXML {
       pageHeight: pixelHeight * (100 / zoom),
       pageWidth: pixelWidth * (100 / zoom),
       scale: zoom,
-      // TODO: change to proper definition of "line" when that gets implemented
-      // (https://github.com/rism-ch/verovio/issues/1056).
       breaks: 'line',
       adjustPageHeight: true,
       minLastJustification: 0,

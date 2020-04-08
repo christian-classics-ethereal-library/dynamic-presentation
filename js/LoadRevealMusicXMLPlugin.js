@@ -5,7 +5,6 @@ import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
 import { RevealMusicXML } from '../js/RevealMusicXML.js';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js';
 import { urlParam } from '../js/urlParam.js';
-import { VerovioLineWrapper } from '../js/VerovioLineWrapper.js';
 
 let rma = new RevealMusicArranger();
 
@@ -14,18 +13,19 @@ let tk;
 
 window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
-window.VerovioLineWrapper = VerovioLineWrapper;
 
 if (urlParam('toolkit') === 'verovio') {
   tk = verovio.toolkit;
 } else if (urlParam('toolkit') === 'veroviostatic') {
-  tk = VerovioLineWrapper;
+  // Backwards compatibility for former VerovioLineWrapper.
+  tk = verovio.toolkit;
 } else if (urlParam('toolkit') === 'text') {
   tk = TextOnlyToolkit;
 } else {
   tk = PianoRollToolkit;
 }
 let rmx = new RevealMusicXML(tk, mxt);
+window.rmx = rmx;
 
 // TODO: Use Reveal.registerPlugin when we can be sure that one loads before the other.
 rma

@@ -12,7 +12,6 @@ The code is primarily written as a few classes.
 - **MusicXMLTransformer**: Generic JavaScript library to perform transformations on the musicXML.
 - **TextOnlyToolkit**: Rendering toolkit to create slides with just text.
 - **PianoRollToolkit**: Rendering toolkit to create "simplified" piano roll notation.
-- **VerovioLineWrapper**: Rendering toolkit: wrapper around the Verovio toolkit that renders multiple systems per page.
 - **Verovio**: Rendering toolkit: Music Notation library maintained by RISM-CH.
 
 ![Diagram of Class Structure](docs/structure.svg)
@@ -64,6 +63,5 @@ Assets (SCSS styles) can be recompiled with `npm run compile`.
 - How do `RevealMusicArranger` and `RevealMusicXML` interact with reveal.js?
 - What is the role of a toolkit in Dynamic Presentation?
 - How is audio generated and played by the toolkits?
-- Why does the `VerovioLineWrapper` exist?
 - Why doesn't Dynamic Presentation depend on the official repository for reveal.js?
 - How can Dynamic Presentation access enhancements to Verovio?
