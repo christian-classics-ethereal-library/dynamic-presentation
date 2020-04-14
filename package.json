@@ -25,7 +25,7 @@
     "jest-environment-jsdom-fourteen": "^0.1.0",
     "node-sass": "^4.13.1",
     "prettierx": "^0.11.0",
-    "reveal.js": "github:christian-classics-ethereal-library/reveal.js",
+    "reveal.js": "github:christian-classics-ethereal-library/reveal.js#non-dist-alpha",
     "semistandard": "^13.0.1"
   },
   "jest": {
@@ -36,6 +36,6 @@
     "testEnvironment": "jest-environment-jsdom-fourteen"
   },
   "peerDependencies": {
-    "reveal.js": "github:christian-classics-ethereal-library/reveal.js"
+    "reveal.js": "github:christian-classics-ethereal-library/reveal.js#non-dist-alpha"
   }
 }

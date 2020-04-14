@@ -14,11 +14,14 @@ export class PianoRollToolkit {
 
   getElementsAtTime (time) {
     let eat = this.verovio.getElementsAtTime(time);
-    let page = this.getPageWithElement(eat.notes[0]);
-    return {
-      notes: eat.notes,
-      page: page
-    };
+    if (typeof eat.notes !== 'undefined' && eat.notes.length) {
+      let page = this.getPageWithElement(eat.notes[0]);
+      return {
+        notes: eat.notes,
+        page: page
+      };
+    }
+    return {};
   }
 
   getPageCount () {

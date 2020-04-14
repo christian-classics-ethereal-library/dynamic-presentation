@@ -111,7 +111,7 @@ export class RevealMusicXML {
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
-    if (elementsAtTime.page > 0) {
+    if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
       if (
         elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
         this.reveal.getState().indexh !==
