@@ -305,6 +305,9 @@ export class PianoRollToolkit {
   }
 
   setOptions (options) {
+    if (this.verovio) {
+      this.verovio.setOptions(options);
+    }
     if (options.scale) {
       this.scale = options.scale;
     }
