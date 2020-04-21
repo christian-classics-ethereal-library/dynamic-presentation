@@ -199,7 +199,26 @@ export class RevealMusicXML {
         width: 250
       });
     }
+    let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
+    if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
+      fetch(el.dataset['musicxmlAudio'])
+        .then(res => {
+          if (res.ok) return res.arrayBuffer();
+        })
+        .then(buf => {
+          let base64 = this._arrayBufferToBase64(buf);
+          // MIDI files start with "MThd". Check that the base64 starts like that.
+          if (base64.substring(0, 4) === window.btoa('MTh')) {
+            return this._playBase64MIDI(base64);
+          }
+        });
+      return true;
+    }
     let base64midi = toolkit.renderToMIDI();
+    return this._playBase64MIDI(base64midi);
+  }
+
+  _playBase64MIDI (base64midi) {
     let song = 'data:audio/midi;base64,' + base64midi;
     jQuery('#player').show();
     jQuery('#player').midiPlayer.play(song);
@@ -208,6 +227,15 @@ export class RevealMusicXML {
     return this.playing;
   }
 
+  _arrayBufferToBase64 (buffer) {
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
   _processSlides () {
     let promises = [];
     document.querySelectorAll('[data-musicxml]').forEach(section => {
