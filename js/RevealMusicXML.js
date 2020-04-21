@@ -1,8 +1,9 @@
-/* globals fetch, jQuery */
+/* globals Audio, fetch, jQuery */
 export class RevealMusicXML {
   constructor (ToolkitType, transformer) {
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
+    this.audio = false;
     this.transformer = transformer;
     // TODO: Use Reveal object passed to plugin when that is available.
     // https://github.com/hakimel/reveal.js/issues/2405
@@ -167,23 +168,38 @@ export class RevealMusicXML {
         this.playerToolkitNum = this._getCurrentToolkitNum();
         this.playing = this._playNext();
       } else {
-        // TODO: fix midiPlayer.play to work when the data is already loaded.
-        // https://github.com/rism-ch/midi-player/issues/11
-        // jQuery('#player').midiPlayer.play();
-        // eslint-disable-next-line no-undef
-        play();
+        if (this.audio) {
+          this.audio.play();
+        } else {
+          // TODO: fix midiPlayer.play to work when the data is already loaded.
+          // https://github.com/rism-ch/midi-player/issues/11
+          // jQuery('#player').midiPlayer.play();
+          // eslint-disable-next-line no-undef
+          play();
+        }
         this.playing = true;
       }
     } else {
-      // TODO: Use jQuery pause interface when it is available
-      // https://github.com/rism-ch/midi-player/pull/10
-      // jQuery('#player').midiPlayer.pause();
-      // eslint-disable-next-line no-undef
-      pause();
+      if (this.audio) {
+        this.audio.pause();
+      } else {
+        // TODO: Use jQuery pause interface when it is available
+        // https://github.com/rism-ch/midi-player/pull/10
+        // jQuery('#player').midiPlayer.pause();
+        // eslint-disable-next-line no-undef
+        pause();
+      }
       this.playing = false;
       this.shouldAutoSkip = false;
     }
     this._playChangeControls();
+  }
+
+  _audioUpdate () {
+    if (this.audio && this.playing) {
+      this._playerUpdate(this.audio.currentTime * 1000);
+      setTimeout(this._audioUpdate.bind(this), 20);
+    }
   }
 
   /**
@@ -191,6 +207,7 @@ export class RevealMusicXML {
    * @return true if it is playing.
    */
   _playMIDI (toolkit) {
+    this.audio = false;
     if (!jQuery('#player')[0]) {
       jQuery('body').prepend(jQuery('<div id="player">'));
       jQuery('#player').midiPlayer({
@@ -201,6 +218,13 @@ export class RevealMusicXML {
     }
     let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
     if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
+      if (el.dataset['musicxmlAudio'].substr(-4) === '.mp3') {
+        jQuery('#player').hide();
+        this.audio = new Audio(el.dataset['musicxmlAudio']);
+        this.audio.onplay = this._audioUpdate.bind(this);
+        this.audio.play();
+        return true;
+      }
       fetch(el.dataset['musicxmlAudio'])
         .then(res => {
           if (res.ok) return res.arrayBuffer();
