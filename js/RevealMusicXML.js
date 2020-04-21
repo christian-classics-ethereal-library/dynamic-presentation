@@ -1,6 +1,7 @@
 /* globals Audio, fetch, jQuery */
 export class RevealMusicXML {
   constructor (ToolkitType, transformer) {
+    this.MIDIDELAY = 380;
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.audio = false;
@@ -108,7 +109,7 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
-    let vrvTime = Math.max(0, time - 380);
+    let vrvTime = Math.max(0, time - this.MIDIDELAY);
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
@@ -197,7 +198,7 @@ export class RevealMusicXML {
 
   _audioUpdate () {
     if (this.audio && this.playing) {
-      this._playerUpdate(this.audio.currentTime * 1000);
+      this._playerUpdate(this.audio.currentTime * 1000 + this.MIDIDELAY);
       setTimeout(this._audioUpdate.bind(this), 20);
     }
   }
