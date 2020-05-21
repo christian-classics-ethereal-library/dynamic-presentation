@@ -13,6 +13,8 @@ let tk;
 
 window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
+// Set verovio.toolkit for when toolkit choice in data-musicxml-toolkit
+window['verovio.toolkit'] = verovio.toolkit;
 
 if (urlParam('toolkit') === 'verovio') {
   tk = verovio.toolkit;
