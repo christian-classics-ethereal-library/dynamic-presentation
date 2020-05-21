@@ -38,7 +38,7 @@ docs:
   dependencies:
     - testnode12
   script:
-    - rm -rf /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
-    - mv coverage/lcov-report /srv/coverage.gitlab.ccel.org/htdocs/dynamic-presentation
+    - rm -rf ~static/coverage/dynamic-presentation
+    - mv coverage/lcov-report ~static/coverage/dynamic-presentation
   only:
     - master
