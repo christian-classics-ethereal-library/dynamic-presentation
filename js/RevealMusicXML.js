@@ -281,9 +281,7 @@ export class RevealMusicXML {
 
   _render (section, toolkit) {
     let max = toolkit.getPageCount();
-    section.querySelectorAll('section').forEach(oldChildSection => {
-      section.removeChild(oldChildSection);
-    });
+    section.innerHTML = '';
     for (let i = 1; i <= max; i++) {
       let cSection = section.appendChild(document.createElement('section'));
       cSection.innerHTML = toolkit.renderToSVG(i, {});
