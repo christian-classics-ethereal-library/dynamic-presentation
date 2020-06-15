@@ -219,7 +219,7 @@ export class RevealMusicXML {
     }
     let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
     if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
-      if (el.dataset['musicxmlAudio'].substr(-4) === '.mp3') {
+      if (el.dataset['musicxmlAudio'].indexOf('.mp3') !== -1) {
         jQuery('#player').hide();
         this.audio = new Audio(el.dataset['musicxmlAudio']);
         this.audio.onplay = this._audioUpdate.bind(this);
