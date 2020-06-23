@@ -8,11 +8,24 @@ Soundfont.instrument(
   ac,
   'https://raw.githubusercontent.com/gleitz/midi-js-soundfonts/gh-pages/MusyngKite/acoustic_guitar_nylon-mp3.js'
 ).then(function (instrument) {
+  let notes = {};
   Player = new MidiPlayer.Player(function (event) {
     if (event.name === 'Note on' && event.velocity > 0) {
-      instrument.play(event.noteName, ac.currentTime, {
-        gain: event.velocity / 100
-      });
+      notes[event.noteNumber] = instrument.play(
+        event.noteName,
+        ac.currentTime,
+        {
+          gain: event.velocity / 100
+        }
+      );
+    }
+    if (
+      event.name === 'Note off' ||
+      (event.name === 'Note on' && event.velocity === 0)
+    ) {
+      if (typeof notes[event.noteNumber] !== 'undefined') {
+        notes[event.noteNumber].stop();
+      }
     }
     // TODO: Fix this
     let milliseconds = new Date().getTime() - Player.startTime;
