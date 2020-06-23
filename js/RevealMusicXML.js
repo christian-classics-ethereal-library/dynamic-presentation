@@ -195,6 +195,13 @@ export class RevealMusicXML {
     }
   }
 
+  _midiUpdate () {
+    if (this.playing) {
+      this._playerUpdate(new Date().getTime() - Player.startTime);
+      setTimeout(this._midiUpdate.bind(this), 20);
+    }
+  }
+
   /**
    * @brief Loads and plays audio from a specified toolkit.
    * @return true if it is playing.
@@ -240,6 +247,7 @@ export class RevealMusicXML {
     Player.play();
     this.playing = true;
     this._playChangeControls();
+    this._midiUpdate();
     return this.playing;
   }
 

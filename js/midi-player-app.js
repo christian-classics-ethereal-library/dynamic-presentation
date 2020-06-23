@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 /* globals MidiPlayer, Player, Soundfont */
+// eslint-disable-next-line no-unused-vars
 var Player;
 var AudioContext = window.AudioContext || window.webkitAudioContext || false;
 var ac = new AudioContext();
@@ -27,10 +28,5 @@ Soundfont.instrument(
         notes[event.noteNumber].stop();
       }
     }
-    // TODO: Fix this
-    let milliseconds = new Date().getTime() - Player.startTime;
-    window.rmx._playerUpdate(milliseconds);
-    console.log(milliseconds);
-    console.log(event);
   });
 });
