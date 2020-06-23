@@ -28,7 +28,6 @@ end
 if test "$JSFILES"
     if not $npx semistandard $JSFILES > /dev/null
         $npx semistandard -v --fix $JSFILES
-        #$npx semistandard -v $JSFILES
         # Print a message if this one didn't print anything.
         and echo "Please stage changes made by semistandard."
         set exit 1
