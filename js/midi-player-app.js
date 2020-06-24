@@ -15,12 +15,13 @@ Soundfont.instrument(ac, soundfont).then(function (instrument) {
   let notes = {};
   Player = new MidiPlayer.Player(function (event) {
     if (event.name === 'Note on' && event.velocity > 0) {
-      notes[event.noteNumber] = instrument.play(
-        event.noteName,
-        ac.currentTime,
-        {
+      notes[event.noteNumber] = notes[event.noteNumber]
+        ? notes[event.noteNumber]
+        : [];
+      notes[event.noteNumber].push(
+        instrument.play(event.noteName, ac.currentTime, {
           gain: event.velocity / 100
-        }
+        })
       );
     }
     if (
@@ -28,7 +29,10 @@ Soundfont.instrument(ac, soundfont).then(function (instrument) {
       (event.name === 'Note on' && event.velocity === 0)
     ) {
       if (typeof notes[event.noteNumber] !== 'undefined') {
-        notes[event.noteNumber].stop();
+        for (let i = 0; i < notes[event.noteNumber].length; i++) {
+          notes[event.noteNumber][i].stop();
+        }
+        notes[event.noteNumber] = [];
       }
     }
   });
