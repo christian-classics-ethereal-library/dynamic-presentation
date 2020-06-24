@@ -5,10 +5,13 @@ var Player;
 var AudioContext = window.AudioContext || window.webkitAudioContext || false;
 var ac = new AudioContext();
 
-Soundfont.instrument(
-  ac,
-  'https://raw.githubusercontent.com/gleitz/midi-js-soundfonts/gh-pages/MusyngKite/acoustic_guitar_nylon-mp3.js'
-).then(function (instrument) {
+var soundfont =
+  'https://raw.githubusercontent.com/gleitz/midi-js-soundfonts/gh-pages/FluidR3_GM/acoustic_grand_piano-mp3.js';
+if (document.getElementById('soundfont')) {
+  soundfont = document.getElementById('soundfont').dataset.soundfont;
+}
+
+Soundfont.instrument(ac, soundfont).then(function (instrument) {
   let notes = {};
   Player = new MidiPlayer.Player(function (event) {
     if (event.name === 'Note on' && event.velocity > 0) {
