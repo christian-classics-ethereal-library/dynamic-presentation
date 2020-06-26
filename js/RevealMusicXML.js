@@ -1,6 +1,6 @@
 /* globals Audio, fetch, jQuery, Player */
 export class RevealMusicXML {
-  constructor (ToolkitType, transformer) {
+  constructor (ToolkitType, transformer, highlightNotes = true) {
     this.MIDIDELAY = -20;
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
@@ -12,6 +12,7 @@ export class RevealMusicXML {
     this.reveal = Reveal;
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
+    this.highlightNotes = highlightNotes;
   }
 
   /**
@@ -110,6 +111,9 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
+    if (this.highlightNotes === false) {
+      return;
+    }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
@@ -143,7 +147,7 @@ export class RevealMusicXML {
 
   _playChangeControls () {
     this.reveal.configure({
-      controls: !this.playing
+      controls: !this.playing || !this.highlightNotes
     });
   }
 
