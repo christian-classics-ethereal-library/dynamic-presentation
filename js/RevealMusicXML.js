@@ -96,6 +96,7 @@ export class RevealMusicXML {
 
   /* Hooks for Player or for this.audio. */
   _playerStop () {
+    Player.instrument.stop();
     if (this.shouldAutoSkip) {
       if (typeof this.highlightedIDs !== 'undefined') {
         this.highlightedIDs.forEach(noteid => {
@@ -159,16 +160,15 @@ export class RevealMusicXML {
 
   _playPause () {
     if (!this.playing) {
-      if (!jQuery('#player')[0]) {
-        this.playerToolkitNum = this._getCurrentToolkitNum();
-        this.playing = this._playNext();
-      } else if (
+      if (
         this._getIndexHForToolkit(this.playerToolkitNum) !==
         this.reveal.getState().indexh
       ) {
+        // Switching to a different song.
         this.playerToolkitNum = this._getCurrentToolkitNum();
         this.playing = this._playNext();
       } else {
+        // Resume the current audio.
         if (this.audio) {
           this.audio.play();
         } else {
@@ -181,6 +181,7 @@ export class RevealMusicXML {
         this.audio.pause();
       } else {
         Player.pause();
+        Player.instrument.stop();
       }
       this.playing = false;
       this.shouldAutoSkip = false;
@@ -197,6 +198,7 @@ export class RevealMusicXML {
 
   _midiUpdate () {
     if (this.playing) {
+      // TODO: Fix this to work after the song has been paused and resumed.
       this._playerUpdate(new Date().getTime() - Player.startTime);
       setTimeout(this._midiUpdate.bind(this), 20);
     }
@@ -208,7 +210,7 @@ export class RevealMusicXML {
    */
   _playMIDI (toolkit) {
     this.audio = false;
-    // TODO: Bind _playerStop to something.
+    Player.on('endOfFile', this._playerStop.bind(this));
     let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
     if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
       if (el.dataset['musicxmlAudio'].indexOf('.mp3') !== -1) {
@@ -239,10 +241,11 @@ export class RevealMusicXML {
     let count = 0;
     // Player should be getting created by midi-player-app.js
     // eslint-disable-next-line no-unmodified-loop-condition
-    while (typeof Player === 'undefined' && count < 20) {
+    while ((typeof Player === 'undefined' || Player.buffer) && count < 20) {
       await new Promise(resolve => setTimeout(resolve, 100));
       count++;
     }
+    Player.stop();
     Player.loadDataUri(song);
     Player.play();
     this.playing = true;

@@ -23,8 +23,7 @@ Soundfont.instrument(ac, soundfont).then(function (instrument) {
           gain: event.velocity / 100
         })
       );
-    }
-    if (
+    } else if (
       event.name === 'Note off' ||
       (event.name === 'Note on' && event.velocity === 0)
     ) {
@@ -36,4 +35,5 @@ Soundfont.instrument(ac, soundfont).then(function (instrument) {
       }
     }
   });
+  Player.instrument = instrument;
 });
