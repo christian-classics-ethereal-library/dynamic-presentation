@@ -97,7 +97,9 @@ export class RevealMusicXML {
 
   /* Hooks for Player or for this.audio. */
   _playerStop () {
-    Player.instrument.stop();
+    if (typeof Player !== 'undefined' && Player.instrument) {
+      Player.instrument.stop();
+    }
     if (this.shouldAutoSkip) {
       if (typeof this.highlightedIDs !== 'undefined') {
         this.highlightedIDs.forEach(noteid => {
@@ -214,7 +216,9 @@ export class RevealMusicXML {
    */
   _playMIDI (toolkit) {
     this.audio = false;
-    Player.on('endOfFile', this._playerStop.bind(this));
+    if (typeof Player !== 'undefined') {
+      Player.on('endOfFile', this._playerStop.bind(this));
+    }
     let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
     if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
       if (el.dataset['musicxmlAudio'].indexOf('.mp3') !== -1) {
