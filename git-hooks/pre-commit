@@ -4,7 +4,7 @@
 
 set FILES (git diff-index --cached HEAD | cut -f2 )
 set JSFILES (printf '%s\n' $FILES | grep '\.js$')
-set PRETTIERFILES (printf '%s\n' $FILES | grep '\.\(css\|js\|json\|less\|md\|scss\|yaml\|yml\)$')
+set PRETTIERFILES (printf '%s\n' $FILES | grep '\.\(css\|js\|json\|html\|less\|md\|scss\|yaml\|yml\)$')
 set TESTJSFILES (printf '%s\n' $FILES | grep '\.test\.js$')
 echo $PRETTIERFILES
 
@@ -27,8 +27,7 @@ end
 
 if test "$JSFILES"
     if not $npx semistandard $JSFILES > /dev/null
-        $npx semistandard --fix $JSFILES
-        $npx semistandard -v $JSFILES
+        $npx semistandard -v --fix $JSFILES
         # Print a message if this one didn't print anything.
         and echo "Please stage changes made by semistandard."
         set exit 1

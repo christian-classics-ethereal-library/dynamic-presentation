@@ -1,7 +1,7 @@
-/* globals Audio, fetch, jQuery */
+/* globals Audio, fetch, jQuery, Player */
 export class RevealMusicXML {
-  constructor (ToolkitType, transformer) {
-    this.MIDIDELAY = 380;
+  constructor (ToolkitType, transformer, highlightNotes = true) {
+    this.MIDIDELAY = -20;
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.audio = false;
@@ -12,6 +12,7 @@ export class RevealMusicXML {
     this.reveal = Reveal;
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
+    this.highlightNotes = highlightNotes;
   }
 
   /**
@@ -94,8 +95,11 @@ export class RevealMusicXML {
       });
   }
 
-  /* Hooks for jQuery.midiplayer. */
+  /* Hooks for Player or for this.audio. */
   _playerStop () {
+    if (typeof Player !== 'undefined' && Player.instrument) {
+      Player.instrument.stop();
+    }
     if (this.shouldAutoSkip) {
       if (typeof this.highlightedIDs !== 'undefined') {
         this.highlightedIDs.forEach(noteid => {
@@ -109,6 +113,9 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
+    if (this.highlightNotes === false) {
+      return;
+    }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
@@ -142,7 +149,7 @@ export class RevealMusicXML {
 
   _playChangeControls () {
     this.reveal.configure({
-      controls: !this.playing
+      controls: !this.playing || !this.highlightNotes
     });
   }
 
@@ -159,24 +166,19 @@ export class RevealMusicXML {
 
   _playPause () {
     if (!this.playing) {
-      if (!jQuery('#player')[0]) {
-        this.playerToolkitNum = this._getCurrentToolkitNum();
-        this.playing = this._playNext();
-      } else if (
+      if (
         this._getIndexHForToolkit(this.playerToolkitNum) !==
         this.reveal.getState().indexh
       ) {
+        // Switching to a different song.
         this.playerToolkitNum = this._getCurrentToolkitNum();
         this.playing = this._playNext();
       } else {
+        // Resume the current audio.
         if (this.audio) {
           this.audio.play();
         } else {
-          // TODO: fix midiPlayer.play to work when the data is already loaded.
-          // https://github.com/rism-ch/midi-player/issues/11
-          // jQuery('#player').midiPlayer.play();
-          // eslint-disable-next-line no-undef
-          play();
+          Player.play();
         }
         this.playing = true;
       }
@@ -184,11 +186,8 @@ export class RevealMusicXML {
       if (this.audio) {
         this.audio.pause();
       } else {
-        // TODO: Use jQuery pause interface when it is available
-        // https://github.com/rism-ch/midi-player/pull/10
-        // jQuery('#player').midiPlayer.pause();
-        // eslint-disable-next-line no-undef
-        pause();
+        Player.pause();
+        Player.instrument.stop();
       }
       this.playing = false;
       this.shouldAutoSkip = false;
@@ -203,24 +202,26 @@ export class RevealMusicXML {
     }
   }
 
+  _midiUpdate () {
+    if (this.playing) {
+      // TODO: Fix this to work after the song has been paused and resumed.
+      this._playerUpdate(new Date().getTime() - Player.startTime);
+      setTimeout(this._midiUpdate.bind(this), 20);
+    }
+  }
+
   /**
    * @brief Loads and plays audio from a specified toolkit.
    * @return true if it is playing.
    */
   _playMIDI (toolkit) {
     this.audio = false;
-    if (!jQuery('#player')[0]) {
-      jQuery('body').prepend(jQuery('<div id="player">'));
-      jQuery('#player').midiPlayer({
-        onUpdate: this._playerUpdate.bind(this),
-        onStop: this._playerStop.bind(this),
-        width: 250
-      });
+    if (typeof Player !== 'undefined') {
+      Player.on('endOfFile', this._playerStop.bind(this));
     }
     let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
     if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
       if (el.dataset['musicxmlAudio'].indexOf('.mp3') !== -1) {
-        jQuery('#player').hide();
         this.audio = new Audio(el.dataset['musicxmlAudio']);
         this.audio.onplay = this._audioUpdate.bind(this);
         this.audio.play();
@@ -243,12 +244,21 @@ export class RevealMusicXML {
     return this._playBase64MIDI(base64midi);
   }
 
-  _playBase64MIDI (base64midi) {
+  async _playBase64MIDI (base64midi) {
     let song = 'data:audio/midi;base64,' + base64midi;
-    jQuery('#player').show();
-    jQuery('#player').midiPlayer.play(song);
+    let count = 0;
+    // Player should be getting created by midi-player-app.js
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while ((typeof Player === 'undefined' || Player.buffer) && count < 20) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      count++;
+    }
+    Player.stop();
+    Player.loadDataUri(song);
+    Player.play();
     this.playing = true;
     this._playChangeControls();
+    this._midiUpdate();
     return this.playing;
   }
 

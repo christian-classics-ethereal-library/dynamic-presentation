@@ -1,6 +1,6 @@
 {
   "name": "dynamic-presentation",
-  "version": "1.2.1",
+  "version": "1.5.0",
   "description": "Javascript for Dynamic Presentation",
   "main": "js/LoadRevealMusicXMLPlugin.js",
   "scripts": {
@@ -37,5 +37,8 @@
   },
   "peerDependencies": {
     "reveal.js": "github:christian-classics-ethereal-library/reveal.js#non-dist-alpha"
+  },
+  "dependencies": {
+    "midi-player-js": "^2.0.13"
   }
 }
