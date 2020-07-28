@@ -116,6 +116,10 @@ export class RevealMusicXML {
       return;
     }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
+    /* if (this.timemap) {
+      // TODO: Figure out if there needs to be a different MIDIDELAY added.
+      vrvTime = this._timemap(vrvTime / 1000, this.timemap) * 1000;
+    } */
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
@@ -144,6 +148,39 @@ export class RevealMusicXML {
         this.highlightedIDs = ids;
       }
     }
+  }
+
+  /**
+   * @brief Interpolate adjusted time from a map of input => output.
+   */
+  _timemap (time, map) {
+    if (typeof map[time] !== 'undefined') {
+      return map[time];
+    }
+    let keys = Object.keys(map);
+    let lowKi = -1;
+    let highKi = keys.length;
+    // Binary search for closest keys
+    while (1 + lowKi < highKi) {
+      const midKi = lowKi + ((highKi - lowKi) >> 1);
+      if (keys[midKi] > time) {
+        highKi = midKi;
+      } else {
+        lowKi = midKi;
+      }
+    }
+    if (lowKi === -1) return 0;
+    if (highKi === keys.length) return 100;
+    return this._map(
+      time,
+      keys[lowKi],
+      keys[highKi],
+      map[keys[lowKi]],
+      map[keys[highKi]]
+    );
+  }
+  _map (x, inMin, inMax, outMin, outMax) {
+    return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
 
   _playChangeControls () {
