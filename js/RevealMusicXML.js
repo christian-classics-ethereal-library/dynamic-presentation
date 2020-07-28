@@ -5,6 +5,7 @@ export class RevealMusicXML {
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.audio = false;
+    this.timemap = {};
     this.transformer = transformer;
     // TODO: Use Reveal object passed to plugin when that is available.
     // https://github.com/hakimel/reveal.js/issues/2405
@@ -110,6 +111,10 @@ export class RevealMusicXML {
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
+    if (this.timemap) {
+      // TODO: Figure out if there needs to be a different MIDIDELAY added.
+      vrvTime = this._timemap(vrvTime / 1000, this.timemap) * 1000;
+    }
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
@@ -138,6 +143,39 @@ export class RevealMusicXML {
         this.highlightedIDs = ids;
       }
     }
+  }
+
+  /**
+   * @brief Interpolate adjusted time from a map of input => output.
+   */
+  _timemap (time, map) {
+    if (typeof map[time] !== 'undefined') {
+      return map[time];
+    }
+    let keys = Object.keys(map);
+    let lowKi = -1;
+    let highKi = keys.length;
+    // Binary search for closest keys
+    while (1 + lowKi < highKi) {
+      const midKi = lowKi + ((highKi - lowKi) >> 1);
+      if (keys[midKi] > time) {
+        highKi = midKi;
+      } else {
+        lowKi = midKi;
+      }
+    }
+    if (lowKi === -1) return 0;
+    if (highKi === keys.length) return 100;
+    return this._map(
+      time,
+      keys[lowKi],
+      keys[highKi],
+      map[keys[lowKi]],
+      map[keys[highKi]]
+    );
+  }
+  _map (x, inMin, inMax, outMin, outMax) {
+    return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
 
   _playChangeControls () {
@@ -209,6 +247,7 @@ export class RevealMusicXML {
    */
   _playMIDI (toolkit) {
     this.audio = false;
+    this.timemap = {};
     if (!jQuery('#player')[0]) {
       jQuery('body').prepend(jQuery('<div id="player">'));
       jQuery('#player').midiPlayer({
@@ -219,6 +258,32 @@ export class RevealMusicXML {
     }
     let el = document.getElementById('RevealMusicXML' + this.playerToolkitNum);
     if (typeof el.dataset['musicxmlAudio'] !== 'undefined') {
+      if (typeof el.dataset['musicxmlAudioTimemap'] !== 'undefined') {
+        fetch(el.dataset['musicxmlAudioTimemap'])
+          .then(res => {
+            if (res.ok) {
+              return res.text();
+            } else {
+              throw new Error(
+                'Failed to load ' + el.dataset['musicxmlAudioTimemap']
+              );
+            }
+          })
+
+          .then(text => {
+            let lines = text.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+              if (lines[i] && lines[i][0] !== '#') {
+                let parts = lines[i].split('\t');
+                // Key is the time of the audio file (coerce to float),
+                // Value is the time of the music document.
+                this.timemap[parseFloat(parts[1]) + 0.001] = parseFloat(
+                  parts[0]
+                );
+              }
+            }
+          });
+      }
       if (el.dataset['musicxmlAudio'].indexOf('.mp3') !== -1) {
         jQuery('#player').hide();
         this.audio = new Audio(el.dataset['musicxmlAudio']);
