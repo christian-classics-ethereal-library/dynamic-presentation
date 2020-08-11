@@ -1,0 +1,78 @@
+/**
+ * Load the theme (with the scss variables)
+ * $mainColor is used for textonly, verovio, and for the pianoroll header
+ * $headingColor is not used specifically for DP
+ * $linkColor is used for textonly, verovio, and pianoroll controls
+ *  as well as pianoroll text
+*/
+
+/* Theme created here is based on 'reveal.js/css/theme/source/serif.scss' */
+/**
+ * Dark serif theme for reveal.js. Based on fires theme and reveal's black theme.
+ *
+ * This theme is based on theme with
+ * Copyright (C) 2012-2013 Owen Versteeg, http://owenversteeg.com - it is MIT licensed.
+ */
+
+// Default mixins and settings -----------------
+@import '../node_modules/reveal.js/css/theme/template/mixins';
+@import '../node_modules/reveal.js/css/theme/template/settings';
+// ---------------------------------------------
+
+// Override theme settings (see ../template/settings.scss)
+$mainFont: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+$headingFont: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+$backgroundColor: #191919;
+$mainColor: #fff;
+$headingColor: #fff;
+$mainFontSize: 42px;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: uppercase;
+$headingFontWeight: 600;
+$linkColor: #42affa;
+$linkColorHover: lighten($linkColor, 15%);
+$selectionBackgroundColor: lighten($linkColor, 25%);
+
+.reveal a {
+  line-height: 1.3em;
+}
+
+// Theme template ------------------------------
+@import '../node_modules/reveal.js/css/theme/template/theme';
+// ---------------------------------------------
+/* End of theme based on 'reveal.js/css/theme/source/serif.scss' */
+
+@import 'dynamic';
+
+/* Monospace Font: Cutive Mono */
+@import url(https://fonts.googleapis.com/css?family=Cutive+Mono);
+.reveal section[data-musicxml] svg {
+  font-family: 'Cutive Mono', monospace;
+}
+
+/* Verovio Text Font: Times New Roman */
+@import url(https://fonts.googleapis.com/css?family=Tinos);
+.reveal.reveal section[data-musicxml] svg g.page-margin {
+  font-family: 'Times New Roman', 'Times', 'Liberation Serif', 'Tinos', serif;
+}
+
+/* Verovio SMuFL Font: Leipzig */
+html {
+  font-family: Leipzig;
+}
+
+/* Mix voice colors for dark background */
+.reveal section[data-musicxml] svg {
+  g.voice0,
+  g.voice1,
+  g.voice2,
+  g.voice3,
+  g.voice4,
+  g.voice5,
+  g.voice6,
+  g.voice7 {
+    mix-blend-mode: screen;
+    isolation: isolate;
+  }
+}
