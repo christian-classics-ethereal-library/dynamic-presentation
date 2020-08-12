@@ -89,8 +89,9 @@ export class RevealMusicXML {
         }
       })
       .then(text => this.transformer.transform(text, transformation))
+      .then(music => this.transformer.transform(text, transformation, true))
       .then(text => {
-        this._slidify(section, text);
+        this._slidify(section, text, music);
       });
   }
 
@@ -272,6 +273,11 @@ export class RevealMusicXML {
           this.transformer.transform(
             section.querySelector('script[type="text/template"]').innerHTML,
             section.getAttribute('data-musicxml-transform')
+          ),
+          this.transformer.transform(
+            section.querySelector('script[type="text/template"]').innerHTML,
+            section.getAttribute('data-musicxml-transform'),
+            true
           )
         );
       }

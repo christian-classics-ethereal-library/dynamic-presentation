@@ -14,7 +14,7 @@ export class MusicXMLTransformer {
   }
 
   /* transform is called by the Reveal Plugin */
-  transform (data, transformationJson) {
+  transform (data, transformationJson, skipMelodyOnly = false) {
     const trans = JSON.parse(transformationJson);
     if (!trans) {
       return data;
@@ -31,7 +31,7 @@ export class MusicXMLTransformer {
       if (trans.options && trans.options.phrases) {
         this.phrasesPerLine(trans.options.phrases);
       }
-      if (trans.options && trans.options.melodyOnly) {
+      if (trans.options && trans.options.melodyOnly && !skipMelodyOnly) {
         this.hidePartsExceptMelody();
       }
       if (trans.options && trans.options.hideMeasureNumbers) {
