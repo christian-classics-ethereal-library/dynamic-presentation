@@ -11,7 +11,7 @@ export class PianoRollToolkit {
       this.verovio = new verovio.toolkit();
     }
     this.musicData = null;
-    this.data = null;
+    this.regularData = null;
   }
 
   getElementsAtTime (time) {
@@ -52,7 +52,7 @@ export class PianoRollToolkit {
   loadData (data, musicData = null) {
     if (musicData) {
       this.musicData = musicData;
-      this.data = data;
+      this.regularData = data;
     }
     if (this.verovio) {
       this.verovio.loadData(data);
@@ -270,8 +270,8 @@ export class PianoRollToolkit {
       this.verovio.loadData(this.musicData);
     }
     let result = this.verovio.renderToMIDI();
-    if (this.musicData) {
-      this.verovio.loadData(this.data);
+    if (this.regularData) {
+      this.verovio.loadData(this.regularData);
     }
     return result;
   }
