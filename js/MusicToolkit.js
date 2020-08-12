@@ -1,5 +1,5 @@
 /* globals verovio */
-export class TextOnlyToolkit extends verovio.toolkit {
+export class MusicToolkit extends verovio.toolkit {
   setMusicData (musicData) {
     this.musicData = musicData;
   }
