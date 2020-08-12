@@ -89,7 +89,6 @@ export class RevealMusicXML {
         }
       })
       .then(text => this.transformer.transform(text, transformation))
-      .then(music => this.transformer.transform(text, transformation, true))
       .then(text => {
         this._slidify(section, text, music);
       });
