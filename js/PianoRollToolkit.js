@@ -11,7 +11,6 @@ export class PianoRollToolkit {
       this.verovio = new verovio.toolkit();
     }
     this.musicData = null;
-    this.regularData = null;
   }
 
   getElementsAtTime (time) {
@@ -52,7 +51,6 @@ export class PianoRollToolkit {
   loadData (data, musicData = null) {
     if (musicData) {
       this.musicData = musicData;
-      this.regularData = data;
     }
     if (this.verovio) {
       this.verovio.loadData(data);
@@ -267,13 +265,13 @@ export class PianoRollToolkit {
 
   renderToMIDI () {
     if (this.musicData) {
-      this.verovio.loadData(this.musicData);
+      // eslint-disable-next-line new-cap
+      let newVerovio = new verovio.toolkit();
+      newVerovio.loadData(this.musicData);
+      return newVerovio.renderToMIDI();
+    } else {
+      return this.verovio.renderToMIDI();
     }
-    let result = this.verovio.renderToMIDI();
-    if (this.regularData) {
-      this.verovio.loadData(this.regularData);
-    }
-    return result;
   }
 
   renderToSVG (page, options) {
