@@ -90,7 +90,11 @@ export class RevealMusicXML {
       })
       .then(text => this.transformer.transform(text, transformation))
       .then(text => {
-        this._slidify(section, text);
+        this._slidify(
+          section,
+          text,
+          this.transformer.transform(text, transformation, true)
+        );
       });
   }
 
