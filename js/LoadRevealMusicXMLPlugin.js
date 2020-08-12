@@ -1,4 +1,4 @@
-/* globals Reveal, verovio */
+/* globals Reveal */
 import { MusicToolkit } from '../js/MusicToolkit.js';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
@@ -14,8 +14,7 @@ let tk;
 
 window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
-// Set verovio.toolkit for when toolkit choice in data-musicxml-toolkit
-window['verovio.toolkit'] = verovio.toolkit;
+window.MusicToolkit = MusicToolkit;
 
 if (urlParam('toolkit') === 'verovio') {
   tk = MusicToolkit;
