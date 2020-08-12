@@ -52,8 +52,8 @@ export class PianoRollToolkit {
   loadData (data, musicData = null) {
     if (musicData) {
       this.musicData = musicData;
+      this.data = data;
     }
-    this.data = data;
     if (this.verovio) {
       this.verovio.loadData(data);
       data = this.verovio.getMEI();
