@@ -1,4 +1,5 @@
 /* globals Reveal, verovio */
+import { MusicToolkit } from '../js/MusicToolkit.js';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
@@ -17,10 +18,10 @@ window.TextOnlyToolkit = TextOnlyToolkit;
 window['verovio.toolkit'] = verovio.toolkit;
 
 if (urlParam('toolkit') === 'verovio') {
-  tk = verovio.toolkit;
+  tk = MusicToolkit;
 } else if (urlParam('toolkit') === 'veroviostatic') {
   // Backwards compatibility for former VerovioLineWrapper.
-  tk = verovio.toolkit;
+  tk = MusicToolkit;
 } else if (urlParam('toolkit') === 'text') {
   tk = TextOnlyToolkit;
 } else {

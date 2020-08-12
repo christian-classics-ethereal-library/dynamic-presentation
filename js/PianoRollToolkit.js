@@ -48,10 +48,10 @@ export class PianoRollToolkit {
   }
 
   getTimeForElement (id) {}
-  loadData (data, musicData = null) {
-    if (musicData) {
-      this.musicData = musicData;
-    }
+  setMusicData (musicData) {
+    this.musicData = musicData;
+  }
+  loadData (data) {
     if (this.verovio) {
       this.verovio.loadData(data);
       data = this.verovio.getMEI();
