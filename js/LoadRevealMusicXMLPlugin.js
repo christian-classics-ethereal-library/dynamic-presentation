@@ -1,4 +1,5 @@
-/* globals Reveal, verovio */
+/* globals Reveal */
+import { MusicToolkit } from '../js/MusicToolkit.js';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
@@ -13,14 +14,13 @@ let tk;
 
 window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
-// Set verovio.toolkit for when toolkit choice in data-musicxml-toolkit
-window['verovio.toolkit'] = verovio.toolkit;
+window.MusicToolkit = MusicToolkit;
 
 if (urlParam('toolkit') === 'verovio') {
-  tk = verovio.toolkit;
+  tk = MusicToolkit;
 } else if (urlParam('toolkit') === 'veroviostatic') {
   // Backwards compatibility for former VerovioLineWrapper.
-  tk = verovio.toolkit;
+  tk = MusicToolkit;
 } else if (urlParam('toolkit') === 'text') {
   tk = TextOnlyToolkit;
 } else {

@@ -88,9 +88,13 @@ export class RevealMusicXML {
           throw new Error('Failed to load ' + url);
         }
       })
-      .then(text => this.transformer.transform(text, transformation))
+      .then(text => this.transformer.transform(text, transformation, true))
       .then(text => {
-        this._slidify(section, text);
+        this._slidify(
+          section,
+          text,
+          this.transformer.transform(text, transformation)
+        );
       });
   }
 
@@ -271,6 +275,11 @@ export class RevealMusicXML {
           section,
           this.transformer.transform(
             section.querySelector('script[type="text/template"]').innerHTML,
+            section.getAttribute('data-musicxml-transform'),
+            true
+          ),
+          this.transformer.transform(
+            section.querySelector('script[type="text/template"]').innerHTML,
             section.getAttribute('data-musicxml-transform')
           )
         );
@@ -322,7 +331,7 @@ export class RevealMusicXML {
     toolkit.setOptions({ ...defaultOptions, ...options });
   }
 
-  _slidify (section, data) {
+  _slidify (section, musicData, data) {
     if (!data) {
       return;
     }
@@ -338,7 +347,8 @@ export class RevealMusicXML {
     let toolkit = this.toolkits[i];
     section.setAttribute('id', `RevealMusicXML${i}`);
     this._setOptions(toolkit);
-    toolkit.loadData(data);
+    toolkit.setMusicData(musicData);
+    toolkit.loadData(data, musicData);
     this._render(section, toolkit);
     // TODO: Possibly use Reveal's 'resize' event when it works with percentage sizes
     // (https://github.com/hakimel/reveal.js/issues/2411).

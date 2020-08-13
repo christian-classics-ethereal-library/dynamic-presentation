@@ -10,6 +10,7 @@ export class PianoRollToolkit {
       // eslint-disable-next-line new-cap
       this.verovio = new verovio.toolkit();
     }
+    this.musicData = null;
   }
 
   getElementsAtTime (time) {
@@ -47,6 +48,9 @@ export class PianoRollToolkit {
   }
 
   getTimeForElement (id) {}
+  setMusicData (musicData) {
+    this.musicData = musicData;
+  }
   loadData (data) {
     if (this.verovio) {
       this.verovio.loadData(data);
@@ -260,7 +264,14 @@ export class PianoRollToolkit {
   }
 
   renderToMIDI () {
-    return this.verovio.renderToMIDI();
+    if (this.musicData) {
+      // eslint-disable-next-line new-cap
+      let newVerovio = new verovio.toolkit();
+      newVerovio.loadData(this.musicData);
+      return newVerovio.renderToMIDI();
+    } else {
+      return this.verovio.renderToMIDI();
+    }
   }
 
   renderToSVG (page, options) {
