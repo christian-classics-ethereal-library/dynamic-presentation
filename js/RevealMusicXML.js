@@ -166,6 +166,14 @@ export class RevealMusicXML {
   }
 
   _playPause () {
+    let hln;
+    if (
+      (hln = jQuery('section.present')[0].closest(
+        '[data-musicxml-highlightnotes]'
+      ))
+    ) {
+      this.highlightNotes = Boolean(hln.dataset.musicxmlHighlightnotes);
+    }
     if (!this.playing) {
       if (!jQuery('#player')[0]) {
         this.playerToolkitNum = this._getCurrentToolkitNum();
