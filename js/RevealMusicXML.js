@@ -1,6 +1,6 @@
 /* globals Audio, fetch, jQuery */
 export class RevealMusicXML {
-  constructor (ToolkitType, transformer) {
+  constructor (ToolkitType, transformer, highlightNotes = true) {
     this.MIDIDELAY = 380;
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
@@ -12,6 +12,7 @@ export class RevealMusicXML {
     this.reveal = Reveal;
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
+    this.highlightNotes = highlightNotes;
   }
 
   /**
@@ -113,6 +114,9 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
+    if (this.highlightNotes === false) {
+      return;
+    }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
@@ -146,7 +150,7 @@ export class RevealMusicXML {
 
   _playChangeControls () {
     this.reveal.configure({
-      controls: !this.playing
+      controls: !this.playing || !this.highlightNotes
     });
   }
 
@@ -162,6 +166,14 @@ export class RevealMusicXML {
   }
 
   _playPause () {
+    let hln;
+    if (
+      (hln = jQuery('section.present')[0].closest(
+        '[data-musicxml-highlightnotes]'
+      ))
+    ) {
+      this.highlightNotes = Boolean(hln.dataset.musicxmlHighlightnotes);
+    }
     if (!this.playing) {
       if (!jQuery('#player')[0]) {
         this.playerToolkitNum = this._getCurrentToolkitNum();

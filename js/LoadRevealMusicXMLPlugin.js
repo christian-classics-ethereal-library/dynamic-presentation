@@ -3,7 +3,7 @@ import { MusicToolkit } from '../js/MusicToolkit.js';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js';
 import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
-import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.2.1';
+import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.3.0';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js';
 import { urlParam } from '../js/urlParam.js';
 
