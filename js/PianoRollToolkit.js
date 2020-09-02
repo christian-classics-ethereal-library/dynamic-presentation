@@ -267,6 +267,7 @@ export class PianoRollToolkit {
     if (this.musicData) {
       // eslint-disable-next-line new-cap
       let newVerovio = new verovio.toolkit();
+      newVerovio.setOptions(this.verovio.getOptions());
       newVerovio.loadData(this.musicData);
       return newVerovio.renderToMIDI();
     } else {
