@@ -54,11 +54,9 @@ npm install
 
 `npm run run` starts serving the directory.
 
-You can also start this as a dart project.
-
 Assets (SCSS styles) can be recompiled with `npm run compile`.
 
-## [Core Understanding Test (CUT)](//gitlab.ccel.org/drupal/shared-modules/wikis/Core-Understanding-Test)
+## Core Understanding Test (CUT)
 
 - How do `RevealMusicArranger` and `RevealMusicXML` interact with reveal.js?
 - What is the role of a toolkit in Dynamic Presentation?
