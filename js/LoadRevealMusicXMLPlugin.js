@@ -6,6 +6,7 @@ import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
 import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.3.2';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js?v=1.3.2';
 import { urlParam } from '../js/urlParam.js';
+import { VoidPlayer } from '../js/VoidPlayer.js';
 
 let rma = new RevealMusicArranger();
 
@@ -15,6 +16,8 @@ let tk;
 window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
 window.MusicToolkit = MusicToolkit;
+
+window.VoidPlayer = VoidPlayer;
 
 if (urlParam('toolkit') === 'verovio') {
   tk = MusicToolkit;

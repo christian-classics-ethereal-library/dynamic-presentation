@@ -108,6 +108,7 @@ export class RevealMusicXML {
       });
     }
     this.playing = false;
+    this._playChangeControls();
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
@@ -152,11 +153,11 @@ export class RevealMusicXML {
   }
 
   _initPlayer (i) {
-    if (typeof window['voidPlayer'] === 'undefined') {
+    if (typeof window['VoidPlayer'] === 'undefined') {
       this._debug('base audio player does not exist. Audio will not play.');
       return {};
     }
-    let PlayerType = window['voidPlayer'];
+    let PlayerType = window['VoidPlayer'];
     let param;
 
     let root = document.getElementById(`RevealMusicXML${i}`);
@@ -167,7 +168,11 @@ export class RevealMusicXML {
         param = audio;
       }
     }
-    return new PlayerType(param, this._playerUpdate.bind(this));
+    return new PlayerType(
+      param,
+      this._playerUpdate.bind(this),
+      this._playerStop.bind(this)
+    );
   }
 
   _playPause () {
