@@ -163,8 +163,8 @@ export class RevealMusicXML {
     let root = document.getElementById(`RevealMusicXML${i}`);
     let audio = root.getAttribute('data-musicxml-audio');
     if (audio) {
-      if (typeof window['audioPlayer'] !== 'undefined') {
-        PlayerType = window['audioPlayer'];
+      if (typeof window['AudioPlayer'] !== 'undefined') {
+        PlayerType = window['AudioPlayer'];
         param = audio;
       }
     }
