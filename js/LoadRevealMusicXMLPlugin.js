@@ -1,4 +1,5 @@
 /* globals Reveal */
+import { AudioPlayer } from '../js/AudioPlayer.js';
 import { MusicToolkit } from '../js/MusicToolkit.js?v=1.3.2';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.2';
@@ -17,6 +18,7 @@ window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
 window.MusicToolkit = MusicToolkit;
 
+window.AudioPlayer = AudioPlayer;
 window.VoidPlayer = VoidPlayer;
 
 if (urlParam('toolkit') === 'verovio') {
