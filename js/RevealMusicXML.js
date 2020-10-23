@@ -169,6 +169,12 @@ export class RevealMusicXML {
       ) {
         PlayerType = window['MIDIPlayer'];
         param = audio;
+      } else if (
+        typeof window['MIDIPlayer'] !== 'undefined' &&
+        typeof window['verovio.toolkit'] !== 'undefined' &&
+        (audio.indexOf('.musicxml') !== -1 || audio.indexOf('.mei') !== -1)
+      ) {
+        // TODO: Generate MIDI from alternate musicxml or mei file.
       } else if (typeof window['AudioPlayer'] !== 'undefined') {
         PlayerType = window['AudioPlayer'];
         param = audio;
