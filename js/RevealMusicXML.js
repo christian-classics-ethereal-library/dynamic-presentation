@@ -163,10 +163,19 @@ export class RevealMusicXML {
     let root = document.getElementById(`RevealMusicXML${i}`);
     let audio = root.getAttribute('data-musicxml-audio');
     if (audio) {
-      if (typeof window['AudioPlayer'] !== 'undefined') {
+      if (
+        typeof window['MIDIPlayer'] !== 'undefined' &&
+        audio.indexOf('.mid') !== -1
+      ) {
+        PlayerType = window['MIDIPlayer'];
+        param = audio;
+      } else if (typeof window['AudioPlayer'] !== 'undefined') {
         PlayerType = window['AudioPlayer'];
         param = audio;
       }
+    } else {
+      PlayerType = window['MIDIPlayer'];
+      param = this.toolkits[i].renderToMIDI();
     }
     return new PlayerType(
       param,
