@@ -1,10 +1,10 @@
 /* globals Reveal */
-import { MusicToolkit } from '../js/MusicToolkit.js?v=1.3.1';
+import { MusicToolkit } from '../js/MusicToolkit.js?v=1.3.2';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
-import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.1';
+import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.2';
 import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
-import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.3.1';
-import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js';
+import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.3.2';
+import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js?v=1.3.2';
 import { urlParam } from '../js/urlParam.js';
 
 let rma = new RevealMusicArranger();
