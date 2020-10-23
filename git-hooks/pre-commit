@@ -1,43 +1,43 @@
-#!/usr/bin/env fish
+#!/bin/sh
 #
 # Symlink this hook to .git/hooks/pre-commit for it to work as a pre-commit hook.
 
-set FILES (git diff-index --cached HEAD | cut -f2 )
-set JSFILES (printf '%s\n' $FILES | grep '\.js$')
-set PRETTIERFILES (printf '%s\n' $FILES | grep '\.\(css\|js\|json\|less\|md\|scss\|yaml\|yml\)$')
-set TESTJSFILES (printf '%s\n' $FILES | grep '\.test\.js$')
+FILES=$(git diff-index --cached HEAD | cut -f2 )
+JSFILES=$(printf '%s\n' $FILES | grep '\.js$')
+PRETTIERFILES=$(printf '%s\n' $FILES | grep '\.\(css\|js\|json\|less\|md\|scss\|yaml\|yml\)$')
+TESTJSFILES=$(printf '%s\n' $FILES | grep '\.test\.js$')
 echo $PRETTIERFILES
 
-set npx (which npx)
-if dart2 w
-    set npx dart2 x - npx
-end
+npx=$(which npx)
+if dart w; then
+    npx="dart x - npx"
+fi
 
-set exit 0
+exit=0
 
-if test "$PRETTIERFILES"
-    if not $npx prettierx --check $PRETTIERFILES > /dev/null
-        $npx prettierx    --write $PRETTIERFILES
-        $npx prettierx    --check $PRETTIERFILES
+if test "$PRETTIERFILES"; then
+    if ! $npx prettierx --check $PRETTIERFILES > /dev/null; then
+        $npx prettierx  --write $PRETTIERFILES
+        $npx prettierx  --check $PRETTIERFILES
         # Make sure a message goes out about needing to stage changes.
-        and echo "Please stage changes made by prettier."
-        set exit 1
-    end
-end
+        test $? -eq 0 && echo "Please stage changes made by prettier."
+        exit=1
+    fi
+fi
 
-if test "$JSFILES"
-    if not $npx semistandard $JSFILES > /dev/null
+if test "$JSFILES"; then
+    if ! $npx semistandard $JSFILES > /dev/null; then
         $npx semistandard --fix $JSFILES
         $npx semistandard -v $JSFILES
         # Print a message if this one didn't print anything.
-        and echo "Please stage changes made by semistandard."
-        set exit 1
-    end
-end
+        test $? -eq 0 && echo "Please stage changes made by semistandard."
+        exit=1
+    fi
+fi
 
-if test "$TESTJSFILES"
+if test "$TESTJSFILES"; then
     $npx jest $TESTJSFILES
-    or set exit 1
-end
+    test $? -eq 0 || exit=1
+fi
 
 exit $exit
