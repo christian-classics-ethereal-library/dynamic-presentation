@@ -17,7 +17,7 @@ export class MIDIPlayer extends VoidPlayer {
     }
     this._data = false;
     // MIDI files start with "MThd". Check that the base64 starts like that.
-    if (params.substring(0, 4) !== window.btoa('MTh')) {
+    if (params && params.substring(0, 4) !== window.btoa('MTh')) {
       // If this is not proper data, treat as URL.
       fetch(params)
         .then(res => {

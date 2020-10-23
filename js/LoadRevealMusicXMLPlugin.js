@@ -8,6 +8,7 @@ import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
 import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.3.2';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js?v=1.3.2';
 import { urlParam } from '../js/urlParam.js';
+import { XMLPlayer } from '../js/XMLPlayer.js';
 import { VoidPlayer } from '../js/VoidPlayer.js';
 
 let rma = new RevealMusicArranger();
@@ -21,6 +22,7 @@ window.MusicToolkit = MusicToolkit;
 
 window.AudioPlayer = AudioPlayer;
 window.MIDIPlayer = MIDIPlayer;
+window.XMLPlayer = XMLPlayer;
 window.VoidPlayer = VoidPlayer;
 
 if (urlParam('toolkit') === 'verovio') {
