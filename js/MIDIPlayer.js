@@ -71,12 +71,11 @@ export class MIDIPlayer extends VoidPlayer {
   }
 
   _hashCode (str) {
-    return str
-      .split('')
-      .reduce(
-        (prevHash, currVal) =>
-          ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
-        0
-      );
+    return str.split('').reduce(
+      (prevHash, currVal) =>
+        // `| 0` casts to 32 bit integer. (https://stackoverflow.com/a/34842797/)
+        ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
+      0
+    );
   }
 }
