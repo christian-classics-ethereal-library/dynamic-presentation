@@ -7,14 +7,20 @@ make it easy to present musicXML files.
 
 The code is primarily written as a few classes.
 
-- **RevealMusicArranger**: reveal.js plugin to load a musicXML file, and return it several times with different transformation instructions.
+- **RevealMusicArranger**: (unsupported) reveal.js plugin to load a musicXML file, and return it several times with different transformation instructions.
 - **RevealMusicXML**: reveal.js plugin containing a rendering toolkit and a transformation library. Loads a musicXML file, transforms it with the transformer, controls rendering toolkits to output slides.
-- **MusicXMLTransformer**: Generic JavaScript library to perform transformations on the musicXML.
+- **MusicXMLTransformer**: (unsupported) Generic JavaScript library to perform transformations on the musicXML.
 - **TextOnlyToolkit**: Rendering toolkit to create slides with just text.
 - **PianoRollToolkit**: Rendering toolkit to create "simplified" piano roll notation.
 - **Verovio**: Rendering toolkit: Music Notation library maintained by RISM-CH.
+- **VoidPlayer**: Base Player implementing API without making any noise.
+- **AudioPlayer**: Player implementation using html5 audio, externally loaded audio files (mp3, wav, etc).
+- **MIDIPlayer**: Loads internal or external MIDI data into the 3rd party `midi-player` library.
+- **XMLPlayer**: Uses Verovio to generate MIDI from externally loaded XML.
 
-![Diagram of Class Structure](docs/structure.svg)
+![Diagram of Class Structure](docs/classDiagram.svg)
+
+(RevealMusicArranger and MusicXMLTransformer described by [old class structure diagram](docs/structure.svg).)
 
 ## Usage
 
