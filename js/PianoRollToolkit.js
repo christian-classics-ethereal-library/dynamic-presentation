@@ -4,6 +4,7 @@ export class PianoRollToolkit {
     this.scale = 100;
     this.width = 300;
     this.height = 150;
+    this.options = {};
     this.adjustPageHeight = false;
     this._configValues();
     if (typeof verovio !== 'undefined') {
@@ -317,6 +318,7 @@ export class PianoRollToolkit {
   }
 
   setOptions (options) {
+    this.options = options;
     if (this.verovio) {
       this.verovio.setOptions(options);
     }
@@ -344,6 +346,9 @@ export class PianoRollToolkit {
       this.noHeader = true;
     }
     this._configValues();
+  }
+  getOptions () {
+    return this.options;
   }
 
   // Private functions
