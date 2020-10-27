@@ -1,5 +1,5 @@
 /* globals */
-import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.2';
+import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.3';
 
 export class TextOnlyToolkit extends PianoRollToolkit {
   getPageCount () {

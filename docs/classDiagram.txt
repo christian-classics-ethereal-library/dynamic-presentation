@@ -1,0 +1,32 @@
+classDiagram
+  RevealJS <.. RevealMusicXML : is a plugin for
+  RevealMusicXML ..> VoidPlayer : Needed to Play/Pause audio
+  RevealMusicXML ..> Toolkit : Needed to render any music
+  VoidPlayer <|-- AudioPlayer
+  VoidPlayer <|-- MIDIPlayer
+  MIDIPlayer <|-- XMLPlayer
+  MidiPlayer <.. MIDIPlayer : uses to play MIDI
+  Verovio <.. XMLPlayer : uses to generate MIDI
+  Toolkit <|.. Verovio
+  Toolkit <|.. PianoRollToolkit
+  PianoRollToolkit <|-- TextOnlyToolkit
+  class Toolkit {
+    <<abstract>>
+    loadData()
+    getElementsAtTime()
+    getPageCount()
+    redoLayout()
+    renderToSVG(int page)
+    getOptions()
+    setOptions()
+  }
+  class Verovio {
+    <<3rd party>>
+    renderToMIDI()
+  }
+  class MidiPlayer {
+    <<3rd party>>
+  }
+  class RevealJS {
+    <<3rd party>>
+  }
