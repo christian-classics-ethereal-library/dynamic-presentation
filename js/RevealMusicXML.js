@@ -302,7 +302,9 @@ export class RevealMusicXML {
     let toolkit = this.toolkits[i];
     section.setAttribute('id', `RevealMusicXML${i}`);
     this._setOptions(toolkit);
-    toolkit.setMusicData(musicData);
+    if (typeof toolkit.setMusicData !== 'undefined') {
+      toolkit.setMusicData(musicData);
+    }
     toolkit.loadData(data, musicData);
     this._render(section, toolkit);
     // TODO: Possibly use Reveal's 'resize' event when it works with percentage sizes

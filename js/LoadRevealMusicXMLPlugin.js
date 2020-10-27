@@ -19,6 +19,9 @@ let tk;
 window.PianoRollToolkit = PianoRollToolkit;
 window.TextOnlyToolkit = TextOnlyToolkit;
 window.MusicToolkit = MusicToolkit;
+if (typeof window.verovio !== 'undefined') {
+  window.VerovioToolkit = window.verovio.toolkit;
+}
 
 window.AudioPlayer = AudioPlayer;
 window.MIDIPlayer = MIDIPlayer;

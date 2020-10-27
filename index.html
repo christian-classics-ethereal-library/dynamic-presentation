@@ -25,24 +25,23 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <!-- Allow the musicarranger to split the xml file into several. -->
-        <section
-          data-musicarranger="musicxmlTestSuite/xmlFiles/61b-MultipleLyrics.xml"
-        >
-          Loading...
+        <!-- Basic way to load a musicXML file (uses default toolkit). -->
+        <section data-musicxml="musicxmlTestSuite/xmlFiles/61a-Lyrics.xml">
+          Your Loading Message Here...
         </section>
-        <section data-musicxml="nonexistentfile.musicxml"></section>
-        <!-- Load a musicXML file and provide your own transformations -->
+        <!-- The toolkit can be specified. -->
         <section
           data-musicxml="musicxmlTestSuite/xmlFiles/61b-MultipleLyrics.xml"
-          data-musicxml-transform='{"sectionNames": ["verse1", "verse3"]}'
           data-musicxml-toolkit='{"toolkit":"TextOnlyToolkit"}'
         ></section>
-        <!-- Or just load a single XML file without any transformations. -->
+        <!-- And options can be passed to the toolkit. -->
         <section
-          data-musicxml="musicxmlTestSuite/xmlFiles/01a-Pitches-Pitches.xml"
-          data-musicxml-toolkit='{"options": {"transpose": "++D"}}'
+          data-musicxml="musicxmlTestSuite/xmlFiles/01b-Pitches-Intervals.xml"
+          data-musicxml-toolkit='{"options": {"transpose": "-C"}, "toolkit":"VerovioToolkit"}'
         ></section>
+        <section data-musicxml="nonexistentfile.musicxml">
+          This loading message will be replaced.
+        </section>
       </div>
     </div>
   </body>
