@@ -176,6 +176,13 @@ export class RevealMusicXML {
       ) {
         PlayerType = window['XMLPlayer'];
         param = [audio, this.toolkits[i].getOptions()];
+      } else if (
+        typeof window['YouTubePlayer'] !== 'undefined' &&
+        (audio.indexOf('youtube.com/') !== -1 ||
+          audio.indexOf('://youtu.be/') !== -1)
+      ) {
+        PlayerType = window['YouTubePlayer'];
+        param = audio;
       } else if (typeof window['AudioPlayer'] !== 'undefined') {
         PlayerType = window['AudioPlayer'];
         param = audio;
@@ -195,7 +202,11 @@ export class RevealMusicXML {
     if (this.playing) {
       for (let i = 0; i < this.players.length; i++) {
         if (typeof this.players[i] !== 'undefined') {
-          this.players[i].pause();
+          if (i !== this.getCurrentToolkitNum) {
+            this.players[i].stop();
+          } else {
+            this.players[i].pause();
+          }
         }
       }
       this.playing = false;
