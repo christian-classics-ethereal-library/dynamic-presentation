@@ -35,12 +35,14 @@ and your document object model needs to look like
   <body>
     <div class="reveal">
       <div class="slides">
-        <section data-musicarranger="path/to/file.musicxml"></section>
+        <section data-musicxml="path/to/file.musicxml"></section>
       </div>
     </div>
   </body>
 </html>
 ```
+
+(see [index.html](index.html) for an example of this).
 
 - `slides.js` Initializes reveal.js. This file can be rewritten to change reveal.js options
   (`parallaxBackgroundImage`, `transition`, etc).
