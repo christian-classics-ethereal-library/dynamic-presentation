@@ -9,6 +9,7 @@ import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.3.3';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js?v=1.3.3'; // Depends on PianoRollToolkit
 import { urlParam } from '../js/urlParam.js';
 import { XMLPlayer } from '../js/XMLPlayer.js'; // Depends on MIDIPlayer
+import { YouTubePlayer } from '../js/YouTubePlayer.js';
 import { VoidPlayer } from '../js/VoidPlayer.js';
 
 let rma = new RevealMusicArranger();
@@ -26,6 +27,7 @@ if (typeof window.verovio !== 'undefined') {
 window.AudioPlayer = AudioPlayer;
 window.MIDIPlayer = MIDIPlayer;
 window.XMLPlayer = XMLPlayer;
+window.YouTubePlayer = YouTubePlayer;
 window.VoidPlayer = VoidPlayer;
 
 if (urlParam('toolkit') === 'verovio') {

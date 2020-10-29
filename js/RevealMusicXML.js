@@ -176,6 +176,13 @@ export class RevealMusicXML {
       ) {
         PlayerType = window['XMLPlayer'];
         param = [audio, this.toolkits[i].getOptions()];
+      } else if (
+        typeof window['YouTubePlayer'] !== 'undefined' &&
+        (audio.indexOf('youtube.com/') !== -1 ||
+          audio.indexOf('://youtu.be/') !== -1)
+      ) {
+        PlayerType = window['YouTubePlayer'];
+        param = audio;
       } else if (typeof window['AudioPlayer'] !== 'undefined') {
         PlayerType = window['AudioPlayer'];
         param = audio;
