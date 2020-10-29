@@ -202,7 +202,11 @@ export class RevealMusicXML {
     if (this.playing) {
       for (let i = 0; i < this.players.length; i++) {
         if (typeof this.players[i] !== 'undefined') {
-          this.players[i].pause();
+          if (i !== this.getCurrentToolkitNum) {
+            this.players[i].stop();
+          } else {
+            this.players[i].pause();
+          }
         }
       }
       this.playing = false;

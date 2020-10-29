@@ -13,6 +13,7 @@ export class YouTubePlayer extends VoidPlayer {
   }
 
   play () {
+    jQuery('#youtubeplayer').show();
     // TODO: Use YouTube Player API to check if this exists
     if (!jQuery('#youtubeplayer .ytp-large-play-button').length) {
       if (!jQuery(`#youtubeplayer[src*="${this._youtubeCode}"]`).length) {
@@ -28,7 +29,6 @@ export class YouTubePlayer extends VoidPlayer {
       }
       return;
     }
-    jQuery('#youtubeplayer').show();
     // TODO: Use YouTube Player API to play this audio.
     jQuery('#youtubeplayer .ytp-large-play-button').click();
     this._playing = true;
