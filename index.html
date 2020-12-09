@@ -25,8 +25,12 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <!-- Basic way to load a musicXML file (uses default toolkit). -->
-        <section data-musicxml="musicxmlTestSuite/xmlFiles/61a-Lyrics.xml">
+        <!-- Load a musicXML file, and optionally provide audio and timemap files. -->
+        <section
+          data-musicxml="examples/110.musicxml"
+          data-musicxml-audio="examples/110.perf.mid"
+          data-musicxml-audio-timemap="examples/110.map.txt"
+        >
           Your Loading Message Here...
         </section>
         <!-- The toolkit can be specified. -->
