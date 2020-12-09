@@ -117,10 +117,12 @@ export class RevealMusicXML {
       return;
     }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
-    /* if (this.timemap) {
+    if (typeof this.timemaps[this.playerToolkitNum] !== 'undefined') {
       // TODO: Figure out if there needs to be a different MIDIDELAY added.
-      vrvTime = this._timemap(vrvTime / 1000, this.timemap) * 1000;
-    } */
+      vrvTime =
+        this._timemap(vrvTime / 1000, this.timemaps[this.playerToolkitNum]) *
+        1000;
+    }
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
