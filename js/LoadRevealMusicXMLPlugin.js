@@ -47,4 +47,7 @@ window.rmx = rmx;
 rma
   .init()
   .then(() => rmx.init())
-  .then(() => Reveal.slide(0, 0));
+  .then(
+    () => Reveal.slide(0, 0),
+    () => Reveal.slide(0, 0)
+  );
