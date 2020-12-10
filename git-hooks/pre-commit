@@ -4,7 +4,7 @@
 
 FILES=$(git diff-index --cached HEAD | cut -f2 )
 JSFILES=$(printf '%s\n' $FILES | grep '\.js$')
-PRETTIERFILES=$(printf '%s\n' $FILES | grep '\.\(css\|js\|json\|less\|md\|scss\|yaml\|yml\)$')
+PRETTIERFILES=$(printf '%s\n' $FILES | grep '\.\(css\|html\|js\|json\|less\|md\|scss\|yaml\|yml\)$')
 TESTJSFILES=$(printf '%s\n' $FILES | grep '\.test\.js$')
 echo $PRETTIERFILES
 

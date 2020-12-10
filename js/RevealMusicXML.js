@@ -5,6 +5,7 @@ export class RevealMusicXML {
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.players = [];
+    this.timemaps = [];
     this.playing = false;
     this.transformer = transformer;
     // TODO: Use Reveal object passed to plugin when that is available.
@@ -116,6 +117,12 @@ export class RevealMusicXML {
       return;
     }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
+    if (typeof this.timemaps[this.playerToolkitNum] !== 'undefined') {
+      // TODO: Figure out if there needs to be a different MIDIDELAY added.
+      vrvTime =
+        this._timemap(vrvTime / 1000, this.timemaps[this.playerToolkitNum]) *
+        1000;
+    }
     let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
       vrvTime
     );
@@ -144,6 +151,39 @@ export class RevealMusicXML {
         this.highlightedIDs = ids;
       }
     }
+  }
+
+  /**
+   * @brief Interpolate adjusted time from a map of input => output.
+   */
+  _timemap (time, map) {
+    if (typeof map[time] !== 'undefined') {
+      return map[time];
+    }
+    let keys = Object.keys(map);
+    let lowKi = -1;
+    let highKi = keys.length;
+    // Binary search for closest keys
+    while (1 + lowKi < highKi) {
+      const midKi = lowKi + ((highKi - lowKi) >> 1);
+      if (keys[midKi] > time) {
+        highKi = midKi;
+      } else {
+        lowKi = midKi;
+      }
+    }
+    if (lowKi === -1) return 0;
+    if (highKi === keys.length) return 100;
+    return this._map(
+      time,
+      keys[lowKi],
+      keys[highKi],
+      map[keys[lowKi]],
+      map[keys[highKi]]
+    );
+  }
+  _map (x, inMin, inMax, outMin, outMax) {
+    return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
 
   _playChangeControls () {
@@ -198,6 +238,37 @@ export class RevealMusicXML {
     );
   }
 
+  _fetchTimeMap (i) {
+    let root = document.getElementById(`RevealMusicXML${i}`);
+    this.timemaps[i] = {};
+    if (typeof root.dataset['musicxmlAudioTimemap'] !== 'undefined') {
+      fetch(root.dataset['musicxmlAudioTimemap'])
+        .then(res => {
+          if (res.ok) {
+            return res.text();
+          } else {
+            throw new Error(
+              'Failed to load ' + root.dataset['musicxmlAudioTimemap']
+            );
+          }
+        })
+
+        .then(text => {
+          let lines = text.split('\n');
+          for (let j = 0; j < lines.length; j++) {
+            if (lines[j] && lines[j][0] !== '#') {
+              let parts = lines[j].split('\t');
+              // Key is the time of the audio file (coerce to float),
+              // Value is the time of the music document.
+              this.timemaps[i][parseFloat(parts[1]) + 0.001] = parseFloat(
+                parts[0]
+              );
+            }
+          }
+        });
+    }
+  }
+
   _playPause () {
     if (this.playing) {
       for (let i = 0; i < this.players.length; i++) {
@@ -216,6 +287,7 @@ export class RevealMusicXML {
         this.players[this.playerToolkitNum] = this._initPlayer(
           this.playerToolkitNum
         );
+        this._fetchTimeMap(this.playerToolkitNum);
       }
       this.players[this.playerToolkitNum].play();
       this.playing = true;
