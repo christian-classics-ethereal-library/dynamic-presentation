@@ -266,6 +266,8 @@ export class RevealMusicXML {
             }
           }
         });
+    } else {
+      this.timemaps[i] = undefined;
     }
   }
 
