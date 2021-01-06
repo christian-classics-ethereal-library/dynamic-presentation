@@ -3,11 +3,12 @@
 import { VoidPlayer } from '../js/VoidPlayer.js';
 
 export class AudioPlayer extends VoidPlayer {
-  constructor (params, onUpdate, onStop) {
+  constructor (params, onUpdate, onStop, playbackRate) {
     super(params, onUpdate, onStop);
     this._audio = new Audio(params);
     this._audio.onplay = this._update.bind(this);
     this._playing = false;
+    this._audio.playbackRate = playbackRate;
   }
   play () {
     this._audio.play();
