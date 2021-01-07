@@ -2,7 +2,7 @@
 import { MIDIPlayer } from '../js/MIDIPlayer.js';
 
 export class XMLPlayer extends MIDIPlayer {
-  constructor (params, onUpdate, onStop) {
+  constructor (params, onUpdate, onStop, playbackRate) {
     super(false, onUpdate, onStop);
     fetch(params[0])
       .then(res => {

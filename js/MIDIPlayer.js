@@ -3,7 +3,7 @@
 import { VoidPlayer } from '../js/VoidPlayer.js';
 
 export class MIDIPlayer extends VoidPlayer {
-  constructor (params, onUpdate, onStop) {
+  constructor (params, onUpdate, onStop, playbackRate) {
     super(params, onUpdate, onStop);
     // TODO: Use different id for different players.
     if (!jQuery('#player')[0]) {
