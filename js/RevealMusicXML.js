@@ -200,10 +200,10 @@ export class RevealMusicXML {
     let PlayerType = window['VoidPlayer'];
     let param;
 
-    let playbackRate = 1;
     let root = document.getElementById(`RevealMusicXML${i}`);
-    if (root.getAttribute('data-playback-rate').length) {
-      playbackRate = root.getAttribute('data-playback-rate');
+    let playbackRate = root.getAttribute('data-playback-rate');
+    if (!playbackRate || !playbackRate.length) {
+      playbackRate = 1;
     }
 
     let audio = root.getAttribute('data-musicxml-audio');
