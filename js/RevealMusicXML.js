@@ -201,12 +201,11 @@ export class RevealMusicXML {
     let param;
 
     let playbackRate = 1;
-    let rateSection = document.querySelectorAll('[data-playback-rate]')[i];
-    if (rateSection.getAttribute('data-playback-rate').length) {
-      playbackRate = rateSection.getAttribute('data-playback-rate');
+    let root = document.getElementById(`RevealMusicXML${i}`);
+    if (root.getAttribute('data-playback-rate').length) {
+      playbackRate = root.getAttribute('data-playback-rate');
     }
 
-    let root = document.getElementById(`RevealMusicXML${i}`);
     let audio = root.getAttribute('data-musicxml-audio');
     if (audio) {
       if (
