@@ -108,3 +108,8 @@ p span.highlightedNote {
 #midiPlayer_div .icon {
   display: none !important;
 }
+
+/* Hide tempo because it may be inaccurate */
+g.tempo {
+  display: none !important;
+}

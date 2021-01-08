@@ -1,6 +1,6 @@
 /* globals Date */
 export class VoidPlayer {
-  constructor (params, onUpdate, onStop) {
+  constructor (params, onUpdate, onStop, playbackRate) {
     this.params = params;
     this.onUpdate = onUpdate;
     this.onStop = onStop;

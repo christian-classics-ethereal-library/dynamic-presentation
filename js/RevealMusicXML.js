@@ -201,6 +201,11 @@ export class RevealMusicXML {
     let param;
 
     let root = document.getElementById(`RevealMusicXML${i}`);
+    let playbackRate = root.getAttribute('data-playback-rate');
+    if (!playbackRate || !playbackRate.length) {
+      playbackRate = 1;
+    }
+
     let audio = root.getAttribute('data-musicxml-audio');
     if (audio) {
       if (
@@ -234,7 +239,8 @@ export class RevealMusicXML {
     return new PlayerType(
       param,
       this._playerUpdate.bind(this),
-      this._playerStop.bind(this)
+      this._playerStop.bind(this),
+      playbackRate
     );
   }
 
