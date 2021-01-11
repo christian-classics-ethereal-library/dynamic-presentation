@@ -15,6 +15,13 @@ export class RevealMusicXML {
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
     this.highlightNotes = highlightNotes;
+    this.currentLowKi = 0;
+    this.currentHighKi = 0;
+    this.shouldPause = false;
+    this.timemapMode = '';
+    this.timestampInProgress = {};
+    this.systems = [];
+    this.currentSystemNum = 0;
   }
 
   /**
@@ -35,10 +42,81 @@ export class RevealMusicXML {
       { keyCode: 77, key: 'M', description: 'Play/Pause audio' },
       this._playPause.bind(this)
     );
+    let root = document.getElementsByClassName(`present`);
+    this.timemapMode = root.length
+      ? root[0].getAttribute('data-timemap-mode')
+      : '';
+    // If the user is creating a timemap file...
+    if (this.timemapMode === 'create') {
+      // When they press space...
+      this.reveal.addKeyBinding(
+        { keyCode: 32, key: ' ', description: 'Record time' },
+        function () {
+          if (this.playing) {
+            this.currentSystemNum += 1;
+            if (this.systems.length > this.currentSystemNum) {
+              // Get the time in the audio recording
+              let player = this.players[this.playerToolkitNum];
+              let audioTime = player.getTimestamp();
+              // Get the current time in the midi file
+              let toolkit = this.toolkits[this.playerToolkitNum];
+              let midiTime = toolkit.getTimeForElement(
+                this.systems
+                  .eq(this.currentSystemNum - 1)
+                  .find('.note')
+                  .attr('id')
+              );
+              // Get the time of the first note in the next system in the midi
+              let nextTime = toolkit.getTimeForElement(
+                this.systems
+                  .eq(this.currentSystemNum)
+                  .find('.note')
+                  .attr('id')
+              );
+              // Record time and highlight next note
+              this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
+              console.log(midiTime / 1000, audioTime / 1000);
+              this._highlightAtTime(nextTime + 1);
+            }
+          }
+        }.bind(this)
+      );
+    }
     return this._processSlides().then(() => Promise.resolve());
   }
 
   // Private methods
+
+  _highlightAtTime (time) {
+    let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
+      time
+    );
+    if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
+      if (
+        elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
+        this.reveal.getState().indexh !==
+          this._getIndexHForToolkit(this.playerToolkitNum)
+      ) {
+        this.reveal.slide(
+          this._getIndexHForToolkit(this.playerToolkitNum),
+          elementsAtTime.page - 1
+        );
+      }
+      let ids = this.highlightedIDs || [];
+      if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
+        ids.forEach(function (noteid) {
+          if (jQuery.inArray(noteid, elementsAtTime.notes) === -1) {
+            jQuery('#' + noteid).removeClass('highlightedNote');
+          }
+        });
+        ids = elementsAtTime.notes;
+        ids.forEach(noteid => {
+          jQuery('#' + noteid).addClass('highlightedNote');
+        });
+        this.highlightedIDs = ids;
+      }
+    }
+  }
 
   _debug (message) {
     console.log(`RevealMusicXML: ${message}`);
@@ -101,7 +179,32 @@ export class RevealMusicXML {
       });
   }
 
+  // From https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
+  _download (filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    );
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   /* Hooks for this.players[i]. */
+  _playerEnd () {
+    if (this.timemapMode === 'create') {
+      let timemapText = '';
+      for (const xmlTime in this.timestampInProgress) {
+        timemapText += `${xmlTime}\t${this.timestampInProgress[xmlTime]}\n`;
+      }
+
+      // Download the timemap
+      this._download('timemap.txt', timemapText);
+    }
+  }
   _playerStop () {
     if (typeof this.highlightedIDs !== 'undefined') {
       this.highlightedIDs.forEach(noteid => {
@@ -113,7 +216,7 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
-    if (this.highlightNotes === false) {
+    if (this.highlightNotes === false || this.timemapMode === 'create') {
       return;
     }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
@@ -123,33 +226,10 @@ export class RevealMusicXML {
         this._timemap(vrvTime / 1000, this.timemaps[this.playerToolkitNum]) *
         1000;
     }
-    let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
-      vrvTime
-    );
-    if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
-      if (
-        elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
-        this.reveal.getState().indexh !==
-          this._getIndexHForToolkit(this.playerToolkitNum)
-      ) {
-        this.reveal.slide(
-          this._getIndexHForToolkit(this.playerToolkitNum),
-          elementsAtTime.page - 1
-        );
-      }
-      let ids = this.highlightedIDs || [];
-      if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
-        ids.forEach(function (noteid) {
-          if (jQuery.inArray(noteid, elementsAtTime.notes) === -1) {
-            jQuery('#' + noteid).removeClass('highlightedNote');
-          }
-        });
-        ids = elementsAtTime.notes;
-        ids.forEach(noteid => {
-          jQuery('#' + noteid).addClass('highlightedNote');
-        });
-        this.highlightedIDs = ids;
-      }
+    this._highlightAtTime(vrvTime);
+    if (this.shouldPause) {
+      this.shouldPause = false;
+      this._playPause();
     }
   }
 
@@ -174,6 +254,16 @@ export class RevealMusicXML {
     }
     if (lowKi === -1) return 0;
     if (highKi === keys.length) return 100;
+    if (this.timemapMode === 'test') {
+      if (
+        this.currentLowKi !== map[keys[lowKi]] ||
+        this.currentHighKi !== map[keys[highKi]]
+      ) {
+        this.currentLowKi = map[keys[lowKi]];
+        this.currentHighKi = map[keys[highKi]];
+        this.shouldPause = true;
+      }
+    }
     return this._map(
       time,
       keys[lowKi],
@@ -240,6 +330,7 @@ export class RevealMusicXML {
       param,
       this._playerUpdate.bind(this),
       this._playerStop.bind(this),
+      this._playerEnd.bind(this),
       playbackRate
     );
   }
@@ -253,6 +344,11 @@ export class RevealMusicXML {
           if (res.ok) {
             return res.text();
           } else {
+            // Disable highlighting if the timemap fails to load
+            this.highlightNotes = false;
+            this.highlightedIDs.forEach(noteid => {
+              jQuery('#' + noteid).removeClass('highlightedNote');
+            });
             throw new Error(
               'Failed to load ' + root.dataset['musicxmlAudioTimemap']
             );
@@ -281,7 +377,7 @@ export class RevealMusicXML {
     if (this.playing) {
       for (let i = 0; i < this.players.length; i++) {
         if (typeof this.players[i] !== 'undefined') {
-          if (i !== this.getCurrentToolkitNum) {
+          if (i !== this._getCurrentToolkitNum()) {
             this.players[i].stop();
           } else {
             this.players[i].pause();
@@ -295,7 +391,21 @@ export class RevealMusicXML {
         this.players[this.playerToolkitNum] = this._initPlayer(
           this.playerToolkitNum
         );
-        this._fetchTimeMap(this.playerToolkitNum);
+        if (this.timemapMode === 'create') {
+          this.systems = jQuery('.reveal').find(jQuery('[id|=system]'));
+          if (this.systems.length > 0) {
+            let toolkit = this.toolkits[this.playerToolkitNum];
+            let firstTime = toolkit.getTimeForElement(
+              this.systems
+                .eq(0)
+                .find('.note')
+                .attr('id')
+            );
+            this._highlightAtTime(firstTime + 1);
+          }
+        } else {
+          this._fetchTimeMap(this.playerToolkitNum);
+        }
       }
       this.players[this.playerToolkitNum].play();
       this.playing = true;
