@@ -42,46 +42,6 @@ export class RevealMusicXML {
       { keyCode: 77, key: 'M', description: 'Play/Pause audio' },
       this._playPause.bind(this)
     );
-    let root = document.getElementsByClassName(`present`);
-    this.timemapMode = root.length
-      ? root[0].getAttribute('data-timemap-mode')
-      : '';
-    // If the user is creating a timemap file...
-    if (this.timemapMode === 'create') {
-      // When they press space...
-      this.reveal.addKeyBinding(
-        { keyCode: 32, key: ' ', description: 'Record time' },
-        function () {
-          if (this.playing) {
-            this.currentSystemNum += 1;
-            if (this.systems.length > this.currentSystemNum) {
-              // Get the time in the audio recording
-              let player = this.players[this.playerToolkitNum];
-              let audioTime = player.getTimestamp();
-              // Get the current time in the midi file
-              let toolkit = this.toolkits[this.playerToolkitNum];
-              let midiTime = toolkit.getTimeForElement(
-                this.systems
-                  .eq(this.currentSystemNum - 1)
-                  .find('.note')
-                  .attr('id')
-              );
-              // Get the time of the first note in the next system in the midi
-              let nextTime = toolkit.getTimeForElement(
-                this.systems
-                  .eq(this.currentSystemNum)
-                  .find('.note')
-                  .attr('id')
-              );
-              // Record time and highlight next note
-              this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
-              console.log(midiTime / 1000, audioTime / 1000);
-              this._highlightAtTime(nextTime + 1);
-            }
-          }
-        }.bind(this)
-      );
-    }
     return this._processSlides().then(() => Promise.resolve());
   }
 
@@ -289,6 +249,47 @@ export class RevealMusicXML {
     }
     let PlayerType = window['VoidPlayer'];
     let param;
+
+    let present = document.getElementsByClassName(`present`);
+    this.timemapMode = present.length
+      ? present.item(0).getAttribute('data-timemap-mode')
+      : '';
+    // If the user is creating a timemap file...
+    if (this.timemapMode === 'create') {
+      // When they press space...
+      this.reveal.addKeyBinding(
+        { keyCode: 32, key: ' ', description: 'Record time' },
+        function () {
+          if (this.playing) {
+            this.currentSystemNum += 1;
+            if (this.systems.length > this.currentSystemNum) {
+              // Get the time in the audio recording
+              let player = this.players[this.playerToolkitNum];
+              let audioTime = player.getTimestamp();
+              // Get the current time in the midi file
+              let toolkit = this.toolkits[this.playerToolkitNum];
+              let midiTime = toolkit.getTimeForElement(
+                this.systems
+                  .eq(this.currentSystemNum - 1)
+                  .find('.note')
+                  .attr('id')
+              );
+              // Get the time of the first note in the next system in the midi
+              let nextTime = toolkit.getTimeForElement(
+                this.systems
+                  .eq(this.currentSystemNum)
+                  .find('.note')
+                  .attr('id')
+              );
+              // Record time and highlight next note
+              this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
+              console.log(midiTime / 1000, audioTime / 1000);
+              this._highlightAtTime(nextTime + 1);
+            }
+          }
+        }.bind(this)
+      );
+    }
 
     let root = document.getElementById(`RevealMusicXML${i}`);
     let playbackRate = root.getAttribute('data-playback-rate');
