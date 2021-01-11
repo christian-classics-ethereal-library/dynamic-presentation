@@ -284,7 +284,7 @@ export class RevealMusicXML {
               // Record time and highlight next note
               this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
               console.log(midiTime / 1000, audioTime / 1000);
-              this._highlightAtTime(nextTime + 1);
+              this._highlightAtTime(nextTime + 10);
             }
           }
         }.bind(this)
@@ -402,7 +402,7 @@ export class RevealMusicXML {
                 .find('.note')
                 .attr('id')
             );
-            this._highlightAtTime(firstTime + 1);
+            this._highlightAtTime(firstTime + 10);
           }
         } else {
           this._fetchTimeMap(this.playerToolkitNum);
