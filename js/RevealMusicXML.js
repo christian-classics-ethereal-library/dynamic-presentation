@@ -22,6 +22,7 @@ export class RevealMusicXML {
     this.timestampInProgress = {};
     this.systems = [];
     this.currentSystemNum = 0;
+    this.startOfSystem = true;
   }
 
   /**
@@ -264,32 +265,56 @@ export class RevealMusicXML {
             this.playing &&
             this.systems.length >= this.currentSystemNum + 1
           ) {
-            this.currentSystemNum += 1;
             // Get the time in the audio recording
             let player = this.players[this.playerToolkitNum];
             let audioTime = player.getTimestamp();
             // Get the current time in the midi file
             let toolkit = this.toolkits[this.playerToolkitNum];
-            let midiTime = toolkit.getTimeForElement(
-              this.systems
-                .eq(this.currentSystemNum - 1)
+            let thisNoteID = '';
+            if (this.startOfSystem) {
+              thisNoteID = this.systems
+                .eq(this.currentSystemNum)
                 .find('.note')
-                .attr('id')
-            );
+                .first()
+                .attr('id');
+            } else {
+              thisNoteID = this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .last()
+                .attr('id');
+            }
+            let midiTime = toolkit.getTimeForElement(thisNoteID);
             // Record time
             this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
             console.log(midiTime / 1000, audioTime / 1000);
+            // Update to end of this system or next system
+            if (this.startOfSystem) {
+              this.startOfSystem = false;
+            } else {
+              this.startOfSystem = true;
+              this.currentSystemNum += 1;
+            }
             if (this.systems.length > this.currentSystemNum) {
-              // If any system before the last one, highlight next system's first notes
-              let nextTime = toolkit.getTimeForElement(
-                this.systems
+              // If any system before the last one or start of the last one, highlight next notes
+              let nextNoteID = '';
+              if (this.startOfSystem) {
+                nextNoteID = this.systems
                   .eq(this.currentSystemNum)
                   .find('.note')
-                  .attr('id')
-              );
+                  .first()
+                  .attr('id');
+              } else {
+                nextNoteID = this.systems
+                  .eq(this.currentSystemNum)
+                  .find('.note')
+                  .last()
+                  .attr('id');
+              }
+              let nextTime = toolkit.getTimeForElement(nextNoteID);
               this._highlightAtTime(nextTime + 10);
             } else {
-              // If last system, remove all highlights
+              // If end of last system, remove all highlights
               this.highlightedIDs.forEach(noteid => {
                 jQuery('#' + noteid).removeClass('highlightedNote');
               });
@@ -301,16 +326,34 @@ export class RevealMusicXML {
       this.reveal.addKeyBinding(
         { keyCode: 8, key: 'Backspace', description: 'Delete previous time' },
         function () {
-          if (this.playing && this.currentSystemNum > 0) {
-            this.currentSystemNum -= 1;
+          if (
+            this.playing &&
+            (this.currentSystemNum > 0 || !this.startOfSystem)
+          ) {
+            // Update to end of prev system or start of this system
+            if (this.startOfSystem) {
+              this.startOfSystem = false;
+              this.currentSystemNum -= 1;
+            } else {
+              this.startOfSystem = true;
+            }
             // Get the time of the first note in the previous system in the midi
             let toolkit = this.toolkits[this.playerToolkitNum];
-            let prevTime = toolkit.getTimeForElement(
-              this.systems
+            let prevNoteID = '';
+            if (this.startOfSystem) {
+              prevNoteID = this.systems
                 .eq(this.currentSystemNum)
                 .find('.note')
-                .attr('id')
-            );
+                .first()
+                .attr('id');
+            } else {
+              prevNoteID = this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .last()
+                .attr('id');
+            }
+            let prevTime = toolkit.getTimeForElement(prevNoteID);
             // Delete previous time and highlight previous note
             delete this.timestampInProgress[prevTime / 1000];
             this._highlightAtTime(prevTime + 10);
