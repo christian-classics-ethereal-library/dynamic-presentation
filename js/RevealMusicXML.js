@@ -260,32 +260,60 @@ export class RevealMusicXML {
       this.reveal.addKeyBinding(
         { keyCode: 32, key: ' ', description: 'Record time' },
         function () {
-          if (this.playing) {
+          if (
+            this.playing &&
+            this.systems.length >= this.currentSystemNum + 1
+          ) {
             this.currentSystemNum += 1;
+            // Get the time in the audio recording
+            let player = this.players[this.playerToolkitNum];
+            let audioTime = player.getTimestamp();
+            // Get the current time in the midi file
+            let toolkit = this.toolkits[this.playerToolkitNum];
+            let midiTime = toolkit.getTimeForElement(
+              this.systems
+                .eq(this.currentSystemNum - 1)
+                .find('.note')
+                .attr('id')
+            );
+            // Record time
+            this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
+            console.log(midiTime / 1000, audioTime / 1000);
             if (this.systems.length > this.currentSystemNum) {
-              // Get the time in the audio recording
-              let player = this.players[this.playerToolkitNum];
-              let audioTime = player.getTimestamp();
-              // Get the current time in the midi file
-              let toolkit = this.toolkits[this.playerToolkitNum];
-              let midiTime = toolkit.getTimeForElement(
-                this.systems
-                  .eq(this.currentSystemNum - 1)
-                  .find('.note')
-                  .attr('id')
-              );
-              // Get the time of the first note in the next system in the midi
+              // If any system before the last one, highlight next system's first notes
               let nextTime = toolkit.getTimeForElement(
                 this.systems
                   .eq(this.currentSystemNum)
                   .find('.note')
                   .attr('id')
               );
-              // Record time and highlight next note
-              this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
-              console.log(midiTime / 1000, audioTime / 1000);
               this._highlightAtTime(nextTime + 10);
+            } else {
+              // If last system, remove all highlights
+              this.highlightedIDs.forEach(noteid => {
+                jQuery('#' + noteid).removeClass('highlightedNote');
+              });
             }
+          }
+        }.bind(this)
+      );
+      // When they press backspace...
+      this.reveal.addKeyBinding(
+        { keyCode: 8, key: 'Backspace', description: 'Delete previous time' },
+        function () {
+          if (this.playing && this.currentSystemNum > 0) {
+            this.currentSystemNum -= 1;
+            // Get the time of the first note in the previous system in the midi
+            let toolkit = this.toolkits[this.playerToolkitNum];
+            let prevTime = toolkit.getTimeForElement(
+              this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .attr('id')
+            );
+            // Delete previous time and highlight previous note
+            delete this.timestampInProgress[prevTime / 1000];
+            this._highlightAtTime(prevTime + 10);
           }
         }.bind(this)
       );
