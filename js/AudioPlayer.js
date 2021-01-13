@@ -1,10 +1,10 @@
 /* globals Audio */
 
-import { VoidPlayer } from '../js/VoidPlayer.js';
+import { VoidPlayer } from '../js/VoidPlayer.js?v=1.7.0';
 
 export class AudioPlayer extends VoidPlayer {
   constructor (params, onUpdate, onStop, onEnd, playbackRate) {
-    super(params, onUpdate, onStop);
+    super(params, onUpdate, onStop, onEnd, playbackRate);
     this._audio = new Audio(params);
     this._audio.onplay = this._update.bind(this);
     this._audio.addEventListener('ended', onEnd);
