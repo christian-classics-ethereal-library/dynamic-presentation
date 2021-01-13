@@ -189,8 +189,8 @@ export class RevealMusicXML {
     }
     this._highlightAtTime(vrvTime);
     if (this.shouldPause) {
-      this.shouldPause = false;
       this._playPause();
+      this.shouldPause = false;
     }
   }
 
