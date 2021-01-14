@@ -2,6 +2,7 @@
 export class RevealMusicXML {
   constructor (ToolkitType, transformer, highlightNotes = true) {
     this.MIDIDELAY = 380;
+    this.TIMEMAPOFFSET = 0.3;
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.players = [];
@@ -286,8 +287,9 @@ export class RevealMusicXML {
             }
             let midiTime = toolkit.getTimeForElement(thisNoteID);
             // Record time
-            this.timestampInProgress[midiTime / 1000] = audioTime / 1000;
-            console.log(midiTime / 1000, audioTime / 1000);
+            this.timestampInProgress[midiTime / 1000] =
+              audioTime / 1000 - this.TIMEMAPOFFSET;
+            console.log(midiTime / 1000, audioTime / 1000 - this.TIMEMAPOFFSET);
             // Update to end of this system or next system
             if (this.startOfSystem) {
               this.startOfSystem = false;
