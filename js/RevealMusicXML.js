@@ -2,6 +2,7 @@
 export class RevealMusicXML {
   constructor (ToolkitType, transformer, highlightNotes = true) {
     this.MIDIDELAY = 380;
+    this.TIMEMAPOFFSET = 0.3;
     this.ToolkitType = ToolkitType;
     this.toolkits = [];
     this.players = [];
@@ -15,6 +16,14 @@ export class RevealMusicXML {
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
     this.highlightNotes = highlightNotes;
+    this.currentLowKi = 0;
+    this.currentHighKi = 0;
+    this.shouldPause = false;
+    this.timemapMode = '';
+    this.timestampInProgress = {};
+    this.systems = [];
+    this.currentSystemNum = 0;
+    this.startOfSystem = true;
   }
 
   /**
@@ -39,6 +48,37 @@ export class RevealMusicXML {
   }
 
   // Private methods
+
+  _highlightAtTime (time) {
+    let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
+      time
+    );
+    if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
+      if (
+        elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
+        this.reveal.getState().indexh !==
+          this._getIndexHForToolkit(this.playerToolkitNum)
+      ) {
+        this.reveal.slide(
+          this._getIndexHForToolkit(this.playerToolkitNum),
+          elementsAtTime.page - 1
+        );
+      }
+      let ids = this.highlightedIDs || [];
+      if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
+        ids.forEach(function (noteid) {
+          if (jQuery.inArray(noteid, elementsAtTime.notes) === -1) {
+            jQuery('#' + noteid).removeClass('highlightedNote');
+          }
+        });
+        ids = elementsAtTime.notes;
+        ids.forEach(noteid => {
+          jQuery('#' + noteid).addClass('highlightedNote');
+        });
+        this.highlightedIDs = ids;
+      }
+    }
+  }
 
   _debug (message) {
     console.log(`RevealMusicXML: ${message}`);
@@ -101,7 +141,32 @@ export class RevealMusicXML {
       });
   }
 
+  // From https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
+  _download (filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    );
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
   /* Hooks for this.players[i]. */
+  _playerEnd () {
+    if (this.timemapMode === 'create') {
+      let timemapText = '';
+      for (const xmlTime in this.timestampInProgress) {
+        timemapText += `${xmlTime}\t${this.timestampInProgress[xmlTime]}\n`;
+      }
+
+      // Download the timemap
+      this._download('timemap.txt', timemapText);
+    }
+  }
   _playerStop () {
     if (typeof this.highlightedIDs !== 'undefined') {
       this.highlightedIDs.forEach(noteid => {
@@ -113,7 +178,7 @@ export class RevealMusicXML {
   }
   _playerUpdate (time) {
     this.shouldAutoSkip = true;
-    if (this.highlightNotes === false) {
+    if (this.highlightNotes === false || this.timemapMode === 'create') {
       return;
     }
     let vrvTime = Math.max(0, time - this.MIDIDELAY);
@@ -123,33 +188,10 @@ export class RevealMusicXML {
         this._timemap(vrvTime / 1000, this.timemaps[this.playerToolkitNum]) *
         1000;
     }
-    let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
-      vrvTime
-    );
-    if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
-      if (
-        elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
-        this.reveal.getState().indexh !==
-          this._getIndexHForToolkit(this.playerToolkitNum)
-      ) {
-        this.reveal.slide(
-          this._getIndexHForToolkit(this.playerToolkitNum),
-          elementsAtTime.page - 1
-        );
-      }
-      let ids = this.highlightedIDs || [];
-      if (elementsAtTime.notes.length > 0 && ids !== elementsAtTime.notes) {
-        ids.forEach(function (noteid) {
-          if (jQuery.inArray(noteid, elementsAtTime.notes) === -1) {
-            jQuery('#' + noteid).removeClass('highlightedNote');
-          }
-        });
-        ids = elementsAtTime.notes;
-        ids.forEach(noteid => {
-          jQuery('#' + noteid).addClass('highlightedNote');
-        });
-        this.highlightedIDs = ids;
-      }
+    this._highlightAtTime(vrvTime);
+    if (this.shouldPause) {
+      this._playPause();
+      this.shouldPause = false;
     }
   }
 
@@ -174,6 +216,16 @@ export class RevealMusicXML {
     }
     if (lowKi === -1) return 0;
     if (highKi === keys.length) return 100;
+    if (this.timemapMode === 'test') {
+      if (
+        this.currentLowKi !== map[keys[lowKi]] ||
+        this.currentHighKi !== map[keys[highKi]]
+      ) {
+        this.currentLowKi = map[keys[lowKi]];
+        this.currentHighKi = map[keys[highKi]];
+        this.shouldPause = true;
+      }
+    }
     return this._map(
       time,
       keys[lowKi],
@@ -199,6 +251,118 @@ export class RevealMusicXML {
     }
     let PlayerType = window['VoidPlayer'];
     let param;
+
+    let present = document.getElementsByClassName(`present`);
+    this.timemapMode = present.length
+      ? present.item(0).getAttribute('data-timemap-mode')
+      : '';
+    // If the user is creating a timemap file...
+    if (this.timemapMode === 'create') {
+      // When they press space...
+      this.reveal.addKeyBinding(
+        { keyCode: 32, key: ' ', description: 'Record time' },
+        function () {
+          if (
+            this.playing &&
+            this.systems.length >= this.currentSystemNum + 1
+          ) {
+            // Get the time in the audio recording
+            let player = this.players[this.playerToolkitNum];
+            let audioTime = player.getTimestamp();
+            // Get the current time in the midi file
+            let toolkit = this.toolkits[this.playerToolkitNum];
+            let thisNoteID = '';
+            if (this.startOfSystem) {
+              thisNoteID = this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .first()
+                .attr('id');
+            } else {
+              thisNoteID = this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .last()
+                .attr('id');
+            }
+            let midiTime = toolkit.getTimeForElement(thisNoteID);
+            // Record time
+            this.timestampInProgress[midiTime / 1000] =
+              audioTime / 1000 - this.TIMEMAPOFFSET;
+            console.log(midiTime / 1000, audioTime / 1000 - this.TIMEMAPOFFSET);
+            // Update to end of this system or next system
+            if (this.startOfSystem) {
+              this.startOfSystem = false;
+            } else {
+              this.startOfSystem = true;
+              this.currentSystemNum += 1;
+            }
+            if (this.systems.length > this.currentSystemNum) {
+              // If any system before the last one or start of the last one, highlight next notes
+              let nextNoteID = '';
+              if (this.startOfSystem) {
+                nextNoteID = this.systems
+                  .eq(this.currentSystemNum)
+                  .find('.note')
+                  .first()
+                  .attr('id');
+              } else {
+                nextNoteID = this.systems
+                  .eq(this.currentSystemNum)
+                  .find('.note')
+                  .last()
+                  .attr('id');
+              }
+              let nextTime = toolkit.getTimeForElement(nextNoteID);
+              this._highlightAtTime(nextTime + 10);
+            } else {
+              // If end of last system, remove all highlights
+              this.highlightedIDs.forEach(noteid => {
+                jQuery('#' + noteid).removeClass('highlightedNote');
+              });
+            }
+          }
+        }.bind(this)
+      );
+      // When they press backspace...
+      this.reveal.addKeyBinding(
+        { keyCode: 8, key: 'Backspace', description: 'Delete previous time' },
+        function () {
+          if (
+            this.playing &&
+            (this.currentSystemNum > 0 || !this.startOfSystem)
+          ) {
+            // Update to end of prev system or start of this system
+            if (this.startOfSystem) {
+              this.startOfSystem = false;
+              this.currentSystemNum -= 1;
+            } else {
+              this.startOfSystem = true;
+            }
+            // Get the time of the first note in the previous system in the midi
+            let toolkit = this.toolkits[this.playerToolkitNum];
+            let prevNoteID = '';
+            if (this.startOfSystem) {
+              prevNoteID = this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .first()
+                .attr('id');
+            } else {
+              prevNoteID = this.systems
+                .eq(this.currentSystemNum)
+                .find('.note')
+                .last()
+                .attr('id');
+            }
+            let prevTime = toolkit.getTimeForElement(prevNoteID);
+            // Delete previous time and highlight previous note
+            delete this.timestampInProgress[prevTime / 1000];
+            this._highlightAtTime(prevTime + 10);
+          }
+        }.bind(this)
+      );
+    }
 
     let root = document.getElementById(`RevealMusicXML${i}`);
     let playbackRate = root.getAttribute('data-playback-rate');
@@ -240,6 +404,7 @@ export class RevealMusicXML {
       param,
       this._playerUpdate.bind(this),
       this._playerStop.bind(this),
+      this._playerEnd.bind(this),
       playbackRate
     );
   }
@@ -253,6 +418,11 @@ export class RevealMusicXML {
           if (res.ok) {
             return res.text();
           } else {
+            // Disable highlighting if the timemap fails to load
+            this.highlightNotes = false;
+            this.highlightedIDs.forEach(noteid => {
+              jQuery('#' + noteid).removeClass('highlightedNote');
+            });
             throw new Error(
               'Failed to load ' + root.dataset['musicxmlAudioTimemap']
             );
@@ -281,7 +451,7 @@ export class RevealMusicXML {
     if (this.playing) {
       for (let i = 0; i < this.players.length; i++) {
         if (typeof this.players[i] !== 'undefined') {
-          if (i !== this.getCurrentToolkitNum) {
+          if (i !== this._getCurrentToolkitNum()) {
             this.players[i].stop();
           } else {
             this.players[i].pause();
@@ -295,7 +465,21 @@ export class RevealMusicXML {
         this.players[this.playerToolkitNum] = this._initPlayer(
           this.playerToolkitNum
         );
-        this._fetchTimeMap(this.playerToolkitNum);
+        if (this.timemapMode === 'create') {
+          this.systems = jQuery('.reveal').find(jQuery('[id|=system]'));
+          if (this.systems.length > 0) {
+            let toolkit = this.toolkits[this.playerToolkitNum];
+            let firstTime = toolkit.getTimeForElement(
+              this.systems
+                .eq(0)
+                .find('.note')
+                .attr('id')
+            );
+            this._highlightAtTime(firstTime + 10);
+          }
+        } else {
+          this._fetchTimeMap(this.playerToolkitNum);
+        }
       }
       this.players[this.playerToolkitNum].play();
       this.playing = true;

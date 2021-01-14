@@ -3,8 +3,8 @@
 import { VoidPlayer } from '../js/VoidPlayer.js';
 
 export class YouTubePlayer extends VoidPlayer {
-  constructor (url, onUpdate, onStop, playbackRate) {
-    super(url, onUpdate, onStop);
+  constructor (url, onUpdate, onStop, onEnd, playbackRate) {
+    super(url, onUpdate, onStop, onEnd, playbackRate);
     this._youtubeCode = this._extractVideoID(url);
     this._playTryCount = 0;
     if (!jQuery('#youtubeplayer')[0]) {

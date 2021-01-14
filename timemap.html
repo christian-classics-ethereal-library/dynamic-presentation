@@ -25,28 +25,14 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <!-- Load a musicXML file, and optionally provide audio and timemap files. -->
+        <!-- Load a musicXML file, and specify timemap creation mode. -->
         <section
-          data-musicxml="examples/110.musicxml"
+          data-musicxml="examples/110.unfolded.musicxml"
           data-musicxml-audio="examples/110.perf.mp3"
-          data-musicxml-audio-timemap="examples/110.map.txt"
           data-musicxml-toolkit='{"toolkit":"MusicToolkit"}'
-          data-playback-rate="2"
+          data-timemap-mode="create"
         >
           Your Loading Message Here...
-        </section>
-        <!-- The toolkit can be specified. -->
-        <section
-          data-musicxml="musicxmlTestSuite/xmlFiles/61b-MultipleLyrics.xml"
-          data-musicxml-toolkit='{"toolkit":"TextOnlyToolkit"}'
-        ></section>
-        <!-- And options can be passed to the toolkit. -->
-        <section
-          data-musicxml="musicxmlTestSuite/xmlFiles/01b-Pitches-Intervals.xml"
-          data-musicxml-toolkit='{"options": {"transpose": "-C"}, "toolkit":"VerovioToolkit"}'
-        ></section>
-        <section data-musicxml="nonexistentfile.musicxml">
-          This loading message will be replaced.
         </section>
       </div>
     </div>

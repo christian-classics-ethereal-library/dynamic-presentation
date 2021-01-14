@@ -1,10 +1,10 @@
 /* globals fetch, jQuery, pause, play */
 
-import { VoidPlayer } from '../js/VoidPlayer.js';
+import { VoidPlayer } from '../js/VoidPlayer.js?v=1.7.0';
 
 export class MIDIPlayer extends VoidPlayer {
-  constructor (params, onUpdate, onStop, playbackRate) {
-    super(params, onUpdate, onStop);
+  constructor (params, onUpdate, onStop, onEnd, playbackRate) {
+    super(params, onUpdate, onStop, onEnd, playbackRate);
     // TODO: Use different id for different players.
     if (!jQuery('#player')[0]) {
       jQuery('body').prepend(jQuery('<div id="player">'));
