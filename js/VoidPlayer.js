@@ -4,6 +4,7 @@ export class VoidPlayer {
     this.params = params;
     this.onUpdate = onUpdate;
     this.onStop = onStop;
+    this.onEnd = onEnd;
     this._playing = false;
     this._seekPosAtPlay = 0;
     this._dateAtPlay = 0;
