@@ -3,4 +3,4 @@
 	url = https://github.com/cuthbertLab/musicxmlTestSuite.git
 [submodule "midi-player"]
 	path = midi-player
-	url = https://github.com/rism-ch/midi-player.git
+	url = https://github.com/christian-classics-ethereal-library/midi-player.git

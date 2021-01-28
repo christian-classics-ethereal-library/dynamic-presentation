@@ -10,7 +10,7 @@ export class MIDIPlayer extends VoidPlayer {
       jQuery('body').prepend(jQuery('<div id="player">'));
       jQuery('#player').midiPlayer({
         onUpdate: onUpdate,
-        onStop: onStop,
+        onStop: onEnd,
         width: 250
       });
       jQuery('#player').hide();
@@ -77,5 +77,9 @@ export class MIDIPlayer extends VoidPlayer {
         ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
       0
     );
+  }
+
+  getTimestamp () {
+    return jQuery('#player').midiPlayer.currentTime() * 1000;
   }
 }
