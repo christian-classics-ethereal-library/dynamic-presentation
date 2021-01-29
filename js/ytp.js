@@ -1,3 +1,5 @@
+/* globals YT */
+
 // YouTube player starting code from https://developers.google.com/youtube/iframe_api_reference#Getting_Started
 let firstScriptTag = document.getElementsByTagName('script')[0];
 let iframeApi = document.createElement('script');
@@ -26,6 +28,7 @@ function onYouTubeIframeAPIReady () {
   });
   window.ytplayer = ytplayer;
 }
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 window.ytplayer = ytplayer;
 
 // Mimick stop() in YouTubePlayer.js as a global function
