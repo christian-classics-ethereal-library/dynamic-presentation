@@ -5,6 +5,9 @@ import { VoidPlayer } from '../js/VoidPlayer.js?v=1.7.0';
 export class MIDIPlayer extends VoidPlayer {
   constructor (params, onUpdate, onStop, onEnd, playbackRate) {
     super(params, onUpdate, onStop, onEnd, playbackRate);
+    // TODO: playbackRate can be altered in midiPlayer by multiplying the SAMPLE_RATE,
+    //       but this distorts the pitch (which cannot be corrected in midiPlayer from what I can tell),
+    //       is tempo control at the expense of pitch worth it?
     // TODO: Use different id for different players.
     if (!jQuery('#player')[0]) {
       jQuery('body').prepend(jQuery('<div id="player">'));

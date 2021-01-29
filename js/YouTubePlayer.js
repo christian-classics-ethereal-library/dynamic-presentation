@@ -1,4 +1,4 @@
-/* globals jQuery, ytplayer */
+/* globals jQuery */
 
 import { VoidPlayer } from '../js/VoidPlayer.js';
 
@@ -6,18 +6,14 @@ export class YouTubePlayer extends VoidPlayer {
   constructor (url, onUpdate, onStop, onEnd, playbackRate) {
     super(url, onUpdate, onStop, onEnd, playbackRate);
     this._youtubeCode = this._extractVideoID(url);
-    this._player = ytplayer;
-    this._player.addEventListener('onStateChange', 'onPlayerStateChange');
-    this._player.loadVideoByUrl('https://www.youtube.com/embed/' + this._youtubeCode);
-    this._player.setPlaybackRate(2);
+    this._player = window.ytplayer;
+    this._player.loadVideoByUrl(
+      'https://www.youtube.com/embed/' + this._youtubeCode
+    );
+    // This function might round down to a number like 0.25, 0.5, 0.75, ..., 2?
+    // On YouTube's pages, you have more control, see https://webapps.stackexchange.com/a/54506
+    this._player.setPlaybackRate(playbackRate);
     jQuery('#youtube-player').show();
-  }
-
-  onPlayerStateChange (event) {
-    // If the video has ended
-    if (event.data == 0) {
-      this.stop();
-    }
   }
 
   play () {
@@ -30,6 +26,7 @@ export class YouTubePlayer extends VoidPlayer {
     this._playing = false;
   }
   stop () {
+    // Behavior mimicked as a global function in ytp.js
     this._player.stopVideo();
     jQuery('#youtube-player').hide();
     this.onEnd();
