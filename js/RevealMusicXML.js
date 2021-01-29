@@ -365,8 +365,8 @@ export class RevealMusicXML {
     }
 
     let root = document.getElementById(`RevealMusicXML${i}`);
-    let playbackRate = root.getAttribute('data-playback-rate');
-    if (!playbackRate || !playbackRate.length) {
+    let playbackRate = Number(root.getAttribute('data-playback-rate'));
+    if (!playbackRate || playbackRate <= 0) {
       playbackRate = 1;
     }
 
