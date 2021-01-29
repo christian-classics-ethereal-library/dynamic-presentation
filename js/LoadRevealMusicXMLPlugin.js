@@ -43,12 +43,6 @@ if (urlParam('toolkit') === 'verovio') {
 let rmx = new RevealMusicXML(tk, mxt);
 window.rmx = rmx;
 
-let firstScriptTag = document.getElementsByTagName('script')[0];
-let ytp = document.createElement('script');
-ytp.src = '/js/ytp.js';
-ytp.type = 'text/javascript';
-firstScriptTag.parentNode.insertBefore(ytp, firstScriptTag);
-
 // TODO: Use Reveal.registerPlugin when we can be sure that one loads before the other.
 rma
   .init()
