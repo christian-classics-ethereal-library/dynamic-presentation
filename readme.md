@@ -7,7 +7,6 @@ make it easy to present musicXML files.
 
 The code is primarily written as a few classes.
 
-- **RevealMusicArranger**: (unsupported) reveal.js plugin to load a musicXML file, and return it several times with different transformation instructions.
 - **RevealMusicXML**: reveal.js plugin containing a rendering toolkit and a transformation library. Loads a musicXML file, transforms it with the transformer, controls rendering toolkits to output slides.
 - **MusicXMLTransformer**: (unsupported) Generic JavaScript library to perform transformations on the musicXML.
 - **TextOnlyToolkit**: Rendering toolkit to create slides with just text.

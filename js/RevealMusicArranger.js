@@ -1,4 +1,5 @@
 /* globals DOMParser, fetch */
+// RevealMusicArranger is the deprecated reveal.js plugin to load a musicXML file, and return it several times with different transformation instructions.
 export class RevealMusicArranger {
   init () {
     return this._processSlides().then(() => Promise.resolve());
