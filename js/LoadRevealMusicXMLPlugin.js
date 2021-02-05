@@ -4,15 +4,12 @@ import { MIDIPlayer } from '../js/MIDIPlayer.js?v=1.7.0';
 import { MusicToolkit } from '../js/MusicToolkit.js?v=1.3.2';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.3';
-import { RevealMusicArranger } from '../js/RevealMusicArranger.js';
 import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.7.0';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js?v=1.3.3'; // Depends on PianoRollToolkit
 import { urlParam } from '../js/urlParam.js';
 import { XMLPlayer } from '../js/XMLPlayer.js?v=1.7.0'; // Depends on MIDIPlayer
 import { YouTubePlayer } from '../js/YouTubePlayer.js?v=1.7.0';
 import { VoidPlayer } from '../js/VoidPlayer.js?v=1.7.0';
-
-let rma = new RevealMusicArranger();
 
 let mxt = new MusicXMLTransformer();
 let tk;
@@ -43,11 +40,8 @@ if (urlParam('toolkit') === 'verovio') {
 let rmx = new RevealMusicXML(tk, mxt);
 window.rmx = rmx;
 
-// TODO: Use Reveal.registerPlugin when we can be sure that one loads before the other.
-rma
-  .init()
-  .then(() => rmx.init())
-  .then(
-    () => Reveal.slide(0, 0),
-    () => Reveal.slide(0, 0)
-  );
+// TODO: Use Reveal.registerPlugin?
+rmx.init().then(
+  () => Reveal.slide(0, 0),
+  () => Reveal.slide(0, 0)
+);
