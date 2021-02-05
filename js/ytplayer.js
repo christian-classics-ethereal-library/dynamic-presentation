@@ -31,18 +31,13 @@ function onYouTubeIframeAPIReady () {
 window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 window.ytplayer = ytplayer;
 
-// Mimick stop() in YouTubePlayer.js as a global function
 function onPlayerStateChange (event) {
   // If the video has ended
   if (event.data === 0) {
-    // Hide the player
-    let player = document.getElementById('youtube-player');
+    // Call stop() on the YouTubePlayer
+    let player = window.rmx.players[window.rmx.playerToolkitNum];
     if (player) {
-      player.style =
-        'position: absolute; opacity: 50%; z-index: 20; display: none;';
+      player.stop();
     }
-    // Call RevealMusicXML handlers
-    window.rmx._playerEnd();
-    window.rmx._playerStop();
   }
 }

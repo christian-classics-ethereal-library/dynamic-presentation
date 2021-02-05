@@ -26,7 +26,6 @@ export class YouTubePlayer extends VoidPlayer {
     this._playing = false;
   }
   stop () {
-    // Behavior mimicked as a global function in ytplayer.js
     this._player.stopVideo();
     jQuery('#youtube-player').hide();
     this.onEnd();
