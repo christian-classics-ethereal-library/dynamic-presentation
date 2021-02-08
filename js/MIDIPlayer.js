@@ -1,6 +1,6 @@
 /* globals fetch, jQuery, pause, play */
 
-import { VoidPlayer } from '../js/VoidPlayer.js?v=1.7.0';
+import { VoidPlayer } from '../js/VoidPlayer.js?v=1.8.0';
 
 export class MIDIPlayer extends VoidPlayer {
   constructor (params, onUpdate, onStop, onEnd, playbackRate) {

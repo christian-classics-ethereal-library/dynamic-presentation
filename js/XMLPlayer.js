@@ -1,5 +1,5 @@
 /* globals fetch, verovio */
-import { MIDIPlayer } from '../js/MIDIPlayer.js?v=1.7.0';
+import { MIDIPlayer } from '../js/MIDIPlayer.js?v=1.8.0';
 
 export class XMLPlayer extends MIDIPlayer {
   constructor (params, onUpdate, onStop, onEnd, playbackRate) {

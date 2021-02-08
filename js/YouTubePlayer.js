@@ -1,6 +1,6 @@
 /* globals jQuery */
 
-import { VoidPlayer } from '../js/VoidPlayer.js';
+import { VoidPlayer } from '../js/VoidPlayer.js?v=1.8.0';
 
 export class YouTubePlayer extends VoidPlayer {
   constructor (url, onUpdate, onStop, onEnd, playbackRate) {
