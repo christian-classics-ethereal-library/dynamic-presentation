@@ -1,6 +1,6 @@
 {
   "name": "dynamic-presentation",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Javascript for Dynamic Presentation",
   "main": "js/LoadRevealMusicXMLPlugin.js",
   "scripts": {

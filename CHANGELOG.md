@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.8.0] - 2021-02-08
+
+### Added
+
+- Support timemaps in MIDIPlayer and YouTubePlayer
+
+### Deprecated
+
+- Remove RevealMusicArranger from LoadRevealMusicXMLPlugin.js
+
 ## [1.7.0] - 2021-01-13
 
 ### Added

@@ -1,60 +1,38 @@
 /* globals jQuery */
 
-import { VoidPlayer } from '../js/VoidPlayer.js';
+import { VoidPlayer } from '../js/VoidPlayer.js?v=1.8.0';
 
 export class YouTubePlayer extends VoidPlayer {
   constructor (url, onUpdate, onStop, onEnd, playbackRate) {
     super(url, onUpdate, onStop, onEnd, playbackRate);
     this._youtubeCode = this._extractVideoID(url);
-    this._playTryCount = 0;
-    if (!jQuery('#youtubeplayer')[0]) {
-      jQuery('body').prepend(jQuery(this._getIFrame()));
-    }
+    this._player = window.ytplayer;
+    this._player.loadVideoByUrl(
+      'https://www.youtube.com/embed/' + this._youtubeCode
+    );
+    // This function might round down to a number like 0.25, 0.5, 0.75, ..., 2?
+    // On YouTube's pages, you have more control, see https://webapps.stackexchange.com/a/54506
+    this._player.setPlaybackRate(playbackRate);
+    jQuery('#youtube-player').show();
   }
 
   play () {
-    jQuery('#youtubeplayer').show();
-    // TODO: Use YouTube Player API to check if this exists
-    if (!jQuery('#youtubeplayer .ytp-large-play-button').length) {
-      if (!jQuery(`#youtubeplayer[src*="${this._youtubeCode}"]`).length) {
-        document.getElementById('youtubeplayer').outerHTML = this._getIFrame();
-      }
-      // If the iframe hasn't been loaded yet, call this again shortly.
-      this._playTryCount++;
-      if (this._playTryCount < 20) {
-        setTimeout(this.play.bind(this), 20);
-      } else {
-        this._playTryCount = 0;
-        console.log('YouTubePlayer: Could not play the audio');
-      }
-      return;
-    }
-    // TODO: Use YouTube Player API to play this audio.
-    jQuery('#youtubeplayer .ytp-large-play-button').click();
+    this._player.playVideo();
     this._playing = true;
     this._update();
   }
   pause () {
-    // TODO: Use YouTube Player API to pause the video.
-    jQuery('#youtubeplayer .ytp-play-button[aria-label*="Pause"]').click();
+    this._player.pauseVideo();
     this._playing = false;
   }
   stop () {
-    this.pause();
-    jQuery('#youtubeplayer').hide();
+    this._player.stopVideo();
+    jQuery('#youtube-player').hide();
+    this.onEnd();
     this.onStop();
   }
   getTimestamp () {
-    // TODO: Use YouTube Player API to get timestamp.
-    return jQuery('#youtubeplayer video').currentTime * 1000;
-  }
-
-  _getIFrame () {
-    return `<iframe id="youtubeplayer" width="200" height="200"
-      style="position: absolute; opacity: 50%; z-index: 20;"
-      src="https://www.youtube-nocookie.com/embed/${this._youtubeCode}"
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>`;
+    return this._player.getCurrentTime() * 1000;
   }
 
   // https://www.labnol.org/code/19797-regex-youtube-id/
