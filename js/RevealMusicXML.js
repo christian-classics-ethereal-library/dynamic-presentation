@@ -72,10 +72,17 @@ export class RevealMusicXML {
           }
         });
         ids = elementsAtTime.notes;
+        let chordIDs = [];
         ids.forEach(noteid => {
-          jQuery('#' + noteid).addClass('highlightedNote');
+          /* If this note is the child of the chord, we also want to highlight the chord. */
+          let note = document.getElementById(noteid);
+          if (note.parentElement.id.indexOf('chord-') === 0) {
+            chordIDs = note.parentElement.id;
+            note.parentElement.classList.add('highlightedNote');
+          }
+          note.classList.add('highlightedNote');
         });
-        this.highlightedIDs = ids;
+        this.highlightedIDs = ids.concat(chordIDs);
       }
     }
   }
