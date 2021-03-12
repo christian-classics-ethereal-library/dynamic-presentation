@@ -15,7 +15,11 @@
   font-style: normal;
   src: url(../fonts/Sanos.woff2) format('woff2');
 }
-@import url(https://fonts.googleapis.com/css?family=Tinos);
+@font-face {
+  font-family: 'Tinos';
+  font-style: normal;
+  src: url(../fonts/Tinos.woff2) format('woff2');
+}
 .reveal.reveal section[data-musicxml] svg g.page-margin {
   font-family: 'Sanos', 'Tinos', 'Times New Roman', 'Times', 'Liberation Serif',
     serif;
