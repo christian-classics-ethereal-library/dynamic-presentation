@@ -6,13 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-## [1.8.1] - 2021-03-15
-
 ### Added
 
 - Serve Tinos font locally
 
-## [1.8.0] - 2021-01-29
+### Fixed
+
+- Highlighting of chord stems in verovio
+
+## [1.8.0] - 2021-02-08
 
 ### Added
 

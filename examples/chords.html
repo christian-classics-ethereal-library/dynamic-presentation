@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chord stems should be highlighted</title>
+
+    <script src="/node_modules/reveal.js/js/reveal.js" defer></script>
+    <script src="/js/slides.js" type="module" defer></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script
+      src="https://www.verovio.org/javascript/develop/verovio-toolkit.js"
+      type="text/javascript"
+      defer
+    ></script>
+    <script src="/midi-player/wildwebmidi.js" type="text/javascript"></script>
+    <script src="/midi-player/midiplayer.js" type="text/javascript"></script>
+    <script src="/js/LoadRevealMusicXMLPlugin.js" type="module" defer></script>
+    <link href="/node_modules/reveal.js/css/reveal.css" rel="stylesheet" />
+    <link href="/css/slidesBlood.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section
+          data-musicxml="/musicxmlTestSuite/xmlFiles/21c-Chords-ThreeNotesDuration.xml"
+          data-musicxml-toolkit='{"toolkit":"MusicToolkit"}'
+        >
+          Your Loading Message Here...
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
