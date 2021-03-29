@@ -24,7 +24,9 @@ export class RevealMusicXML {
     this.systems = [];
     this.currentSystemNum = 0;
     this.startOfSystem = true;
-    this.playbackRate = 1;
+    this.playbackRates = [];
+    this.defaultTempos = [];
+    this.currentTempos = [];
   }
 
   /**
@@ -53,10 +55,12 @@ export class RevealMusicXML {
   _highlightAtTime (time) {
     let thisToolkit = this.toolkits[this.playerToolkitNum];
     let elementsAtTime = thisToolkit.getElementsAtTime(time);
-    let elementsInFuture = thisToolkit.getElementsAtTime(
-      time + 500 / this.playbackRate
-    );
-    // If the note(s) 0.5 seconds (in the base tempo) from now are on the next page, highlight those instead
+    let millisecEarly =
+      300 *
+      (this.defaultTempos[this.playerToolkitNum] /
+        this.currentTempos[this.playerToolkitNum]);
+    let elementsInFuture = thisToolkit.getElementsAtTime(time + millisecEarly);
+    // If the note(s) 0.3 seconds (in the base tempo) from now are on the next page, highlight those instead
     if (
       typeof elementsAtTime.page !== 'undefined' &&
       typeof elementsInFuture.page !== 'undefined' &&
@@ -385,9 +389,17 @@ export class RevealMusicXML {
     }
 
     let root = document.getElementById(`RevealMusicXML${i}`);
-    this.playbackRate = Number(root.getAttribute('data-playback-rate'));
-    if (!this.playbackRate || this.playbackRate <= 0) {
-      this.playbackRate = 1;
+    this.playbackRates[i] = Number(root.getAttribute('data-playback-rate'));
+    if (!this.playbackRates[i] || this.playbackRates[i] <= 0) {
+      this.playbackRates[i] = 1;
+    }
+    this.defaultTempos[i] = Number(root.getAttribute('data-default-tempo'));
+    if (!this.defaultTempos[i] || this.defaultTempos[i] <= 0) {
+      this.defaultTempos[i] = 120;
+    }
+    this.currentTempos[i] = Number(root.getAttribute('data-current-tempo'));
+    if (!this.currentTempos[i] || this.currentTempos[i] <= 0) {
+      this.currentTempos[i] = 120;
     }
 
     let audio = root.getAttribute('data-musicxml-audio');
@@ -425,7 +437,7 @@ export class RevealMusicXML {
       this._playerUpdate.bind(this),
       this._playerStop.bind(this),
       this._playerEnd.bind(this),
-      this.playbackRate
+      this.playbackRates[i]
     );
   }
 
