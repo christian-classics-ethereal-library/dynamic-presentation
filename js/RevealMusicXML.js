@@ -24,6 +24,9 @@ export class RevealMusicXML {
     this.systems = [];
     this.currentSystemNum = 0;
     this.startOfSystem = true;
+    this.playbackRates = [];
+    this.defaultTempos = [];
+    this.currentTempos = [];
   }
 
   /**
@@ -50,9 +53,23 @@ export class RevealMusicXML {
   // Private methods
 
   _highlightAtTime (time) {
-    let elementsAtTime = this.toolkits[this.playerToolkitNum].getElementsAtTime(
-      time
-    );
+    let thisToolkit = this.toolkits[this.playerToolkitNum];
+    let elementsAtTime = thisToolkit.getElementsAtTime(time);
+    let millisecEarly =
+      400 *
+      (this.defaultTempos[this.playerToolkitNum] /
+        this.currentTempos[this.playerToolkitNum]);
+    let elementsInFuture = thisToolkit.getElementsAtTime(time + millisecEarly);
+    // If the note(s) 0.4 seconds (in the base tempo) from now are on the next page, highlight those instead
+    if (
+      typeof elementsAtTime.page !== 'undefined' &&
+      typeof elementsInFuture.page !== 'undefined' &&
+      elementsAtTime.page > 0 &&
+      elementsInFuture.page > 0 &&
+      elementsAtTime.page !== elementsInFuture.page
+    ) {
+      elementsAtTime = elementsInFuture;
+    }
     if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
       if (
         elementsAtTime.page - 1 !== this.reveal.getState().indexv ||
@@ -372,9 +389,17 @@ export class RevealMusicXML {
     }
 
     let root = document.getElementById(`RevealMusicXML${i}`);
-    let playbackRate = Number(root.getAttribute('data-playback-rate'));
-    if (!playbackRate || playbackRate <= 0) {
-      playbackRate = 1;
+    this.playbackRates[i] = Number(root.getAttribute('data-playback-rate'));
+    if (!this.playbackRates[i] || this.playbackRates[i] <= 0) {
+      this.playbackRates[i] = 1;
+    }
+    this.defaultTempos[i] = Number(root.getAttribute('data-default-tempo'));
+    if (!this.defaultTempos[i] || this.defaultTempos[i] <= 0) {
+      this.defaultTempos[i] = 120;
+    }
+    this.currentTempos[i] = Number(root.getAttribute('data-current-tempo'));
+    if (!this.currentTempos[i] || this.currentTempos[i] <= 0) {
+      this.currentTempos[i] = 120;
     }
 
     let audio = root.getAttribute('data-musicxml-audio');
@@ -412,7 +437,7 @@ export class RevealMusicXML {
       this._playerUpdate.bind(this),
       this._playerStop.bind(this),
       this._playerEnd.bind(this),
-      playbackRate
+      this.playbackRates[i]
     );
   }
 
