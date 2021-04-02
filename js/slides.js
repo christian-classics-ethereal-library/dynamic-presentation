@@ -7,6 +7,6 @@ Reveal.initialize({
   navigationMode: 'linear',
   width: width,
   height: '100%',
-  transition: 'fade',
+  transition: 'none',
   transitionSpeed: 'fast'
 });
