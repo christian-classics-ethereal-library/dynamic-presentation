@@ -93,11 +93,13 @@ export class RevealMusicXML {
         ids.forEach(noteid => {
           /* If this note is the child of the chord, we also want to highlight the chord. */
           let note = document.getElementById(noteid);
-          if (note.parentElement.id.startsWith('chord-')) {
-            chordIDs.push(note.parentElement.id);
-            note.parentElement.classList.add('highlightedNote');
+          if (note) {
+            if (note.parentElement.id.startsWith('chord-')) {
+              chordIDs.push(note.parentElement.id);
+              note.parentElement.classList.add('highlightedNote');
+            }
+            note.classList.add('highlightedNote');
           }
-          note.classList.add('highlightedNote');
         });
         this.highlightedIDs = ids.concat(chordIDs);
       }

@@ -4,7 +4,7 @@ import { MIDIPlayer } from '../js/MIDIPlayer.js?v=1.8.0';
 import { MusicToolkit } from '../js/MusicToolkit.js?v=1.3.2';
 import { MusicXMLTransformer } from '../js/MusicXMLTransformer.js';
 import { PianoRollToolkit } from '../js/PianoRollToolkit.js?v=1.3.3';
-import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.8.1';
+import { RevealMusicXML } from '../js/RevealMusicXML.js?v=1.8.3';
 import { TextOnlyToolkit } from '../js/TextOnlyToolkit.js?v=1.3.3'; // Depends on PianoRollToolkit
 import { urlParam } from '../js/urlParam.js';
 import { XMLPlayer } from '../js/XMLPlayer.js?v=1.8.0'; // Depends on MIDIPlayer

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.8.3] - 2021-04-06
+
+### Fixed
+
+- Check note exists when deciding to highlight chord
+
 ## [1.8.2] - 2021-03-29
 
 ### Added
