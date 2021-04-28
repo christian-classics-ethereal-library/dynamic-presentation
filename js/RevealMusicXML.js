@@ -27,6 +27,7 @@ export class RevealMusicXML {
     this.playbackRates = [];
     this.defaultTempos = [];
     this.currentTempos = [];
+    this.earlyTime = 0;
   }
 
   /**
@@ -59,16 +60,21 @@ export class RevealMusicXML {
       400 *
       (this.defaultTempos[this.playerToolkitNum] /
         this.currentTempos[this.playerToolkitNum]);
-    let elementsInFuture = thisToolkit.getElementsAtTime(time + millisecEarly);
+    let elementsInFuture = thisToolkit.getElementsAtTime(
+      this.earlyTime ? this.earlyTime : time + millisecEarly
+    );
     // If the note(s) 0.4 seconds (in the base tempo) from now are on the next page, highlight those instead
     if (
       typeof elementsAtTime.page !== 'undefined' &&
       typeof elementsInFuture.page !== 'undefined' &&
       elementsAtTime.page > 0 &&
       elementsInFuture.page > 0 &&
-      elementsAtTime.page !== elementsInFuture.page
+      elementsAtTime.page < elementsInFuture.page
     ) {
+      this.earlyTime = this.earlyTime ? this.earlyTime : time + millisecEarly;
       elementsAtTime = elementsInFuture;
+    } else {
+      this.earlyTime = 0;
     }
     if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
       if (
