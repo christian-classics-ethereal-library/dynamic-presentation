@@ -57,7 +57,7 @@ export class RevealMusicXML {
     let thisToolkit = this.toolkits[this.playerToolkitNum];
     let elementsAtTime = thisToolkit.getElementsAtTime(time);
     let millisecEarly =
-      400 *
+      300 *
       (this.defaultTempos[this.playerToolkitNum] /
         this.currentTempos[this.playerToolkitNum]);
     // Determine the first notes which are on the page millisecEarly from now
@@ -71,7 +71,7 @@ export class RevealMusicXML {
     let elementsInFuture = thisToolkit.getElementsAtTime(
       this.earlyTime ? this.earlyTime : earlyTime
     );
-    // If the note(s) 0.4 seconds (in the base tempo) from now are on the next page, highlight those instead
+    // If the note(s) 0.3 seconds (in the base tempo) from now are on the next page, highlight those instead
     if (
       typeof elementsAtTime.page !== 'undefined' &&
       typeof elementsInFuture.page !== 'undefined' &&
