@@ -56,33 +56,38 @@ export class RevealMusicXML {
   _highlightAtTime (time) {
     let thisToolkit = this.toolkits[this.playerToolkitNum];
     let elementsAtTime = thisToolkit.getElementsAtTime(time);
-    let millisecEarly =
-      300 *
-      (this.defaultTempos[this.playerToolkitNum] /
-        this.currentTempos[this.playerToolkitNum]);
-    // Determine the first notes which are on the page millisecEarly from now
-    let earlyTime =
-      this.players[this.playerToolkitNum].getTimestamp() + millisecEarly;
-    if (typeof this.timemaps[this.playerToolkitNum] !== 'undefined') {
-      earlyTime =
-        this._timemap(earlyTime / 1000, this.timemaps[this.playerToolkitNum]) *
-        1000;
-    }
-    let elementsInFuture = thisToolkit.getElementsAtTime(
-      this.earlyTime ? this.earlyTime : earlyTime
-    );
-    // If the note(s) 0.3 seconds (in the base tempo) from now are on the next page, highlight those instead
-    if (
-      typeof elementsAtTime.page !== 'undefined' &&
-      typeof elementsInFuture.page !== 'undefined' &&
-      elementsAtTime.page > 0 &&
-      elementsInFuture.page > 0 &&
-      elementsAtTime.page !== elementsInFuture.page
-    ) {
-      this.earlyTime = this.earlyTime ? this.earlyTime : earlyTime;
-      elementsAtTime = elementsInFuture;
-    } else {
-      this.earlyTime = 0;
+    if (this.timemapMode !== 'create') {
+      let millisecEarly =
+        300 *
+        (this.defaultTempos[this.playerToolkitNum] /
+          this.currentTempos[this.playerToolkitNum]);
+      // Determine the first notes which are on the page millisecEarly from now
+      let earlyTime =
+        this.players[this.playerToolkitNum].getTimestamp() + millisecEarly;
+      if (typeof this.timemaps[this.playerToolkitNum] !== 'undefined') {
+        earlyTime =
+          this._timemap(
+            earlyTime / 1000,
+            this.timemaps[this.playerToolkitNum],
+            false
+          ) * 1000;
+      }
+      let elementsInFuture = thisToolkit.getElementsAtTime(
+        this.earlyTime ? this.earlyTime : earlyTime
+      );
+      // If the note(s) 0.3 seconds (in the base tempo) from now are on the next page, highlight those instead
+      if (
+        typeof elementsAtTime.page !== 'undefined' &&
+        typeof elementsInFuture.page !== 'undefined' &&
+        elementsAtTime.page > 0 &&
+        elementsInFuture.page > 0 &&
+        elementsAtTime.page !== elementsInFuture.page
+      ) {
+        this.earlyTime = this.earlyTime ? this.earlyTime : earlyTime;
+        elementsAtTime = elementsInFuture;
+      } else {
+        this.earlyTime = 0;
+      }
     }
     if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
       if (
@@ -238,7 +243,7 @@ export class RevealMusicXML {
   /**
    * @brief Interpolate adjusted time from a map of input => output.
    */
-  _timemap (time, map) {
+  _timemap (time, map, checkPause = true) {
     if (typeof map[time] !== 'undefined') {
       return map[time];
     }
@@ -256,7 +261,7 @@ export class RevealMusicXML {
     }
     if (lowKi === -1) return 0;
     if (highKi === keys.length) return 100;
-    if (this.timemapMode === 'test') {
+    if (this.timemapMode === 'test' && checkPause) {
       if (
         this.currentLowKi !== map[keys[lowKi]] ||
         this.currentHighKi !== map[keys[highKi]]
