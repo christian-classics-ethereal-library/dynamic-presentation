@@ -60,8 +60,16 @@ export class RevealMusicXML {
       400 *
       (this.defaultTempos[this.playerToolkitNum] /
         this.currentTempos[this.playerToolkitNum]);
+    // Determine the first notes which are on the page millisecEarly from now
+    let earlyTime =
+      this.players[this.playerToolkitNum].getTimestamp() + millisecEarly;
+    if (typeof this.timemaps[this.playerToolkitNum] !== 'undefined') {
+      earlyTime =
+        this._timemap(earlyTime / 1000, this.timemaps[this.playerToolkitNum]) *
+        1000;
+    }
     let elementsInFuture = thisToolkit.getElementsAtTime(
-      this.earlyTime ? this.earlyTime : time + millisecEarly
+      this.earlyTime ? this.earlyTime : earlyTime
     );
     // If the note(s) 0.4 seconds (in the base tempo) from now are on the next page, highlight those instead
     if (
@@ -69,9 +77,9 @@ export class RevealMusicXML {
       typeof elementsInFuture.page !== 'undefined' &&
       elementsAtTime.page > 0 &&
       elementsInFuture.page > 0 &&
-      elementsAtTime.page < elementsInFuture.page
+      elementsAtTime.page !== elementsInFuture.page
     ) {
-      this.earlyTime = this.earlyTime ? this.earlyTime : time + millisecEarly;
+      this.earlyTime = this.earlyTime ? this.earlyTime : earlyTime;
       elementsAtTime = elementsInFuture;
     } else {
       this.earlyTime = 0;
