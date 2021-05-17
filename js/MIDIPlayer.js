@@ -83,6 +83,6 @@ export class MIDIPlayer extends VoidPlayer {
   }
 
   getTimestamp () {
-    return jQuery('#player').midiPlayer.currentTime() * 1000;
+    return jQuery('#player').midiPlayer.currentTime();
   }
 }
