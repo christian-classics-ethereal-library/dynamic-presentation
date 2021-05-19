@@ -16,8 +16,7 @@ export class RevealMusicXML {
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
     this.highlightNotes = highlightNotes;
-    this.currentLowKi = 0;
-    this.currentHighKi = 0;
+    this.currentLowKi = -1;
     this.shouldPause = false;
     this.timemapMode = '';
     this.timestampInProgress = {};
@@ -245,6 +244,9 @@ export class RevealMusicXML {
    */
   _timemap (time, map, checkPause = true) {
     if (typeof map[time] !== 'undefined') {
+      if (checkPause) {
+        this._shouldPause(map[time]);
+      }
       return map[time];
     }
     let keys = Object.keys(map);
@@ -261,15 +263,8 @@ export class RevealMusicXML {
     }
     if (lowKi === -1) return 0;
     if (highKi === keys.length) return 100;
-    if (this.timemapMode === 'test' && checkPause) {
-      if (
-        this.currentLowKi !== map[keys[lowKi]] ||
-        this.currentHighKi !== map[keys[highKi]]
-      ) {
-        this.currentLowKi = map[keys[lowKi]];
-        this.currentHighKi = map[keys[highKi]];
-        this.shouldPause = true;
-      }
+    if (checkPause) {
+      this._shouldPause(map[keys[lowKi]]);
     }
     return this._map(
       time,
@@ -281,6 +276,17 @@ export class RevealMusicXML {
   }
   _map (x, inMin, inMax, outMin, outMax) {
     return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+  }
+  /**
+   * @brief For use when testing a timemap:
+   *  Check if we have reached a new point in the timemap,
+   *  if so, record new position and indicate that player should pause.
+   */
+  _shouldPause (low) {
+    if (this.timemapMode === 'test' && this.currentLowKi !== low) {
+      this.currentLowKi = low;
+      this.shouldPause = true;
+    }
   }
 
   _playChangeControls () {
