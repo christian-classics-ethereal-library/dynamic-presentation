@@ -16,8 +16,7 @@ export class RevealMusicXML {
     this.resizeTimeout = undefined;
     this.shouldAutoSkip = false;
     this.highlightNotes = highlightNotes;
-    this.currentLowKi = 0;
-    this.currentHighKi = 0;
+    this.currentLowKi = -1;
     this.shouldPause = false;
     this.timemapMode = '';
     this.timestampInProgress = {};
@@ -27,6 +26,7 @@ export class RevealMusicXML {
     this.playbackRates = [];
     this.defaultTempos = [];
     this.currentTempos = [];
+    this.earlyTime = 0;
   }
 
   /**
@@ -55,20 +55,38 @@ export class RevealMusicXML {
   _highlightAtTime (time) {
     let thisToolkit = this.toolkits[this.playerToolkitNum];
     let elementsAtTime = thisToolkit.getElementsAtTime(time);
-    let millisecEarly =
-      400 *
-      (this.defaultTempos[this.playerToolkitNum] /
-        this.currentTempos[this.playerToolkitNum]);
-    let elementsInFuture = thisToolkit.getElementsAtTime(time + millisecEarly);
-    // If the note(s) 0.4 seconds (in the base tempo) from now are on the next page, highlight those instead
-    if (
-      typeof elementsAtTime.page !== 'undefined' &&
-      typeof elementsInFuture.page !== 'undefined' &&
-      elementsAtTime.page > 0 &&
-      elementsInFuture.page > 0 &&
-      elementsAtTime.page !== elementsInFuture.page
-    ) {
-      elementsAtTime = elementsInFuture;
+    if (this.timemapMode !== 'create') {
+      let millisecEarly =
+        300 *
+        (this.defaultTempos[this.playerToolkitNum] /
+          this.currentTempos[this.playerToolkitNum]);
+      // Determine the first notes which are on the page millisecEarly from now
+      let earlyTime =
+        this.players[this.playerToolkitNum].getTimestamp() + millisecEarly;
+      if (typeof this.timemaps[this.playerToolkitNum] !== 'undefined') {
+        earlyTime =
+          this._timemap(
+            earlyTime / 1000,
+            this.timemaps[this.playerToolkitNum],
+            false
+          ) * 1000;
+      }
+      let elementsInFuture = thisToolkit.getElementsAtTime(
+        this.earlyTime ? this.earlyTime : earlyTime
+      );
+      // If the note(s) 0.3 seconds (in the base tempo) from now are on the next page, highlight those instead
+      if (
+        typeof elementsAtTime.page !== 'undefined' &&
+        typeof elementsInFuture.page !== 'undefined' &&
+        elementsAtTime.page > 0 &&
+        elementsInFuture.page > 0 &&
+        elementsAtTime.page !== elementsInFuture.page
+      ) {
+        this.earlyTime = this.earlyTime ? this.earlyTime : earlyTime;
+        elementsAtTime = elementsInFuture;
+      } else {
+        this.earlyTime = 0;
+      }
     }
     if (typeof elementsAtTime.page !== 'undefined' && elementsAtTime.page > 0) {
       if (
@@ -224,8 +242,11 @@ export class RevealMusicXML {
   /**
    * @brief Interpolate adjusted time from a map of input => output.
    */
-  _timemap (time, map) {
+  _timemap (time, map, checkPause = true) {
     if (typeof map[time] !== 'undefined') {
+      if (checkPause) {
+        this._shouldPause(map[time]);
+      }
       return map[time];
     }
     let keys = Object.keys(map);
@@ -242,15 +263,8 @@ export class RevealMusicXML {
     }
     if (lowKi === -1) return 0;
     if (highKi === keys.length) return 100;
-    if (this.timemapMode === 'test') {
-      if (
-        this.currentLowKi !== map[keys[lowKi]] ||
-        this.currentHighKi !== map[keys[highKi]]
-      ) {
-        this.currentLowKi = map[keys[lowKi]];
-        this.currentHighKi = map[keys[highKi]];
-        this.shouldPause = true;
-      }
+    if (checkPause) {
+      this._shouldPause(map[keys[lowKi]]);
     }
     return this._map(
       time,
@@ -262,6 +276,17 @@ export class RevealMusicXML {
   }
   _map (x, inMin, inMax, outMin, outMax) {
     return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+  }
+  /**
+   * @brief For use when testing a timemap:
+   *  Check if we have reached a new point in the timemap,
+   *  if so, record new position and indicate that player should pause.
+   */
+  _shouldPause (low) {
+    if (this.timemapMode === 'test' && this.currentLowKi !== low) {
+      this.currentLowKi = low;
+      this.shouldPause = true;
+    }
   }
 
   _playChangeControls () {

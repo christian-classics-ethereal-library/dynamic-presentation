@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.8.4] - 2021-04-28
+
+### Fixed
+
+- Only highlight first note when pre-advancing slides
+
 ## [1.8.3] - 2021-04-06
 
 ### Fixed
